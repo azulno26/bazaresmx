@@ -177,8 +177,11 @@ export default function LandingPage() {
             Bazares<span className="text-accent">MX</span>
           </div>
           <div className="h-px w-24 bg-white/20 mb-8"></div>
-          <p className="text-white/50 text-lg font-medium">
+          <p className="text-white/50 text-lg font-medium mb-2">
             El directorio digital de bazares en México · 2026
+          </p>
+          <p className="text-white/30 text-xs">
+            Desarrollado por 💡 <a href="https://www.flowisolutions.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-bold">Flowi Solutions</a>
           </p>
         </div>
       </footer>

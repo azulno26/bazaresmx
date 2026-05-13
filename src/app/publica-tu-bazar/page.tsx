@@ -13,6 +13,8 @@ const estadosMexico = [
 
 export default function PublishBazarForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     nombreBazar: "",
     ciudad: "Ciudad de México",
@@ -47,7 +49,7 @@ export default function PublishBazarForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (
       !formData.nombreBazar ||
@@ -58,7 +60,49 @@ export default function PublishBazarForm() {
       alert("Por favor completa los campos requeridos.");
       return;
     }
-    setSubmitted(true);
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch('/api/solicitud', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: formData.nombreBazar,
+          estado: formData.ciudad,
+          colonia: formData.colonia,
+          direccion: formData.direccion,
+          fechaInicio: formData.fechaInicio,
+          fechaFin: formData.fechaFin,
+          recurrente: formData.esRecurrente,
+          frecuencia: formData.frecuencia,
+          horarioInicio: formData.horarioInicio,
+          horarioFin: formData.horarioFin,
+          descripcion: formData.descripcion,
+          whatsapp: formData.whatsapp,
+          instagram: formData.instagram,
+          facebook: formData.facebook,
+          otroTipo: formData.plataformaOtraRed,
+          otro: formData.otraRedSocial,
+          aceptaExpositores: formData.aceptaExpositores,
+          entrada: formData.entradaLibre,
+          organizador: formData.nombreOrganizador,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.ok) {
+        setSubmitted(true);
+      } else {
+        setError("Hubo un error, intenta de nuevo.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Hubo un error, intenta de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -106,6 +150,12 @@ export default function PublishBazarForm() {
           {/* FORMULARIO */}
           <div className="lg:col-span-2 bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-gray-100">
             <form onSubmit={handleSubmit} className="space-y-8">
+              {error && (
+                <div className="bg-red-50 text-red-600 p-4 rounded-xl font-bold text-center border border-red-100">
+                  {error}
+                </div>
+              )}
+              
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Nombre del Bazar */}
                 <div className="flex flex-col gap-2">
@@ -387,9 +437,10 @@ export default function PublishBazarForm() {
 
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-5 rounded-2xl font-extrabold text-xl hover:brightness-110 transition shadow-xl shadow-primary/20"
+                disabled={loading}
+                className={`w-full bg-primary text-white py-5 rounded-2xl font-extrabold text-xl transition shadow-xl shadow-primary/20 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:brightness-110'}`}
               >
-                Enviar solicitud
+                {loading ? "Enviando solicitud..." : "Enviar solicitud"}
               </button>
             </form>
           </div>

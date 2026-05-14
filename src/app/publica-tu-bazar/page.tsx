@@ -469,7 +469,7 @@ export default function PublishBazarForm() {
               <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
                 <p className="text-white/70 text-sm mb-4">¿Dudas? Escríbenos</p>
                 <a 
-                  href="https://wa.me/5215500000000" 
+                  href="https://wa.me/5215623194635" 
                   className="inline-flex items-center gap-2 font-bold hover:text-yellow-brand transition"
                 >
                   <span className="text-xl">💬</span>

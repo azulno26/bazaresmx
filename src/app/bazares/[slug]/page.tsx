@@ -24,8 +24,14 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return {
-    title: `${bazar.nombre} | BazaresMX`,
+    title: bazar.nombre,
     description: bazar.descripcion,
+    openGraph: {
+      title: `${bazar.nombre} | BazaresMX`,
+      description: bazar.descripcion,
+      images: [{ url: bazar.imagen }],
+      type: 'website',
+    }
   };
 }
 
@@ -179,6 +185,37 @@ export default async function Page({ params }: Props) {
           </div>
         </div>
       </main>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Event",
+            "name": bazar.nombre,
+            "description": bazar.descripcion,
+            "startDate": bazar.fecha,
+            "location": {
+              "@type": "Place",
+              "name": bazar.nombre,
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": (bazar as any).direccion,
+                "addressLocality": bazar.colonia,
+                "addressRegion": bazar.ciudad,
+                "addressCountry": "MX"
+              }
+            },
+            "organizer": {
+              "@type": "Organization",
+              "name": bazar.nombre,
+              "url": bazar.instagram
+            },
+            "isAccessibleForFree": bazar.entrada === "libre",
+            "url": `https://www.bazaresmx.com.mx/bazares/${bazar.slug}`
+          })
+        }}
+      />
     </div>
   );
 }

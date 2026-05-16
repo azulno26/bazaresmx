@@ -45,10 +45,6 @@ export const metadata = {
   verification: {
     google: 'H9mAWGoQPo7Yr58DQKNOqIotGOERr2wizLYV2-nHIkA',
   },
-  icons: {
-    icon: '/images/favicon.png',
-    apple: '/images/favicon.png',
-  }
 }
 
 export default function RootLayout({

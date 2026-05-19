@@ -37,8 +37,14 @@ export default function BazaresDirectory() {
     setAcceptsExhibitorsOnly(false);
   };
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr + "T00:00:00").toLocaleDateString("es-MX", {
+  const formatDate = (bazar: any) => {
+    if ("fechas" in bazar && Array.isArray(bazar.fechas)) {
+      return bazar.fechas.map((f: string) => new Date(f + "T00:00:00").toLocaleDateString("es-MX", {
+        day: "numeric",
+        month: "long",
+      })).join(" · ");
+    }
+    return new Date(bazar.fecha + "T00:00:00").toLocaleDateString("es-MX", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -185,7 +191,7 @@ export default function BazaresDirectory() {
                     
                     <div className="flex flex-col gap-2 text-gray-500 font-medium text-sm mb-6 flex-1">
                       <span className="flex items-center gap-2">📍 {bazar.ciudad}, {bazar.colonia}</span>
-                      <span className="flex items-center gap-2">📅 {formatDate(bazar.fecha)}</span>
+                      <span className="flex items-center gap-2">📅 {formatDate(bazar)}</span>
                     </div>
 
                     <div className="pt-4 border-t border-gray-100 flex justify-between items-center">

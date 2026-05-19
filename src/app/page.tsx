@@ -118,7 +118,12 @@ export default function LandingPage() {
                       <h3 className="text-2xl font-bold mt-5 mb-3 group-hover:text-primary transition">{bazar.nombre}</h3>
                       <div className="flex flex-col gap-2 text-gray-500 font-medium">
                         <span className="flex items-center gap-2">📍 {bazar.ciudad}, {bazar.colonia}</span>
-                        <span className="flex items-center gap-2">📅 {new Date(bazar.fecha + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })} · {bazar.horario}</span>
+                        <span className="flex items-center gap-2">
+                          📅 {"fechas" in bazar && Array.isArray((bazar as any).fechas)
+                            ? `${(bazar as any).fechas.map((f: string) => new Date(f + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long' })).join(' · ')} · ${bazar.horario}`
+                            : `${new Date(bazar.fecha + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })} · ${bazar.horario}`
+                          }
+                        </span>
                       </div>
                     </div>
                   </div>

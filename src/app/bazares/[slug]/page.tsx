@@ -43,11 +43,21 @@ export default async function Page({ params }: Props) {
     notFound();
   }
 
-  const formattedDate = new Date(bazar.fecha + "T00:00:00").toLocaleDateString("es-MX", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  let formattedDate = "";
+  if ("fechas" in bazar && Array.isArray((bazar as any).fechas)) {
+    formattedDate = (bazar as any).fechas.map((f: string) => {
+      return new Date(f + "T00:00:00").toLocaleDateString("es-MX", {
+        day: "numeric",
+        month: "long",
+      });
+    }).join(" · ") + ` · ${bazar.horario}`;
+  } else {
+    formattedDate = new Date(bazar.fecha + "T00:00:00").toLocaleDateString("es-MX", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }) + ` · ${bazar.horario}`;
+  }
 
   return (
     <div className="min-h-screen bg-[#FFFAF5] pb-20">
@@ -142,11 +152,9 @@ export default async function Page({ params }: Props) {
               </h3>
               <ul className="space-y-6">
                 <li className="flex flex-col">
-                  <span className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Horario</span>
-                  <span className="text-lg font-bold">{bazar.horario}</span>
-                </li>
-                <li className="flex flex-col">
-                  <span className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Próxima Fecha</span>
+                  <span className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">
+                    {"fechas" in bazar && Array.isArray((bazar as any).fechas) ? "Fechas y Horario" : "Próxima Fecha y Horario"}
+                  </span>
                   <span className="text-lg font-bold">{formattedDate}</span>
                 </li>
                 {bazar.entrada === "libre" && (

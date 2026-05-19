@@ -189,6 +189,16 @@ export default async function Page({ params }: Props) {
               >
                 <span>Ver en Instagram</span>
               </a>
+              {(bazar as any).facebook && (
+                <a
+                  href={(bazar as any).facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 w-full bg-accent text-white py-4 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-lg"
+                >
+                  <span>Contactar por FB</span>
+                </a>
+              )}
             </div>
           </div>
         </div>

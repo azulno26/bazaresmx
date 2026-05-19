@@ -30,14 +30,15 @@
     "direccion": "Calzada del Hueso 380, Salón LUX del Deportivo SME, Copa, CDMX",
     "fecha": "2026-08-30",
     "horario": "11:00 - 18:00",
+    "descripcion": "Somos Kitty fest kawaii en cada edición hacemos diferentes temáticas, para los Kitty lovers y kawaii lovers",
     "imagen": "/images/kitty-fest-kawaii.jpg",
     "instagram": "https://instagram.com/kitty_fest_kawaii",
     "whatsapp": "5215617221276",
-    "tags": ["kawaii", "diseño", "artesanal"],
+    "tags": ["kawaii", "diseño", "temático"],
     "destacado": true,
     "acepta_expositores": true,
     "entrada": "libre",
-    "tipo": "artesanal",
+    "tipo": "kawaii",
     "recurrente": false
   }
 ]

@@ -20,5 +20,24 @@
     "direccion": "Narciso 168, Nueva Santa María, Azcapotzalco",
     "recurrente": true,
     "recurrencia": "Todos los sábados"
+  },
+  {
+    "id": "3",
+    "slug": "kitty-fest-kawaii-cdmx",
+    "nombre": "Kitty Fest Kawaii",
+    "ciudad": "CDMX",
+    "colonia": "Copa",
+    "direccion": "Calzada del Hueso 380, Salón LUX del Deportivo SME, Copa, CDMX",
+    "fecha": "2026-08-30",
+    "horario": "11:00 - 18:00",
+    "imagen": "/images/kitty-fest-kawaii.jpg",
+    "instagram": "https://instagram.com/kitty_fest_kawaii",
+    "whatsapp": "5215617221276",
+    "tags": ["kawaii", "diseño", "artesanal"],
+    "destacado": true,
+    "acepta_expositores": true,
+    "entrada": "libre",
+    "tipo": "artesanal",
+    "recurrente": false
   }
 ]

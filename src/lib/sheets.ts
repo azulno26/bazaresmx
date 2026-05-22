@@ -61,7 +61,7 @@ export async function getBazaresFromSheets() {
       destacado: row[20] === 'pro',
       badge: row[20] === 'pro' ? 'destacado' : '',
       tags: [] as string[],
-      tipo: 'artesanal',
+      tipo: row[25] || 'artesanal',
       recurrente: false,
     }))
     .filter((bazar: any) => {

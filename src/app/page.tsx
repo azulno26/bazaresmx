@@ -4,6 +4,24 @@ import Link from "next/link";
 
 export const revalidate = 86400;
 
+function formatBazarDate(bazar: any) {
+  const fInicio = new Date(bazar.fecha + "T00:00:00");
+  const hasFechaFin = bazar.fechaFin && bazar.fechaFin !== "";
+  
+  if (hasFechaFin && bazar.fechaFin !== bazar.fecha) {
+    const fFin = new Date(bazar.fechaFin + "T00:00:00");
+    const dInicio = fInicio.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
+    const dFin = fFin.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+    return `${dInicio} - ${dFin}`;
+  }
+  
+  return fInicio.toLocaleDateString("es-MX", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export default async function LandingPage() {
   const bazares = await getBazaresFromSheets();
   return (
@@ -135,10 +153,7 @@ export default async function LandingPage() {
                       <div className="flex flex-col gap-2 text-gray-500 font-medium">
                         <span className="flex items-center gap-2">📍 {bazar.ciudad}, {bazar.colonia}</span>
                         <span className="flex items-center gap-2">
-                          📅 {"fechas" in bazar && Array.isArray((bazar as any).fechas)
-                            ? `${(bazar as any).fechas.map((f: string) => new Date(f + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long' })).join(' · ')}`
-                            : `${new Date(bazar.fecha + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}`
-                          }
+                          📅 {formatBazarDate(bazar)}
                         </span>
                         {bazar.horario && bazar.horario !== "" && bazar.horario.toLowerCase() !== "por confirmar" && (
                           <span className="flex items-center gap-2">📅 {bazar.horario}</span>

@@ -37,13 +37,17 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
   };
 
   const formatDate = (bazar: any) => {
-    if ("fechas" in bazar && Array.isArray(bazar.fechas)) {
-      return bazar.fechas.map((f: string) => new Date(f + "T00:00:00").toLocaleDateString("es-MX", {
-        day: "numeric",
-        month: "long",
-      })).join(" · ");
+    const fInicio = new Date(bazar.fecha + "T00:00:00");
+    const hasFechaFin = bazar.fechaFin && bazar.fechaFin !== "";
+    
+    if (hasFechaFin && bazar.fechaFin !== bazar.fecha) {
+      const fFin = new Date(bazar.fechaFin + "T00:00:00");
+      const dInicio = fInicio.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
+      const dFin = fFin.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+      return `${dInicio} - ${dFin}`;
     }
-    return new Date(bazar.fecha + "T00:00:00").toLocaleDateString("es-MX", {
+    
+    return fInicio.toLocaleDateString("es-MX", {
       day: "numeric",
       month: "long",
       year: "numeric",

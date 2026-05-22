@@ -7,7 +7,7 @@ export async function getBazaresFromSheets() {
   const apiKey = process.env.GOOGLE_SHEETS_API_KEY
   
   const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${apiKey}`
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Bazares%21A2%3AZ100?key=${apiKey}`
   )
   
   if (!response.ok) {

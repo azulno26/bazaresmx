@@ -3,6 +3,17 @@ import { google } from 'googleapis'
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk'
 const RANGE = 'Bazares!A2:Z100'
 
+function parseDate(dateStr: string): Date {
+  if (!dateStr) return new Date(0)
+  // Si tiene formato DD/M/YYYY o DD/MM/YYYY
+  if (dateStr.includes('/')) {
+    const [d, m, y] = dateStr.split('/')
+    return new Date(`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`)
+  }
+  // Si tiene formato YYYY-MM-DD
+  return new Date(dateStr)
+}
+
 export async function getBazaresFromSheets() {
   const apiKey = process.env.GOOGLE_SHEETS_API_KEY
   
@@ -43,7 +54,7 @@ export async function getBazaresFromSheets() {
       imagen3: row[19] || '',
       imagenes: [row[17], row[18], row[19]].filter(Boolean),
       plan: row[20] || 'básico',
-      activo: row[21] === '1' || (row[21] as any) === 1,
+      activo: row[21] === '1' || (row[21] as any) === 1 || Number(row[21]) === 1,
       publicado: row[22] || '',
       vencimiento: row[23] || '',
       notas: row[24] || '',
@@ -56,7 +67,7 @@ export async function getBazaresFromSheets() {
     .filter((bazar: any) => {
       if (!bazar.activo) return false
       if (!bazar.vencimiento) return true
-      const venc = new Date(bazar.vencimiento)
+      const venc = parseDate(bazar.vencimiento)
       return venc >= today
     })
 }

@@ -13,7 +13,7 @@ type Props = {
 
 export async function generateStaticParams() {
   const bazares = await getBazaresFromSheets();
-  return bazares.map((b) => ({
+  return bazares.map((b: any) => ({
     slug: b.slug,
   }));
 }
@@ -21,7 +21,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const bazares = await getBazaresFromSheets();
-  const bazar = bazares.find((b) => b.slug === slug);
+  const bazar = bazares.find((b: any) => b.slug === slug);
 
   if (!bazar) {
     return {
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const bazares = await getBazaresFromSheets();
-  const bazar = bazares.find((b) => b.slug === slug);
+  const bazar = bazares.find((b: any) => b.slug === slug);
 
   if (!bazar) {
     notFound();
@@ -154,7 +154,7 @@ export default async function Page({ params }: Props) {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  {bazar.tags.map((tag) => (
+                  {bazar.tags.map((tag: any) => (
                     <span 
                       key={tag} 
                       className="bg-[#D1F2E8] text-primary px-4 py-2 rounded-xl font-bold text-sm"
@@ -168,7 +168,7 @@ export default async function Page({ params }: Props) {
               <section>
                 <h2 className="text-2xl font-bold mb-4 text-primary">Qué encontrarás</h2>
                 <div className="flex flex-wrap gap-3">
-                  {bazar.tags.map((tag) => (
+                  {bazar.tags.map((tag: any) => (
                     <span 
                       key={tag} 
                       className="bg-[#D1F2E8] text-primary px-4 py-2 rounded-xl font-bold text-sm"

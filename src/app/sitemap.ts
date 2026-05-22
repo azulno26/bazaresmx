@@ -2,7 +2,7 @@ import { getBazaresFromSheets } from '@/src/lib/sheets'
 
 export default async function sitemap() {
   const bazares = await getBazaresFromSheets()
-  const bazarUrls = bazares.map((b) => ({
+  const bazarUrls = bazares.map((b: any) => ({
     url: `https://www.bazaresmx.com.mx/bazares/${b.slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,

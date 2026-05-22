@@ -4,20 +4,23 @@ const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk'
 const RANGE = 'Bazares!A2:Z100'
 
 export async function getBazaresFromSheets() {
-  const sheets = google.sheets({ version: 'v4' })
+  const apiKey = process.env.GOOGLE_SHEETS_API_KEY
   
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId: SHEET_ID,
-    range: RANGE,
-    key: process.env.GOOGLE_SHEETS_API_KEY,
-  })
-
-  const rows = response.data.values || []
+  const response = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${apiKey}`
+  )
+  
+  if (!response.ok) {
+    throw new Error(`Sheets API error: ${response.status}`)
+  }
+  
+  const data = await response.json()
+  const rows = (data.values || []) as string[][]
   const today = new Date()
   today.setHours(0,0,0,0)
 
   return rows
-    .map((row) => ({
+    .map((row: string[]) => ({
       id: row[0] || '',
       slug: row[1] || '',
       nombre: row[2] || '',
@@ -40,17 +43,17 @@ export async function getBazaresFromSheets() {
       imagen3: row[19] || '',
       imagenes: [row[17], row[18], row[19]].filter(Boolean),
       plan: row[20] || 'básico',
-      activo: row[21] === '1' || row[21] === 1,
+      activo: row[21] === '1' || (row[21] as any) === 1,
       publicado: row[22] || '',
       vencimiento: row[23] || '',
       notas: row[24] || '',
       destacado: row[20] === 'pro',
       badge: row[20] === 'pro' ? 'destacado' : '',
-      tags: [],
+      tags: [] as string[],
       tipo: 'artesanal',
       recurrente: false,
     }))
-    .filter((bazar) => {
+    .filter((bazar: any) => {
       if (!bazar.activo) return false
       if (!bazar.vencimiento) return true
       const venc = new Date(bazar.vencimiento)

@@ -103,7 +103,7 @@ export default async function LandingPage() {
               <p className="text-xl text-gray-600 mt-4 font-medium">Los eventos más populares esta temporada</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {bazares.map((bazar) => (
+              {bazares.map((bazar: any) => (
                 <Link key={bazar.id} href={`/bazares/${bazar.slug}`}>
                   <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition duration-500 group cursor-pointer h-full">
                     <div className="relative h-64 w-full overflow-hidden">

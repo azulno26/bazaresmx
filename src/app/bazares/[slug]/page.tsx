@@ -44,6 +44,7 @@ export default async function Page({ params }: Props) {
     notFound();
   }
 
+  const hasValidHorario = bazar.horario && bazar.horario !== "" && bazar.horario.toLowerCase() !== "por confirmar";
   let formattedDate = "";
   if ("fechas" in bazar && Array.isArray((bazar as any).fechas)) {
     formattedDate = (bazar as any).fechas.map((f: string) => {
@@ -51,13 +52,13 @@ export default async function Page({ params }: Props) {
         day: "numeric",
         month: "long",
       });
-    }).join(" · ") + (bazar.horario && bazar.horario !== "" ? ` · ${bazar.horario}` : "");
+    }).join(" · ") + (hasValidHorario ? ` · ${bazar.horario}` : "");
   } else {
     formattedDate = new Date(bazar.fecha + "T00:00:00").toLocaleDateString("es-MX", {
       day: "numeric",
       month: "long",
       year: "numeric",
-    }) + (bazar.horario && bazar.horario !== "" ? ` · ${bazar.horario}` : "");
+    }) + (hasValidHorario ? ` · ${bazar.horario}` : "");
   }
 
   return (
@@ -199,8 +200,8 @@ export default async function Page({ params }: Props) {
                 <li className="flex flex-col">
                   <span className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">
                     {"fechas" in bazar && Array.isArray((bazar as any).fechas)
-                      ? (bazar.horario && bazar.horario !== "" ? "Fechas y Horario" : "Fechas")
-                      : (bazar.horario && bazar.horario !== "" ? "Próxima Fecha y Horario" : "Próxima Fecha")}
+                      ? (hasValidHorario ? "Fechas y Horario" : "Fechas")
+                      : (hasValidHorario ? "Próxima Fecha y Horario" : "Próxima Fecha")}
                   </span>
                   <span className="text-lg font-bold">{formattedDate}</span>
                 </li>

@@ -131,7 +131,7 @@ export default function LandingPage() {
                             : `${new Date(bazar.fecha + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}`
                           }
                         </span>
-                        {bazar.horario && bazar.horario !== "" && (
+                        {bazar.horario && bazar.horario !== "" && bazar.horario.toLowerCase() !== "por confirmar" && (
                           <span className="flex items-center gap-2">📅 {bazar.horario}</span>
                         )}
                       </div>

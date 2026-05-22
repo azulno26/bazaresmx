@@ -201,7 +201,9 @@ export default function BazaresDirectory() {
 
                     <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
                       <span className="text-primary font-bold text-sm">Ver detalles →</span>
-                      <span className="text-gray-400 text-xs font-bold uppercase">{bazar.horario}</span>
+                      {bazar.horario && bazar.horario !== "" && bazar.horario.toLowerCase() !== "por confirmar" && (
+                        <span className="text-gray-400 text-xs font-bold uppercase">{bazar.horario}</span>
+                      )}
                     </div>
                   </div>
                 </div>

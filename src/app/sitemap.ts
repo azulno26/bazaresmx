@@ -1,6 +1,7 @@
-import bazares from '@/src/data/bazares.json'
+import { getBazaresFromSheets } from '@/src/lib/sheets'
 
-export default function sitemap() {
+export default async function sitemap() {
+  const bazares = await getBazaresFromSheets()
   const bazarUrls = bazares.map((b) => ({
     url: `https://www.bazaresmx.com.mx/bazares/${b.slug}`,
     lastModified: new Date(),

@@ -1,8 +1,9 @@
 import Image from "next/image";
-import bazares from "@/src/data/bazares.json";
+import { getBazaresFromSheets } from "@/src/lib/sheets";
 import Link from "next/link";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const bazares = await getBazaresFromSheets();
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. NAVBAR */}

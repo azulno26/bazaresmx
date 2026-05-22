@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import bazares from "@/src/data/bazares.json";
+import { getBazaresFromSheets } from "@/src/lib/sheets";
 import BazarCarrusel from "./BazarCarrusel";
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export async function generateStaticParams() {
+  const bazares = await getBazaresFromSheets();
   return bazares.map((b) => ({
     slug: b.slug,
   }));
@@ -16,6 +17,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
+  const bazares = await getBazaresFromSheets();
   const bazar = bazares.find((b) => b.slug === slug);
 
   if (!bazar) {
@@ -38,6 +40,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
+  const bazares = await getBazaresFromSheets();
   const bazar = bazares.find((b) => b.slug === slug);
 
   if (!bazar) {

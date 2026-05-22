@@ -250,6 +250,18 @@ export default async function Page({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {(bazar as any).publicado && (
+          <p className="text-xs text-gray-300 mt-8 text-right">
+            Publicado el {(() => {
+              const parts = (bazar as any).publicado.split("-");
+              const date = parts[0].length === 4
+                ? new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
+                : new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+              return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+            })()}
+          </p>
+        )}
       </main>
 
       <script

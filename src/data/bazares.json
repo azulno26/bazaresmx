@@ -25,7 +25,8 @@
     "entrada": "libre",
     "tipo": "artesanal",
     "recurrente": false,
-    "badge": "destacado"
+    "badge": "destacado",
+    "publicado": "18-05-2026"
   },
   {
     "id": "2",
@@ -47,7 +48,8 @@
     "tipo": "artesanal",
     "direccion": "Narciso 168, Nueva Santa María, Azcapotzalco",
     "recurrente": true,
-    "recurrencia": "Todos los sábados"
+    "recurrencia": "Todos los sábados",
+    "publicado": "21-05-2026"
   },
   {
     "id": "3",
@@ -68,6 +70,7 @@
     "acepta_expositores": true,
     "entrada": "libre",
     "tipo": "kawaii",
-    "recurrente": false
+    "recurrente": false,
+    "publicado": "18-05-2026"
   }
 ]

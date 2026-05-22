@@ -158,11 +158,7 @@ export default function BazaresDirectory() {
                       src={bazar.imagen}
                       alt={bazar.nombre}
                       fill
-                      className={`transition duration-700 ${
-                        bazar.slug === "bazarista" 
-                          ? "object-contain bg-neutral-50" 
-                          : "object-cover group-hover:scale-105"
-                      }`}
+                      className="object-cover group-hover:scale-105 transition duration-700"
                     />
                     <div className="absolute top-4 left-4 flex gap-2">
                       {(bazar as any).badge === "destacado" && (

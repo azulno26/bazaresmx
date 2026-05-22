@@ -24,22 +24,29 @@ export default function BazarCarrusel({ imagenes, nombre, tipo }: BazarCarruselP
     <div className="relative w-full h-80 rounded-[2rem] overflow-hidden shadow-2xl mb-10 group">
       {/* Images container */}
       <div className="relative w-full h-full">
-        {imagenes.map((img, idx) => (
-          <div
-            key={img}
-            className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
-              idx === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
-          >
-            <Image
-              src={img}
-              alt={`${nombre} - ${idx + 1}`}
-              fill
-              className="object-contain w-full h-full bg-neutral-50"
-              priority={idx === 0}
-            />
-          </div>
-        ))}
+        {imagenes.map((img, idx) => {
+          const isPersonImage = img.includes("bazarista-3") || img.includes("persona");
+          return (
+            <div
+              key={img}
+              className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+                idx === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+              }`}
+            >
+              <Image
+                src={img}
+                alt={`${nombre} - ${idx + 1}`}
+                fill
+                className={`${
+                  isPersonImage 
+                    ? "object-contain bg-[#FFFAF5]" 
+                    : "object-cover"
+                } w-full h-full`}
+                priority={idx === 0}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {/* Tipo Badge */}

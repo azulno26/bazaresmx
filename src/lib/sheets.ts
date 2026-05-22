@@ -54,7 +54,7 @@ export async function getBazaresFromSheets() {
       imagen3: row[19] || '',
       imagenes: [row[17], row[18], row[19]].filter(Boolean),
       plan: row[20] || 'básico',
-      activo: row[21] === '1' || (row[21] as any) === 1 || Number(row[21]) === 1,
+      activo: row[21] === '1' || Number(row[21]) === 1,
       publicado: row[22] || '',
       vencimiento: row[23] || '',
       notas: row[24] || '',

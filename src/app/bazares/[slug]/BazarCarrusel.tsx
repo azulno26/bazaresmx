@@ -35,7 +35,7 @@ export default function BazarCarrusel({ imagenes, nombre, tipo }: BazarCarruselP
               src={img}
               alt={`${nombre} - ${idx + 1}`}
               fill
-              className="object-cover w-full h-full"
+              className="object-contain w-full h-full bg-neutral-50"
               priority={idx === 0}
             />
           </div>

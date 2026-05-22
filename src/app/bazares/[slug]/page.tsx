@@ -51,13 +51,13 @@ export default async function Page({ params }: Props) {
         day: "numeric",
         month: "long",
       });
-    }).join(" · ") + ` · ${bazar.horario}`;
+    }).join(" · ") + (bazar.horario && bazar.horario !== "" ? ` · ${bazar.horario}` : "");
   } else {
     formattedDate = new Date(bazar.fecha + "T00:00:00").toLocaleDateString("es-MX", {
       day: "numeric",
       month: "long",
       year: "numeric",
-    }) + ` · ${bazar.horario}`;
+    }) + (bazar.horario && bazar.horario !== "" ? ` · ${bazar.horario}` : "");
   }
 
   return (
@@ -198,7 +198,9 @@ export default async function Page({ params }: Props) {
               <ul className="space-y-6">
                 <li className="flex flex-col">
                   <span className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">
-                    {"fechas" in bazar && Array.isArray((bazar as any).fechas) ? "Fechas y Horario" : "Próxima Fecha y Horario"}
+                    {"fechas" in bazar && Array.isArray((bazar as any).fechas)
+                      ? (bazar.horario && bazar.horario !== "" ? "Fechas y Horario" : "Fechas")
+                      : (bazar.horario && bazar.horario !== "" ? "Próxima Fecha y Horario" : "Próxima Fecha")}
                   </span>
                   <span className="text-lg font-bold">{formattedDate}</span>
                 </li>

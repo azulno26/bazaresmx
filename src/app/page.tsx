@@ -127,10 +127,13 @@ export default function LandingPage() {
                         <span className="flex items-center gap-2">📍 {bazar.ciudad}, {bazar.colonia}</span>
                         <span className="flex items-center gap-2">
                           📅 {"fechas" in bazar && Array.isArray((bazar as any).fechas)
-                            ? `${(bazar as any).fechas.map((f: string) => new Date(f + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long' })).join(' · ')} · ${bazar.horario}`
-                            : `${new Date(bazar.fecha + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })} · ${bazar.horario}`
+                            ? `${(bazar as any).fechas.map((f: string) => new Date(f + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long' })).join(' · ')}`
+                            : `${new Date(bazar.fecha + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })}`
                           }
                         </span>
+                        {bazar.horario && bazar.horario !== "" && (
+                          <span className="flex items-center gap-2">📅 {bazar.horario}</span>
+                        )}
                       </div>
                     </div>
                   </div>

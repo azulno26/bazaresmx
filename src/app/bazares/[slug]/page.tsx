@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getBazaresFromSheets } from "@/src/lib/sheets";
 import BazarCarrusel from "./BazarCarrusel";
 
+export const revalidate = 86400;
+
 type Props = {
   params: Promise<{ slug: string }>;
 };

@@ -51,21 +51,12 @@ export default async function Page({ params }: Props) {
   }
 
   const hasValidHorario = bazar.horario && bazar.horario !== "" && bazar.horario.toLowerCase() !== "por confirmar";
-  let formattedDate = "";
-  if ("fechas" in bazar && Array.isArray((bazar as any).fechas)) {
-    formattedDate = (bazar as any).fechas.map((f: string) => {
-      return new Date(f + "T00:00:00").toLocaleDateString("es-MX", {
-        day: "numeric",
-        month: "long",
-      });
-    }).join(" · ") + (hasValidHorario ? ` · ${bazar.horario}` : "");
-  } else {
-    formattedDate = new Date(bazar.fecha + "T00:00:00").toLocaleDateString("es-MX", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }) + (hasValidHorario ? ` · ${bazar.horario}` : "");
-  }
+  const fechaInicio = bazar.fecha ? new Date(bazar.fecha + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+  const fechaFin = bazar.fechaFin && bazar.fechaFin !== bazar.fecha ? new Date(bazar.fechaFin + "T00:00:00").toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+
+  const fechaDisplay = fechaFin 
+    ? `${fechaInicio} - ${fechaFin}` 
+    : fechaInicio
 
   return (
     <div className="min-h-screen bg-[#FFFAF5] pb-20">
@@ -215,7 +206,7 @@ export default async function Page({ params }: Props) {
                       ? (hasValidHorario ? "Fechas y Horario" : "Fechas")
                       : (hasValidHorario ? "Próxima Fecha y Horario" : "Próxima Fecha")}
                   </span>
-                  <span className="text-lg font-bold">{formattedDate}</span>
+                  <span className="text-lg font-bold">{fechaDisplay}</span>
                 </li>
                 {bazar.entrada === "libre" && (
                   <li className="flex flex-col">

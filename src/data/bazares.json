@@ -1,5 +1,32 @@
 [
   {
+    "id": "4",
+    "slug": "bazarista",
+    "nombre": "Bazarista",
+    "ciudad": "Estado de México",
+    "colonia": "Las Margaritas, Cd. López Mateos",
+    "direccion": "Galerías Atizapán — Av. Adolfo Ruiz Cortines 255, Las Margaritas, 52977 Cd. López Mateos, Estado de México",
+    "fecha": "2026-05-22",
+    "fechas": ["2026-05-22", "2026-05-23", "2026-05-24"],
+    "horario": "11:00 - 18:00",
+    "imagen": "/images/bazarista-1.jpg",
+    "imagenes": [
+      "/images/bazarista-1.jpg",
+      "/images/bazarista-2.jpg",
+      "/images/bazarista-3.jpg"
+    ],
+    "descripcion": "La fiesta del emprendimiento. Desde 2021 hemos colaborado con más de 1,600 marcas emergentes, artesanales y creativas en centros comerciales de México.",
+    "instagram": "https://instagram.com/bazarista",
+    "whatsapp": "5215528543109",
+    "tags": ["emprendimiento", "artesanal", "diseño"],
+    "destacado": true,
+    "acepta_expositores": true,
+    "entrada": "libre",
+    "tipo": "artesanal",
+    "recurrente": false,
+    "badge": "destacado"
+  },
+  {
     "id": "2",
     "slug": "bazar-dulce-cempasuchil-azcapotzalco",
     "nombre": "Bazar Dulce Cempasúchil",

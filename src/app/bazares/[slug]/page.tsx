@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import bazares from "@/src/data/bazares.json";
+import BazarCarrusel from "./BazarCarrusel";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -73,20 +74,28 @@ export default async function Page({ params }: Props) {
 
       <main className="max-w-5xl mx-auto px-6">
         {/* HEADER */}
-        <div className="relative w-full h-72 md:h-96 rounded-[2rem] overflow-hidden shadow-2xl mb-10">
-          <Image
-            src={bazar.imagen}
-            alt={bazar.nombre}
-            fill
-            className="object-cover"
-            priority
+        {bazar.imagenes && bazar.imagenes.length > 1 ? (
+          <BazarCarrusel
+            imagenes={bazar.imagenes}
+            nombre={bazar.nombre}
+            tipo={bazar.tipo}
           />
-          <div className="absolute top-6 left-6">
-            <span className="bg-accent text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg">
-              {bazar.tipo}
-            </span>
+        ) : (
+          <div className="relative w-full h-72 md:h-96 rounded-[2rem] overflow-hidden shadow-2xl mb-10">
+            <Image
+              src={bazar.imagen}
+              alt={bazar.nombre}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute top-6 left-6">
+              <span className="bg-accent text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg">
+                {bazar.tipo}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="mb-12">
           <h1 className="font-syne text-4xl md:text-6xl font-extrabold text-[#1a1a1a] mb-4 tracking-tight">
@@ -108,19 +117,55 @@ export default async function Page({ params }: Props) {
               </p>
             </section>
 
-            <section>
-              <h2 className="text-2xl font-bold mb-4 text-primary">Qué encontrarás</h2>
-              <div className="flex flex-wrap gap-3">
-                {bazar.tags.map((tag) => (
-                  <span 
-                    key={tag} 
-                    className="bg-[#D1F2E8] text-primary px-4 py-2 rounded-xl font-bold text-sm"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </section>
+            {((bazar as any).queEncontraras || bazar.slug === "bazarista") ? (
+              <section>
+                <h2 className="text-2xl font-bold mb-4 text-primary">Qué encontrarás</h2>
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4 mb-6">
+                  <div className="flex items-start gap-3 text-lg text-gray-700">
+                    <span className="text-2xl leading-none">🎨</span>
+                    <div>
+                      <span className="font-semibold text-gray-900">Marcas emergentes y diseño independiente</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 text-lg text-gray-700">
+                    <span className="text-2xl leading-none">🛍️</span>
+                    <div>
+                      <span className="font-semibold text-gray-900">Productos artesanales y de consumo local</span>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 text-lg text-gray-700">
+                    <span className="text-2xl leading-none">🌱</span>
+                    <div>
+                      <span className="font-semibold text-gray-900">Emprendimiento y economía creativa</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {bazar.tags.map((tag) => (
+                    <span 
+                      key={tag} 
+                      className="bg-[#D1F2E8] text-primary px-4 py-2 rounded-xl font-bold text-sm"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <section>
+                <h2 className="text-2xl font-bold mb-4 text-primary">Qué encontrarás</h2>
+                <div className="flex flex-wrap gap-3">
+                  {bazar.tags.map((tag) => (
+                    <span 
+                      key={tag} 
+                      className="bg-[#D1F2E8] text-primary px-4 py-2 rounded-xl font-bold text-sm"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {(bazar as any).recurrente && (
               <section className="bg-yellow-brand/10 p-6 rounded-2xl border border-yellow-brand/20">

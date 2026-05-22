@@ -161,6 +161,11 @@ export default function BazaresDirectory() {
                       className="object-cover group-hover:scale-105 transition duration-700"
                     />
                     <div className="absolute top-4 left-4 flex gap-2">
+                      {(bazar as any).badge === "destacado" && (
+                        <span className="bg-[#0B5E43] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">
+                          ⭐ Destacado
+                        </span>
+                      )}
                       <span className="bg-white/90 backdrop-blur-md text-primary px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest shadow-sm">
                         {bazar.tipo}
                       </span>

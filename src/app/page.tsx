@@ -110,6 +110,13 @@ export default function LandingPage() {
                         fill 
                         className="object-cover group-hover:scale-105 transition duration-700"
                       />
+                      {(bazar as any).badge === "destacado" && (
+                        <div className="absolute top-4 left-4 z-10">
+                          <span className="bg-[#0B5E43] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">
+                            ⭐ Destacado
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <div className="p-8">
                       <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">

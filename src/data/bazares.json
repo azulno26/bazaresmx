@@ -72,5 +72,27 @@
     "tipo": "kawaii",
     "recurrente": false,
     "publicado": "18-05-2026"
+  },
+  {
+    "id": "5",
+    "slug": "eremos-bazar",
+    "nombre": "Eremos Bazar",
+    "ciudad": "CDMX",
+    "colonia": "Nola Restaurante",
+    "direccion": "Nola Restaurante, CDMX",
+    "fecha": "2026-06-13",
+    "fechas": ["2026-06-13", "2026-06-14"],
+    "horario": "Por confirmar",
+    "imagen": "/images/Eremos.jpg",
+    "descripcion": "El primer bazar con shows en vivo y talleres de la ciudad. Concepto vintage y circense para todas las edades.",
+    "instagram": "https://www.instagram.com/eremosbazar/",
+    "whatsapp": "",
+    "tags": ["vintage", "circense", "shows en vivo", "talleres"],
+    "destacado": false,
+    "acepta_expositores": true,
+    "entrada": "libre",
+    "tipo": "artesanal",
+    "recurrente": false,
+    "publicado": "2026-05-22"
   }
 ]

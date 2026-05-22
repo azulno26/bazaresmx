@@ -83,13 +83,19 @@ export default async function Page({ params }: Props) {
           />
         ) : (
           <div className="relative w-full h-72 md:h-96 rounded-[2rem] overflow-hidden shadow-2xl mb-10">
-            <Image
-              src={bazar.imagen}
-              alt={bazar.nombre}
-              fill
-              className="object-cover"
-              priority
-            />
+            {bazar.imagen && bazar.imagen !== "" ? (
+              <Image
+                src={bazar.imagen}
+                alt={bazar.nombre}
+                fill
+                className="object-cover"
+                priority
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400 font-bold text-2xl p-4 text-center">
+                📸 Imagen próximamente
+              </div>
+            )}
             <div className="absolute top-6 left-6">
               <span className="bg-accent text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg">
                 {bazar.tipo}

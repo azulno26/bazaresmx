@@ -94,5 +94,28 @@
     "tipo": "artesanal",
     "recurrente": false,
     "publicado": "2026-05-22"
+  },
+  {
+    "id": "6",
+    "slug": "black-fest-puebla",
+    "nombre": "Black Fest",
+    "ciudad": "Puebla",
+    "colonia": "Analco",
+    "direccion": "Avenida 7 Oriente 807, Analco, Puebla",
+    "fecha": "2026-06-06",
+    "fechas": ["2026-06-06", "2026-06-07"],
+    "horario": "11:00 - 17:00",
+    "descripcion": "Bazar del mundo mágico de Harry Potter. Una experiencia única para todos los fans del mundo mágico.",
+    "imagen": "",
+    "instagram": "https://instagram.com/ordendelosblack",
+    "facebook": "https://facebook.com/OrdendelosBlack",
+    "whatsapp": "5212211961915",
+    "tags": ["temático", "harry potter", "fantasia"],
+    "destacado": false,
+    "acepta_expositores": true,
+    "entrada": "pagada",
+    "tipo": "temático",
+    "recurrente": false,
+    "publicado": "2026-05-22"
   }
 ]

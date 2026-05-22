@@ -154,12 +154,18 @@ export default function BazaresDirectory() {
               <Link key={bazar.id} href={`/bazares/${bazar.slug}`}>
                 <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-1 group h-full flex flex-col">
                   <div className="relative h-56 w-full overflow-hidden">
-                    <Image
-                      src={bazar.imagen}
-                      alt={bazar.nombre}
-                      fill
-                      className="object-cover group-hover:scale-105 transition duration-700"
-                    />
+                    {bazar.imagen && bazar.imagen !== "" ? (
+                      <Image
+                        src={bazar.imagen}
+                        alt={bazar.nombre}
+                        fill
+                        className="object-cover group-hover:scale-105 transition duration-700"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400 font-bold text-lg p-4 text-center">
+                        📸 Imagen próximamente
+                      </div>
+                    )}
                     <div className="absolute top-4 left-4 flex gap-2">
                       {(bazar as any).badge === "destacado" && (
                         <span className="bg-[#0B5E43] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">

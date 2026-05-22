@@ -104,12 +104,18 @@ export default function LandingPage() {
                 <Link key={bazar.id} href={`/bazares/${bazar.slug}`}>
                   <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition duration-500 group cursor-pointer h-full">
                     <div className="relative h-64 w-full overflow-hidden">
-                      <Image 
-                        src={bazar.imagen} 
-                        alt={bazar.nombre} 
-                        fill 
-                        className="object-cover group-hover:scale-105 transition duration-700"
-                      />
+                      {bazar.imagen && bazar.imagen !== "" ? (
+                        <Image 
+                          src={bazar.imagen} 
+                          alt={bazar.nombre} 
+                          fill 
+                          className="object-cover group-hover:scale-105 transition duration-700"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400 font-bold text-lg p-4 text-center">
+                          📸 Imagen próximamente
+                        </div>
+                      )}
                       {(bazar as any).badge === "destacado" && (
                         <div className="absolute top-4 left-4 z-10">
                           <span className="bg-[#0B5E43] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">

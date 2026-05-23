@@ -160,13 +160,24 @@ export default async function Page({ params }: Props) {
               </section>
             )}
 
-            {(bazar as any).direccion && (
+            {bazar.direccion && (
               <section>
                 <h2 className="text-2xl font-bold mb-4 text-primary">Ubicación</h2>
-                <div className="flex items-start gap-3 text-lg text-gray-700 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <div className="flex items-start gap-3 text-lg text-gray-700 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-4">
                   <span className="text-2xl">🗺️</span>
-                  <p>{(bazar as any).direccion}</p>
+                  <p>{bazar.direccion}</p>
                 </div>
+                {bazar.plan === 'pro' && (
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(bazar.direccion)}&output=embed`}
+                    width="100%"
+                    height="300"
+                    style={{ border: 0, borderRadius: '24px' }}
+                    allowFullScreen
+                    loading="lazy"
+                    className="shadow-md border border-gray-100"
+                  />
+                )}
               </section>
             )}
           </div>
@@ -251,6 +262,17 @@ export default async function Page({ params }: Props) {
                     <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.85.99 2 1.7 3.29 2 .03 1.37.03 2.74.01 4.11-.97-.06-1.93-.36-2.79-.84a8.2 8.2 0 01-2.92-2.82c-.06 3.65-.02 7.3-.04 10.95-.14 1.94-.97 3.79-2.4 5.09-1.84 1.74-4.5 2.4-6.95 1.74-2.52-.61-4.63-2.46-5.59-4.88A9.8 9.8 0 011.025 12c.16-2.87 1.52-5.61 3.82-7.3a9.85 9.85 0 018.66-1.58c.07.69.17 1.38.28 2.07A7.8 7.8 0 006.185 8c-.68 1.13-1.07 2.46-.97 3.79.08 1.96.95 3.82 2.48 5.05 1.63 1.34 3.96 1.7 5.92 1.05 1.72-.51 3.12-1.84 3.68-3.51.34-1.12.28-2.31.29-3.48-.01-4.9-.01-9.8.01-14.7-.09-.07-.1-.13-.08-.2z"/>
                   </svg>
                   <span>TikTok</span>
+                </a>
+              )}
+              {bazar.plan === 'pro' && bazar.acepta_expositores && bazar.whatsapp && bazar.whatsapp !== "" && (
+                <a
+                  href={`https://wa.me/${bazar.whatsapp}?text=Hola,%20vi%20tu%20bazar%20en%20BazaresMX%20y%20me%20interesa%20exponer%20en%20${encodeURIComponent(bazar.nombre)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 w-full text-white py-4 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-lg"
+                  style={{ backgroundColor: '#D85A30' }}
+                >
+                  <span>🛍️ Quiero exponer aquí</span>
                 </a>
               )}
             </div>

@@ -27,7 +27,7 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
         (bazar.tags || []).some((tag: string) => tag.toLowerCase().includes(q));
       const matchesCity = cityFilter === "" || bazar.ciudad === cityFilter;
       const matchesType = typeFilter === "" || bazar.tipo === typeFilter;
-      const matchesFreeEntry = !freeEntryOnly || bazar.entrada === "libre";
+      const matchesFreeEntry = !freeEntryOnly || (bazar.entrada || '').toLowerCase() === 'libre';
       const matchesExhibitors = !acceptsExhibitorsOnly || bazar.acepta_expositores;
 
       return matchesSearch && matchesCity && matchesType && matchesFreeEntry && matchesExhibitors;

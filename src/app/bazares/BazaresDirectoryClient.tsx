@@ -17,7 +17,7 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
 
   // Filtering logic
   const filteredBazares = useMemo(() => {
-    return bazaresData.filter((bazar) => {
+    const res = bazaresData.filter((bazar) => {
       const q = search.toLowerCase();
       const matchesSearch = !search || 
         bazar.nombre.toLowerCase().includes(q) ||
@@ -32,6 +32,11 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
 
       return matchesSearch && matchesCity && matchesType && matchesFreeEntry && matchesExhibitors;
     });
+
+    const ordenPlan: Record<string, number> = { pro: 1, promo: 2, medio: 3, básico: 4 };
+    return res.sort((a, b) => 
+      (ordenPlan[a.plan] || 5) - (ordenPlan[b.plan] || 5)
+    );
   }, [bazaresData, search, cityFilter, typeFilter, freeEntryOnly, acceptsExhibitorsOnly]);
 
   const resetFilters = () => {

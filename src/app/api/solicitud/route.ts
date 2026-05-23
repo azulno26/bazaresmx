@@ -4,13 +4,30 @@ import { NextRequest, NextResponse } from 'next/server'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
-  const data = await req.json()
-  
   try {
+    const formData = await req.formData()
+    const data = JSON.parse(formData.get('data') as string)
+    const imagen = formData.get('imagen') as File | null
+
+    let imageInfo = 'No se adjuntó imagen'
+    let attachments = undefined
+
+    if (imagen) {
+      const buffer = Buffer.from(await imagen.arrayBuffer())
+      const base64 = buffer.toString('base64')
+      imageInfo = `Imagen adjunta: ${imagen.name} (${(imagen.size / 1024).toFixed(0)} KB)`
+      
+      attachments = [{
+        filename: imagen.name,
+        content: base64,
+      }]
+    }
+
     await resend.emails.send({
       from: 'onboarding@resend.dev',
       to: 'azulno26@hotmail.com',
       subject: `Nueva solicitud de bazar: ${data.nombre}`,
+      attachments,
       html: `
         <h2>Nueva solicitud de publicación en BazaresMX</h2>
         <p><strong>Nombre del bazar:</strong> ${data.nombre}</p>
@@ -29,8 +46,10 @@ export async function POST(req: NextRequest) {
         <p><strong>Acepta expositores:</strong> ${data.aceptaExpositores}</p>
         <p><strong>Entrada:</strong> ${data.entrada}</p>
         <p><strong>Organizador:</strong> ${data.organizador}</p>
+        <p><strong>Imagen:</strong> ${imageInfo}</p>
       `
     })
+
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error("Error sending email:", error);

@@ -15,6 +15,7 @@ export default function PublishBazarForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     nombreBazar: "",
     ciudad: "Ciudad de México",
@@ -65,30 +66,37 @@ export default function PublishBazarForm() {
     setError("");
 
     try {
+      const formState = {
+        nombre: formData.nombreBazar,
+        estado: formData.ciudad,
+        colonia: formData.colonia,
+        direccion: formData.direccion,
+        fechaInicio: formData.fechaInicio,
+        fechaFin: formData.fechaFin,
+        recurrente: formData.esRecurrente,
+        frecuencia: formData.frecuencia,
+        horarioInicio: formData.horarioInicio,
+        horarioFin: formData.horarioFin,
+        descripcion: formData.descripcion,
+        whatsapp: formData.whatsapp,
+        instagram: formData.instagram,
+        facebook: formData.facebook,
+        otroTipo: formData.plataformaOtraRed,
+        otro: formData.otraRedSocial,
+        aceptaExpositores: formData.aceptaExpositores,
+        entrada: formData.entradaLibre,
+        organizador: formData.nombreOrganizador,
+      };
+
+      const submitFormData = new FormData();
+      submitFormData.append('data', JSON.stringify(formState));
+      if (imageFile) {
+        submitFormData.append('imagen', imageFile);
+      }
+
       const response = await fetch('/api/solicitud', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: formData.nombreBazar,
-          estado: formData.ciudad,
-          colonia: formData.colonia,
-          direccion: formData.direccion,
-          fechaInicio: formData.fechaInicio,
-          fechaFin: formData.fechaFin,
-          recurrente: formData.esRecurrente,
-          frecuencia: formData.frecuencia,
-          horarioInicio: formData.horarioInicio,
-          horarioFin: formData.horarioFin,
-          descripcion: formData.descripcion,
-          whatsapp: formData.whatsapp,
-          instagram: formData.instagram,
-          facebook: formData.facebook,
-          otroTipo: formData.plataformaOtraRed,
-          otro: formData.otraRedSocial,
-          aceptaExpositores: formData.aceptaExpositores,
-          entrada: formData.entradaLibre,
-          organizador: formData.nombreOrganizador,
-        }),
+        body: submitFormData,
       });
 
       const result = await response.json();
@@ -433,6 +441,19 @@ export default function PublishBazarForm() {
                   className="border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-primary outline-none transition"
                   placeholder="Tu nombre completo"
                 />
+              </div>
+              <div className="flex flex-col gap-2 pt-4 border-t border-gray-50">
+                <label className="text-sm font-bold text-gray-700 flex flex-col md:flex-row md:items-baseline gap-1">
+                  <span>Imagen de portada principal</span>
+                  <span className="text-xs text-gray-400 font-medium">(opcional, JPG o PNG, máx. 5MB)</span>
+                </label>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  className="border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-primary outline-none transition file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 file:cursor-pointer"
+                />
+                <p className="text-xs text-gray-400 font-medium">Esta imagen aparecerá en tu página del directorio</p>
               </div>
 
               <button

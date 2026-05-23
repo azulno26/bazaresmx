@@ -18,7 +18,13 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
   // Filtering logic
   const filteredBazares = useMemo(() => {
     return bazaresData.filter((bazar) => {
-      const matchesSearch = bazar.nombre.toLowerCase().includes(search.toLowerCase());
+      const q = search.toLowerCase();
+      const matchesSearch = !search || 
+        bazar.nombre.toLowerCase().includes(q) ||
+        bazar.tipo.toLowerCase().includes(q) ||
+        (bazar.descripcion || '').toLowerCase().includes(q) ||
+        bazar.ciudad.toLowerCase().includes(q) ||
+        (bazar.tags || []).some((tag: string) => tag.toLowerCase().includes(q));
       const matchesCity = cityFilter === "" || bazar.ciudad === cityFilter;
       const matchesType = typeFilter === "" || bazar.tipo === typeFilter;
       const matchesFreeEntry = !freeEntryOnly || bazar.entrada === "libre";

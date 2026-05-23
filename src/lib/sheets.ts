@@ -57,10 +57,9 @@ export async function getBazaresFromSheets() {
       activo: row[21] === '1' || Number(row[21]) === 1,
       publicado: row[22] || '',
       vencimiento: row[23] || '',
-      notas: row[24] || '',
       destacado: row[20] === 'pro',
       badge: row[20] === 'pro' ? 'destacado' : '',
-      tags: [] as string[],
+      tags: row[24] ? row[24].split(',').map((t: string) => t.trim()) : [],
       tipo: row[25] || 'artesanal',
       recurrente: false,
     }))

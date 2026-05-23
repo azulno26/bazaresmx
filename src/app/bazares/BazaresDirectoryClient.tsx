@@ -215,7 +215,18 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
                     </div>
                     
                     <div className="flex flex-col gap-2 text-gray-500 font-medium text-sm mb-6 flex-1">
-                      <span className="flex items-center gap-2">📍 {bazar.ciudad}, {bazar.colonia}</span>
+                      {(() => {
+                        const coloniasParsed = bazar.colonias?.length > 0 ? bazar.colonias : [bazar.colonia];
+                        const sedesExtra = coloniasParsed.length - 1;
+                        return (
+                          <span className="flex items-center gap-2">
+                            📍 {bazar.ciudad}, {coloniasParsed[0]}
+                            {sedesExtra > 0 && (
+                              <span className="text-xs text-gray-400 ml-1">+{sedesExtra} sedes más</span>
+                            )}
+                          </span>
+                        );
+                      })()}
                       <span className="flex items-center gap-2">📅 {formatDate(bazar)}</span>
                     </div>
 

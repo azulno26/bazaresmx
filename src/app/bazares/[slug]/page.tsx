@@ -160,25 +160,60 @@ export default async function Page({ params }: Props) {
               </section>
             )}
 
-            {bazar.direccion && (
+            {bazar.colonias && bazar.colonias.length > 1 ? (
               <section>
-                <h2 className="text-2xl font-bold mb-4 text-primary">Ubicación</h2>
-                <div className="flex items-start gap-3 text-lg text-gray-700 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-4">
-                  <span className="text-2xl">🗺️</span>
-                  <p>{bazar.direccion}</p>
+                <h2 className="text-2xl font-bold mb-6 text-primary">Sedes</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {bazar.colonias.map((colonia: string, i: number) => (
+                    <div key={i} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col justify-between">
+                      <div className="mb-4">
+                        <p className="font-extrabold text-gray-900 text-lg flex items-center gap-1.5">
+                          <span>📍</span> {colonia}
+                        </p>
+                        {bazar.direcciones && bazar.direcciones[i] && (
+                          <p className="text-sm text-gray-500 mt-2 font-medium leading-relaxed">
+                            {bazar.direcciones[i]}
+                          </p>
+                        )}
+                      </div>
+                      {bazar.plan === 'pro' && (
+                        <iframe
+                          src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                            (bazar.direcciones && bazar.direcciones[i]) || colonia
+                          )}&output=embed`}
+                          width="100%"
+                          height="220"
+                          style={{ border: 0, borderRadius: '24px' }}
+                          allowFullScreen
+                          loading="lazy"
+                          className="shadow-sm border border-gray-100 mt-4"
+                        />
+                      )}
+                    </div>
+                  ))}
                 </div>
-                {bazar.plan === 'pro' && (
-                  <iframe
-                    src={`https://maps.google.com/maps?q=${encodeURIComponent(bazar.direccion)}&output=embed`}
-                    width="100%"
-                    height="300"
-                    style={{ border: 0, borderRadius: '24px' }}
-                    allowFullScreen
-                    loading="lazy"
-                    className="shadow-md border border-gray-100"
-                  />
-                )}
               </section>
+            ) : (
+              bazar.direccion && (
+                <section>
+                  <h2 className="text-2xl font-bold mb-4 text-primary">Ubicación</h2>
+                  <div className="flex items-start gap-3 text-lg text-gray-700 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-4">
+                    <span className="text-2xl">🗺️</span>
+                    <p>{bazar.direccion}</p>
+                  </div>
+                  {bazar.plan === 'pro' && (
+                    <iframe
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(bazar.direccion)}&output=embed`}
+                      width="100%"
+                      height="300"
+                      style={{ border: 0, borderRadius: '24px' }}
+                      allowFullScreen
+                      loading="lazy"
+                      className="shadow-md border border-gray-100"
+                    />
+                  )}
+                </section>
+              )
             )}
           </div>
 

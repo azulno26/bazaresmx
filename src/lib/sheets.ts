@@ -1,7 +1,7 @@
 import { google } from 'googleapis'
 
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk'
-const RANGE = 'Bazares!A2:Z100'
+const RANGE = 'Bazares!A2:AA100'
 
 function parseDate(dateStr: string): Date {
   if (!dateStr) return new Date(0)
@@ -18,7 +18,7 @@ export async function getBazaresFromSheets() {
   const apiKey = process.env.GOOGLE_SHEETS_API_KEY
   
   const response = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Bazares%21A2%3AZ100?key=${apiKey}`
+    `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Bazares%21A2%3AAA100?key=${apiKey}`
   )
   
   if (!response.ok) {
@@ -42,25 +42,26 @@ export async function getBazaresFromSheets() {
       fechaFin: row[7] || '',
       horario: row[8] || '',
       descripcion: row[9] || '',
-      whatsapp: row[10] || '',
-      instagram: row[11] || '',
-      facebook: row[12] || '',
-      tiktok: row[13] || '',
-      acepta_expositores: row[14] === 'Sí',
-      entrada: row[15] || '',
-      organizador: row[16] || '',
-      imagen: row[17] || '',
-      imagen2: row[18] || '',
-      imagen3: row[19] || '',
-      imagenes: [row[17], row[18], row[19]].filter(Boolean),
-      plan: row[20] || 'básico',
-      activo: row[21] === '1' || Number(row[21]) === 1,
-      publicado: row[22] || '',
-      vencimiento: row[23] || '',
-      destacado: row[20] === 'pro',
-      badge: row[20] === 'pro' ? 'destacado' : '',
-      tags: row[24] ? row[24].split(',').map((t: string) => t.trim()) : [],
-      tipo: row[25] || 'artesanal',
+      queEncontraras: row[10] ? row[10].split(',').map((t: string) => t.trim()) : [],
+      whatsapp: row[11] || '',
+      instagram: row[12] || '',
+      facebook: row[13] || '',
+      tiktok: row[14] || '',
+      acepta_expositores: row[15] === 'Sí',
+      entrada: row[16] || '',
+      organizador: row[17] || '',
+      imagen: row[18] || '',
+      imagen2: row[19] || '',
+      imagen3: row[20] || '',
+      imagenes: [row[18], row[19], row[20]].filter(Boolean),
+      plan: row[21] || 'básico',
+      activo: row[22] === '1' || Number(row[22]) === 1,
+      publicado: row[23] || '',
+      vencimiento: row[24] || '',
+      tags: row[25] ? row[25].split(',').map((t: string) => t.trim()) : [],
+      tipo: row[26] || 'artesanal',
+      destacado: row[21] === 'pro',
+      badge: row[21] === 'pro' ? 'destacado' : '',
       recurrente: false,
     }))
     .filter((bazar: any) => {

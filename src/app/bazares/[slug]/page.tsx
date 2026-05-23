@@ -119,7 +119,7 @@ export default async function Page({ params }: Props) {
               <p className="text-lg text-gray-700 leading-relaxed">
                 {bazar.descripcion}
               </p>
-              {bazar.slug !== "bazarista" && bazar.tags && bazar.tags.length > 0 && (
+              {bazar.tags && bazar.tags.length > 0 && (
                 <div className="flex flex-wrap gap-3 mt-6">
                   {bazar.tags.map((tag: any) => (
                     <span 
@@ -133,41 +133,19 @@ export default async function Page({ params }: Props) {
               )}
             </section>
 
-            {bazar.slug === "bazarista" && (
+            {bazar.queEncontraras && bazar.queEncontraras.length > 0 && (
               <section>
                 <h2 className="text-2xl font-bold mb-4 text-primary">Qué encontrarás</h2>
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4 mb-6">
-                  <div className="flex items-start gap-3 text-lg text-gray-700">
-                    <span className="text-2xl leading-none">🎨</span>
-                    <div>
-                      <span className="font-semibold text-gray-900">Marcas emergentes y diseño independiente</span>
+                  {bazar.queEncontraras.map((item: any, i: number) => (
+                    <div key={i} className="flex items-start gap-3 text-lg text-gray-700">
+                      <span className="text-2xl leading-none">✨</span>
+                      <div>
+                        <span className="font-semibold text-gray-900">{item}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-3 text-lg text-gray-700">
-                    <span className="text-2xl leading-none">🛍️</span>
-                    <div>
-                      <span className="font-semibold text-gray-900">Productos artesanales y de consumo local</span>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 text-lg text-gray-700">
-                    <span className="text-2xl leading-none">🌱</span>
-                    <div>
-                      <span className="font-semibold text-gray-900">Emprendimiento y economía creativa</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-                {bazar.tags && bazar.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-3">
-                    {bazar.tags.map((tag: any) => (
-                      <span 
-                        key={tag} 
-                        className="bg-[#D1F2E8] text-primary px-4 py-2 rounded-xl font-bold text-sm"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
               </section>
             )}
 
@@ -207,6 +185,11 @@ export default async function Page({ params }: Props) {
                       : (hasValidHorario ? "Próxima Fecha y Horario" : "Próxima Fecha")}
                   </span>
                   <span className="text-lg font-bold">{fechaDisplay}</span>
+                  {bazar.horario && bazar.horario !== '' && (
+                    <div className="mt-2 text-white/90 text-sm font-bold flex items-center gap-1.5">
+                      🕐 {bazar.horario}
+                    </div>
+                  )}
                 </li>
                 {bazar.entrada === "libre" && (
                   <li className="flex flex-col">

@@ -79,21 +79,36 @@ export default async function Page({ params }: Props) {
             tipo={bazar.tipo}
           />
         ) : (
-          <div className="relative w-full aspect-[1200/630] rounded-[2rem] overflow-hidden shadow-2xl mb-10">
+          <div className="relative w-full aspect-[1200/630] rounded-[2rem] overflow-hidden shadow-2xl mb-10 bg-neutral-900/5">
             {bazar.imagen && bazar.imagen !== "" ? (
-              <Image
-                src={bazar.imagen}
-                alt={bazar.nombre}
-                fill
-                className="object-cover"
-                priority
-              />
+              <>
+                {/* Blurred background */}
+                <Image
+                  src={bazar.imagen}
+                  alt=""
+                  fill
+                  className="object-cover blur-2xl scale-110 opacity-30 select-none pointer-events-none"
+                  priority
+                />
+                {/* Padded foreground image */}
+                <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={bazar.imagen}
+                      alt={bazar.nombre}
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
+                </div>
+              </>
             ) : (
               <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400 font-bold text-2xl p-4 text-center">
                 📸 Imagen próximamente
               </div>
             )}
-            <div className="absolute top-6 left-6">
+            <div className="absolute top-6 left-6 z-20">
               <span className="bg-accent text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg">
                 {bazar.tipo}
               </span>

@@ -25,7 +25,6 @@ export default function BazarCarrusel({ imagenes, nombre, tipo }: BazarCarruselP
       {/* Images container */}
       <div className="relative w-full h-full">
         {imagenes.map((img, idx) => {
-          const isPersonImage = img.includes("bazarista-3") || img.includes("persona");
           return (
             <div
               key={img}
@@ -33,17 +32,26 @@ export default function BazarCarrusel({ imagenes, nombre, tipo }: BazarCarruselP
                 idx === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
               }`}
             >
+              {/* Blurred background */}
               <Image
                 src={img}
-                alt={`${nombre} - ${idx + 1}`}
+                alt=""
                 fill
-                className={`${
-                  isPersonImage 
-                    ? "object-contain bg-[#FFFAF5]" 
-                    : "object-cover"
-                } w-full h-full`}
+                className="object-cover blur-2xl scale-110 opacity-30 select-none pointer-events-none"
                 priority={idx === 0}
               />
+              {/* Padded foreground image */}
+              <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={img}
+                    alt={`${nombre} - ${idx + 1}`}
+                    fill
+                    className="object-contain"
+                    priority={idx === 0}
+                  />
+                </div>
+              </div>
             </div>
           );
         })}

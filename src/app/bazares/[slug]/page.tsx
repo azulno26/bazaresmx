@@ -332,10 +332,26 @@ export default async function Page({ params }: Props) {
         {(bazar as any).publicado && (
           <p className="text-xs text-gray-300 mt-8 text-right">
             Publicado el {(() => {
-              const parts = (bazar as any).publicado.split("-");
-              const date = parts[0].length === 4
-                ? new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
-                : new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+              const dateStr = (bazar as any).publicado.trim();
+              let date: Date;
+              
+              if (dateStr.includes('/')) {
+                const [d, m, y] = dateStr.split('/');
+                date = new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
+              } else if (dateStr.includes('-')) {
+                const parts = dateStr.split('-');
+                if (parts[0].length === 4) {
+                  date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                } else {
+                  date = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+                }
+              } else {
+                date = new Date(dateStr);
+              }
+              
+              if (isNaN(date.getTime())) {
+                return dateStr;
+              }
               return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
             })()}
           </p>

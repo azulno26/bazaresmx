@@ -167,7 +167,7 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
             {filteredBazares.map((bazar) => (
               <Link key={bazar.id} href={`/bazares/${bazar.slug}`}>
                 <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition-all duration-300 transform hover:-translate-y-1 group h-full flex flex-col">
-                  <div className="relative h-56 w-full overflow-hidden">
+                  <div className="relative w-full aspect-[1200/630] overflow-hidden">
                     {bazar.imagen && bazar.imagen !== "" ? (
                       <Image
                         src={bazar.imagen}

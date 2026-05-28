@@ -79,7 +79,7 @@ export default async function Page({ params }: Props) {
             tipo={bazar.tipo}
           />
         ) : (
-          <div className="relative w-full h-72 md:h-96 rounded-[2rem] overflow-hidden shadow-2xl mb-10">
+          <div className="relative w-full aspect-[1200/630] rounded-[2rem] overflow-hidden shadow-2xl mb-10">
             {bazar.imagen && bazar.imagen !== "" ? (
               <Image
                 src={bazar.imagen}

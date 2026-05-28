@@ -131,7 +131,7 @@ export default async function LandingPage() {
               {bazaresDestacados.map((bazar: any) => (
                 <Link key={bazar.id} href={`/bazares/${bazar.slug}`}>
                   <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition duration-500 group cursor-pointer h-full">
-                    <div className="relative h-64 w-full overflow-hidden">
+                    <div className="relative w-full aspect-[1200/630] overflow-hidden">
                       {bazar.imagen && bazar.imagen !== "" ? (
                         <Image 
                           src={bazar.imagen} 

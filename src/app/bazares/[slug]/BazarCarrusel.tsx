@@ -21,7 +21,7 @@ export default function BazarCarrusel({ imagenes, nombre, tipo }: BazarCarruselP
   };
 
   return (
-    <div className="relative w-full h-80 rounded-[2rem] overflow-hidden shadow-2xl mb-10 group">
+    <div className="relative w-full aspect-[1200/630] rounded-[2rem] overflow-hidden shadow-2xl mb-10 group">
       {/* Images container */}
       <div className="relative w-full h-full">
         {imagenes.map((img, idx) => {

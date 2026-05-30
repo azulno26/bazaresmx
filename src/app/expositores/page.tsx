@@ -1,21 +1,20 @@
-import { getExpositoresTodas } from "@/src/lib/sheets-expositores";
-import ExpositoresClient from "./ExpositoresClient";
+import { getExpositoresTodas, Expositor } from "@/src/lib/sheets-expositores";
+import ExpositoresIndexClient from "./ExpositoresIndexClient";
 
 export const revalidate = 86400; // Cache 24h
 
 export default async function Page() {
-  let spotsLeft = 10;
-  
+  let featuredExpositores: Expositor[] = [];
+
   try {
     const expositores = await getExpositoresTodas();
-    // Count active exhibitors with ID <= 10 (since they qualify for free month)
-    const activeUnderTen = expositores.filter(
-      (e) => e.status === 'Activo' && e.id <= 10
-    ).length;
-    spotsLeft = Math.max(0, 10 - activeUnderTen);
+    // Only featured (Plan = Top) active exhibitors, capped at 10 (Top 10)
+    featuredExpositores = expositores
+      .filter((e) => e.planElegido === "Top" && e.status === "Activo")
+      .slice(0, 10);
   } catch (err) {
-    console.error("Error calculating free spots:", err);
+    console.error("Error loading featured exhibitors:", err);
   }
 
-  return <ExpositoresClient initialSpotsLeft={spotsLeft} />;
+  return <ExpositoresIndexClient featuredExpositores={featuredExpositores} />;
 }

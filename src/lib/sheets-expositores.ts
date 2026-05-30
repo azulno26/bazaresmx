@@ -134,11 +134,8 @@ export async function getExpositoresTodas(): Promise<Expositor[]> {
         };
       })
       .filter((expositor) => {
-        // Filtrar: Status = "Activo" Y (Plan = "Media" O Plan = "Top")
-        return (
-          expositor.status === 'Activo' &&
-          (expositor.planElegido === 'Media' || expositor.planElegido === 'Top')
-        );
+        // Filtrar: Status = "Activo"
+        return expositor.status === 'Activo';
       });
   } catch (error) {
     console.error("Error fetching expositores from sheets:", error);

@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-type ExpositoresClientProps = {
+type ExpositoresRegistroClientProps = {
   initialSpotsLeft: number;
 };
 
@@ -15,7 +15,7 @@ interface ProductoForm {
   foto: string;
 }
 
-export default function ExpositoresClient({ initialSpotsLeft }: ExpositoresClientProps) {
+export default function ExpositoresRegistroClient({ initialSpotsLeft }: ExpositoresRegistroClientProps) {
   const formRef = useRef<HTMLDivElement>(null);
   
   // State for progressive form
@@ -110,7 +110,7 @@ export default function ExpositoresClient({ initialSpotsLeft }: ExpositoresClien
     }
   };
 
-  // Step Navigations & Valdation
+  // Step Navigations & Validation
   const nextStep = () => {
     if (step === 1) {
       if (!formData.nombreCompleto || !formData.whatsapp || !formData.correo) {
@@ -218,8 +218,8 @@ export default function ExpositoresClient({ initialSpotsLeft }: ExpositoresClien
           <Link href="/" className="text-2xl font-title font-extrabold text-[#1a1a1a] tracking-tight">
             Bazares<span className="text-accent">MX</span>
           </Link>
-          <Link href="/" className="text-[#1A7A52] font-bold hover:underline">
-            Ver Directorio
+          <Link href="/expositores" className="text-[#1A7A52] font-bold hover:underline">
+            ← Volver a Expositores
           </Link>
         </div>
       </nav>
@@ -251,7 +251,7 @@ export default function ExpositoresClient({ initialSpotsLeft }: ExpositoresClien
             </Link>
           </div>
           
-          {/* Placeholder de Video Animado */}
+          {/* Video Placeholder */}
           <div className="w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-200/60 rounded-[2.5rem] shadow-2xl relative flex items-center justify-center border border-neutral-300/40 backdrop-blur-sm overflow-hidden select-none">
             <div className="text-center p-6">
               <span className="text-5xl block mb-2">📹</span>
@@ -592,7 +592,7 @@ export default function ExpositoresClient({ initialSpotsLeft }: ExpositoresClien
                 {/* PASO 4: REDES SOCIALES */}
                 {step === 4 && (
                   <div className="space-y-6">
-                    <p className="text-gray-400 font-semibold text-sm">
+                    <p className="text-gray-400 font-semibold text-sm text-center">
                       ⚠️ Estos campos son opcionales, pero altamente recomendados para mejorar la confianza de los organizadores.
                     </p>
                     <div>
@@ -671,11 +671,11 @@ export default function ExpositoresClient({ initialSpotsLeft }: ExpositoresClien
                   </div>
                 )}
 
-                {/* PASO 6: VENDIMIA (Solo si Plan = Media o Top) */}
+                {/* PASO 6: VENDIMIA */}
                 {step === 6 && (
                   <div className="space-y-8">
                     <div className="bg-[#EBF7F2] p-5 rounded-2xl border border-[#1A7A52]/10 text-sm font-semibold text-[#1A7A52]">
-                      🛍️ ¡Tu plan incluye Catálogo de productos! Agrega hasta 3 de tus mejores productos para atraer organizadores.
+                      🛍  ¡Tu plan incluye Catálogo de productos! Agrega hasta 3 de tus mejores productos para atraer organizadores.
                     </div>
                     
                     {/* Subir foto de perfil comercial */}
@@ -765,7 +765,7 @@ export default function ExpositoresClient({ initialSpotsLeft }: ExpositoresClien
                                 htmlFor={`product-upload-${idx}`}
                                 className="inline-flex bg-neutral-200 text-neutral-700 px-4 py-2 rounded-xl font-bold cursor-pointer hover:bg-neutral-300 transition text-xs"
                               >
-                                {uploadingProd[idx] ? "Subiendo..." : "Símbolo Foto"}
+                                {uploadingProd[idx] ? "Subiendo..." : "Subir Foto"}
                               </label>
                             </div>
                           </div>

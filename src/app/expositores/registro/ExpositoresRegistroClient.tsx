@@ -251,13 +251,16 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
             </Link>
           </div>
           
-          {/* Video Placeholder */}
-          <div className="w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-200/60 rounded-[2.5rem] shadow-2xl relative flex items-center justify-center border border-neutral-300/40 backdrop-blur-sm overflow-hidden select-none">
-            <div className="text-center p-6">
-              <span className="text-5xl block mb-2">📹</span>
-              <p className="font-bold text-gray-500">Video explicativo animado</p>
-              <p className="text-xs text-gray-400 mt-1">Descubre cómo potenciar tu marca con BazaresMX</p>
-            </div>
+          {/* Video Player */}
+          <div className="w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-900 rounded-[2.5rem] shadow-2xl relative overflow-hidden border border-neutral-800 flex items-center justify-center">
+            <video 
+              src="https://res.cloudinary.com/duonm6wku/video/upload/v1780167157/Brief_de_producci%C3%B3n_para_video_qup30x.mp4" 
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-contain"
+              poster="https://res.cloudinary.com/duonm6wku/image/upload/v1780166520/bazar_explicativo_banner_thumbnail.jpg" // Fallback or nice black background
+            />
           </div>
         </div>
       </section>

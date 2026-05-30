@@ -214,11 +214,11 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
     <div className="min-h-screen bg-[#FFFAF5]">
       {/* NAVBAR */}
       <nav className="w-full bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
-          <Link href="/" className="text-2xl font-title font-extrabold text-[#1a1a1a] tracking-tight">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+          <Link href="/" className="text-xl sm:text-2xl font-title font-extrabold text-[#1a1a1a] tracking-tight">
             Bazares<span className="text-accent">MX</span>
           </Link>
-          <Link href="/expositores" className="text-[#1A7A52] font-bold hover:underline">
+          <Link href="/expositores" className="text-[#1A7A52] font-bold hover:underline text-xs sm:text-base whitespace-nowrap">
             ← Volver a Expositores
           </Link>
         </div>

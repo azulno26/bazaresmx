@@ -28,17 +28,17 @@ export default function ExpositoresIndexClient({ featuredExpositores }: Exposito
     <div className="min-h-screen bg-[#FFFAF5] pb-24">
       {/* NAVBAR */}
       <nav className="w-full bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
-          <Link href="/" className="text-2xl font-title font-extrabold text-[#1a1a1a] tracking-tight">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+          <Link href="/" className="text-xl sm:text-2xl font-title font-extrabold text-[#1a1a1a] tracking-tight">
             Bazares<span className="text-accent">MX</span>
           </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/" className="text-gray-600 hover:text-primary transition font-bold text-sm sm:text-base">
+          <div className="flex items-center gap-3 sm:gap-6">
+            <Link href="/" className="text-gray-600 hover:text-primary transition font-bold text-xs sm:text-base whitespace-nowrap">
               Ver Bazares
             </Link>
             <Link 
               href="/expositores/registro"
-              className="bg-[#1A7A52] text-white px-5 py-2 rounded-full font-bold hover:brightness-110 transition text-sm sm:text-base shadow-md shadow-[#1A7A52]/20"
+              className="bg-[#1A7A52] text-white px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full font-bold hover:brightness-110 transition text-xs sm:text-base shadow-md shadow-[#1A7A52]/20 whitespace-nowrap"
             >
               Publicar mi Perfil
             </Link>

@@ -139,7 +139,7 @@ export default function PublishBazarForm() {
     <div className="min-h-screen bg-[#FFFAF5] pb-20">
       {/* HEADER */}
       <header className="max-w-7xl mx-auto px-6 pt-12 pb-16">
-        <Link href="/" className="text-primary font-bold hover:underline mb-8 inline-block">
+        <Link href="/" className="text-primary font-bold hover:underline mb-6 block">
           ← Volver al inicio
         </Link>
         <div className="inline-flex items-center bg-[#D1F2E8] text-primary px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6">

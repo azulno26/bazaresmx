@@ -4,15 +4,15 @@ import ExpositoresRegistroClient from "./ExpositoresRegistroClient";
 export const revalidate = 86400; // Cache 24h
 
 export default async function Page() {
-  let spotsLeft = 10;
+  let spotsLeft = 11;
   
   try {
     const expositores = await getExpositoresTodas();
-    // Count active exhibitors with ID <= 10
-    const activeUnderTen = expositores.filter(
-      (e) => e.status === 'Activo' && e.id <= 10
+    // Count active exhibitors with ID <= 11
+    const activeUnderEleven = expositores.filter(
+      (e) => e.status === 'Activo' && e.id <= 11
     ).length;
-    spotsLeft = Math.max(0, 10 - activeUnderTen);
+    spotsLeft = Math.max(0, 11 - activeUnderEleven);
   } catch (err) {
     console.error("Error calculating free spots:", err);
   }

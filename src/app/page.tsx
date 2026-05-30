@@ -34,13 +34,19 @@ export default async function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. NAVBAR */}
-      <nav className="w-full">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+      <nav className="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100/55">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3.5">
           <div className="text-2xl font-title font-extrabold text-[#1a1a1a] tracking-tight">
             Bazares<span className="text-accent">MX</span>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Link 
+              href="/expositores"
+              className="text-[#1A7A52] hover:text-[#1D9E75] font-black text-sm sm:text-base transition duration-300"
+            >
+              ¿Eres expositor?
+            </Link>
+            <div className="hidden md:flex items-center gap-4">
               <a 
                 href="https://www.instagram.com/bazaresmx.com.mx/" 
                 target="_blank" 
@@ -66,7 +72,7 @@ export default async function LandingPage() {
             </div>
             <Link 
               href="/publica-tu-bazar"
-              className="bg-accent text-white px-6 py-2.5 rounded-full font-bold hover:brightness-110 transition shadow-lg shadow-accent/20"
+              className="bg-accent text-white px-5 sm:px-6 py-2 sm:py-2.5 rounded-full font-bold hover:brightness-110 transition shadow-lg shadow-accent/20 text-sm sm:text-base"
             >
               Publica tu bazar
             </Link>
@@ -98,6 +104,18 @@ export default async function LandingPage() {
               className="w-full sm:w-auto border-3 border-primary text-primary px-10 py-5 rounded-2xl font-extrabold text-lg hover:bg-primary/5 transition text-center"
             >
               Publica tu bazar gratis →
+            </Link>
+          </div>
+
+          {/* Enlace para Expositores en Hero */}
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-2 text-[#1a1a1a] font-medium text-base sm:text-lg">
+            <span>🛍️</span>
+            <span className="text-gray-600">¿Eres expositor o buscas marcas?</span>
+            <Link 
+              href="/expositores" 
+              className="text-[#1A7A52] hover:text-[#1D9E75] font-black underline hover:no-underline transition duration-300"
+            >
+              Entra a la sección de expositores →
             </Link>
           </div>
         </section>

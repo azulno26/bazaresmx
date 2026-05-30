@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     }
 
     const slug = generateSlug(data.nombreNegocio, data.ciudad);
-    const mesGratis = nextId <= 10 ? 'Sí' : 'No';
+    const mesGratis = nextId <= 11 ? 'Sí' : 'No';
     const statusDefault = data.planElegido === 'Básico' ? 'Activo' : 'Pendiente pago'; // Paid plans are pending until validation
 
     // Gather product images for the gallery field
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
           <p><strong>Detalles de tu registro:</strong></p>
           <ul>
             <li><strong>Tu enlace de perfil reservado:</strong> /expositores/${slug}</li>
-            <li><strong>¿Primer mes GRATIS?:</strong> ${mesGratis === 'Sí' ? '¡Sí, calificados entre los primeros 10!' : 'No (sujeto a cuota normal)'}</li>
+            <li><strong>¿Primer mes GRATIS?:</strong> ${mesGratis === 'Sí' ? '¡Sí, calificados entre los primeros 11!' : 'No (sujeto a cuota normal)'}</li>
             <li><strong>Estatus actual:</strong> ${statusDefault === 'Activo' ? 'Activo (Perfil público)' : 'Pendiente de validación de pago'}</li>
           </ul>
           <p>Pronto nos pondremos en contacto contigo vía WhatsApp para validar los últimos detalles y activar tu perfil público si elegiste un plan de catálogo.</p>

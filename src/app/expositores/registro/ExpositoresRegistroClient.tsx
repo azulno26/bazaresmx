@@ -365,7 +365,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
         </div>
       </section>
 
-      {/* SECCIÓN 4: PRIMEROS 10 GRATIS */}
+      {/* SECCIÓN 4: PRIMEROS 11 GRATIS */}
       <section className="py-24 px-6">
         <div className="max-w-2xl mx-auto bg-[#F5E6D3] rounded-[3rem] p-8 md:p-12 text-center border border-amber-900/10 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-amber-800/5 rounded-full -mr-12 -mt-12"></div>
@@ -373,7 +373,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
             OFERTA LIMITADA
           </span>
           <h2 className="font-syne font-extrabold text-3xl md:text-4xl text-gray-900 mb-4 leading-tight">
-            ¡Los primeros 10 expositores tienen su PRIMER MES GRATIS!
+            ¡Los primeros 11 expositores tienen su PRIMER MES GRATIS!
           </h2>
           <p className="text-gray-700 font-medium text-lg mb-8 leading-relaxed">
             Elige el plan que quieras (Básico, Media o Top). Tu primer mes de suscripción corre por nuestra cuenta.
@@ -383,17 +383,17 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
           <div className="max-w-sm mx-auto mb-4">
             <div className="flex justify-between font-bold text-gray-900 mb-2 text-sm">
               <span>{spotsLeft} lugares disponibles</span>
-              <span>10 en total</span>
+              <span>11 en total</span>
             </div>
             <div className="w-full bg-white/60 h-4 rounded-full overflow-hidden p-0.5 border border-amber-950/10">
               <div 
                 className="bg-accent h-full rounded-full transition-all duration-1000 ease-out" 
-                style={{ width: `${(spotsLeft / 10) * 100}%` }}
+                style={{ width: `${(spotsLeft / 11) * 100}%` }}
               ></div>
             </div>
           </div>
           <p className="text-xs text-amber-900/60 font-bold">
-            *Válido únicamente para los primeros 10 expositores activos registrados.
+            *Válido únicamente para los primeros 11 expositores activos registrados.
           </p>
         </div>
       </section>

@@ -22,6 +22,8 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
       const matchesSearch = !search || 
         bazar.nombre.toLowerCase().includes(q) ||
         bazar.tipo.toLowerCase().includes(q) ||
+        (bazar.colonia || '').toLowerCase().includes(q) ||
+        (bazar.direccion || '').toLowerCase().includes(q) ||
         (bazar.descripcion || '').toLowerCase().includes(q) ||
         bazar.ciudad.toLowerCase().includes(q) ||
         (bazar.tags || []).some((tag: string) => tag.toLowerCase().includes(q));
@@ -92,7 +94,7 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
           <div className="w-full lg:flex-1">
             <input
               type="text"
-              placeholder="Buscar por nombre..."
+              placeholder="Buscar por nombre, colonia, dirección..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full border-2 border-gray-100 rounded-xl px-4 py-2 focus:border-primary outline-none transition"

@@ -551,6 +551,39 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                         className="w-full border-2 border-gray-100 rounded-xl px-5 py-4 focus:border-[#1A7A52] outline-none transition text-lg bg-[#FFFAF5]/40"
                       ></textarea>
                     </div>
+
+                    {/* Subir foto de perfil comercial */}
+                    <div className="border-t border-gray-100 pt-6 mt-6">
+                      <label className="block text-gray-800 font-bold mb-3 text-base">Foto de Perfil Comercial / Logo *</label>
+                      <div className="flex items-center gap-5">
+                        <div className="w-20 h-20 relative bg-neutral-100 border rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+                          {formData.fotoPerfil ? (
+                            <Image src={formData.fotoPerfil} alt="Perfil" fill className="object-cover" />
+                          ) : (
+                            <span className="text-3xl">📸</span>
+                          )}
+                        </div>
+                        <div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleCloudinaryUpload(file, "profile");
+                            }}
+                            className="hidden"
+                            id="profile-upload"
+                          />
+                          <label
+                            htmlFor="profile-upload"
+                            className="inline-flex bg-[#1A7A52]/10 text-[#1A7A52] px-5 py-2.5 rounded-xl font-bold cursor-pointer hover:bg-[#1A7A52]/15 transition text-sm"
+                          >
+                            {uploadingProfile ? "Subiendo..." : "Subir Foto"}
+                          </label>
+                          <p className="text-xs text-gray-400 mt-2 font-medium">Recomendado: Proporción 1:1 (cuadrada)</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -679,39 +712,6 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                   <div className="space-y-8">
                     <div className="bg-[#EBF7F2] p-5 rounded-2xl border border-[#1A7A52]/10 text-sm font-semibold text-[#1A7A52]">
                       🛍  ¡Tu plan incluye Catálogo de productos! Agrega hasta 3 de tus mejores productos para atraer organizadores.
-                    </div>
-                    
-                    {/* Subir foto de perfil comercial */}
-                    <div className="border-b border-gray-100 pb-6 mb-6">
-                      <label className="block text-gray-800 font-bold mb-3 text-base">Foto de Perfil Comercial / Logo *</label>
-                      <div className="flex items-center gap-5">
-                        <div className="w-20 h-20 relative bg-neutral-100 border rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
-                          {formData.fotoPerfil ? (
-                            <Image src={formData.fotoPerfil} alt="Perfil" fill className="object-cover" />
-                          ) : (
-                            <span className="text-3xl">📸</span>
-                          )}
-                        </div>
-                        <div>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) handleCloudinaryUpload(file, "profile");
-                            }}
-                            className="hidden"
-                            id="profile-upload"
-                          />
-                          <label
-                            htmlFor="profile-upload"
-                            className="inline-flex bg-[#1A7A52]/10 text-[#1A7A52] px-5 py-2.5 rounded-xl font-bold cursor-pointer hover:bg-[#1A7A52]/15 transition text-sm"
-                          >
-                            {uploadingProfile ? "Subiendo..." : "Subir Foto"}
-                          </label>
-                          <p className="text-xs text-gray-400 mt-2 font-medium">Recomendado: Proporción 1:1 (cuadrada)</p>
-                        </div>
-                      </div>
                     </div>
 
                     <div className="space-y-10">

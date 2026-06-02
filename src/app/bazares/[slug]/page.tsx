@@ -41,6 +41,25 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+// Helper to format date strings from Sheets to ISO YYYY-MM-DD
+function formatIsoDate(dateStr: string | undefined | null): string {
+  if (!dateStr) return "";
+  const clean = dateStr.trim();
+  if (clean.includes('/')) {
+    const [d, m, y] = clean.split('/');
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+  return clean;
+}
+
+// Helper to construct fully absolute image URLs for SEO structured data
+function getAbsoluteImageUrl(img: string | undefined | null): string {
+  if (!img) return "https://www.bazaresmx.com.mx/icon.png";
+  const clean = img.trim();
+  if (clean.startsWith("http")) return clean;
+  return `https://www.bazaresmx.com.mx${clean.startsWith("/") ? "" : "/"}${clean}`;
+}
+
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const bazares = await getBazaresFromSheets();
@@ -366,24 +385,39 @@ export default async function Page({ params }: Props) {
             "@type": "Event",
             "name": bazar.nombre,
             "description": bazar.descripcion,
-            "startDate": bazar.fecha,
+            "startDate": formatIsoDate(bazar.fecha),
+            "endDate": formatIsoDate(bazar.fechaFin || bazar.fecha),
+            "eventStatus": "https://schema.org/EventScheduled",
+            "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "image": getAbsoluteImageUrl(bazar.imagen),
             "location": {
               "@type": "Place",
               "name": bazar.nombre,
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": (bazar as any).direccion,
-                "addressLocality": bazar.colonia,
-                "addressRegion": bazar.ciudad,
+                "streetAddress": (bazar as any).direccion || "",
+                "addressLocality": bazar.colonia || "",
+                "addressRegion": bazar.ciudad || "",
                 "addressCountry": "MX"
               }
             },
             "organizer": {
               "@type": "Organization",
-              "name": bazar.nombre,
-              "url": bazar.instagram
+              "name": bazar.organizador || bazar.nombre,
+              "url": bazar.instagram || `https://www.bazaresmx.com.mx/bazares/${bazar.slug}`
             },
-            "isAccessibleForFree": bazar.entrada === "libre",
+            "performer": {
+              "@type": "PerformingGroup",
+              "name": bazar.organizador || "Expositores y Emprendedores Locales"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "MXN",
+              "availability": "https://schema.org/InStock",
+              "url": `https://www.bazaresmx.com.mx/bazares/${bazar.slug}`
+            },
+            "isAccessibleForFree": true,
             "url": `https://www.bazaresmx.com.mx/bazares/${bazar.slug}`
           })
         }}

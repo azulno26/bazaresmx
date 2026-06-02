@@ -15,6 +15,41 @@ interface ProductoForm {
   foto: string;
 }
 
+const ESTADOS_MEXICO = [
+  "Aguascalientes",
+  "Baja California",
+  "Baja California Sur",
+  "Campeche",
+  "Chiapas",
+  "Chihuahua",
+  "Coahuila",
+  "Colima",
+  "CDMX",
+  "Durango",
+  "EdoMex",
+  "Guanajuato",
+  "Guerrero",
+  "Hidalgo",
+  "Jalisco",
+  "Michoacán",
+  "Morelos",
+  "Nayarit",
+  "Nuevo León",
+  "Oaxaca",
+  "Puebla",
+  "Querétaro",
+  "Quintana Roo",
+  "San Luis Potosí",
+  "Sinaloa",
+  "Sonora",
+  "Tabasco",
+  "Tamaulipas",
+  "Tlaxcala",
+  "Veracruz",
+  "Yucatán",
+  "Zacatecas"
+];
+
 export default function ExpositoresRegistroClient({ initialSpotsLeft }: ExpositoresRegistroClientProps) {
   const formRef = useRef<HTMLDivElement>(null);
   
@@ -51,6 +86,9 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
     { nombre: "", descripcion: "", precio: "", foto: "" },
     { nombre: "", descripcion: "", precio: "", foto: "" },
   ]);
+
+  const [selectedEstado, setSelectedEstado] = useState("");
+  const [localidad, setLocalidad] = useState("");
 
   const spotsLeft = initialSpotsLeft;
 
@@ -123,8 +161,8 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
         return;
       }
     } else if (step === 3) {
-      if (!formData.ciudad || formData.disponibilidad.length === 0) {
-        alert("Por favor completa tu ubicación y selecciona al menos una disponibilidad.");
+      if (!selectedEstado || !localidad || formData.disponibilidad.length === 0) {
+        alert("Por favor selecciona tu Estado, escribe tu Localidad/Zona y selecciona al menos una disponibilidad.");
         return;
       }
     } else if (step === 5) {
@@ -157,6 +195,18 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
         : [...prev.disponibilidad, val];
       return { ...prev, disponibilidad: active };
     });
+  };
+
+  const handleEstadoChange = (estado: string) => {
+    setSelectedEstado(estado);
+    const combined = estado && localidad ? `${estado}, ${localidad}` : (estado || localidad);
+    setFormData((prev) => ({ ...prev, ciudad: combined }));
+  };
+
+  const handleLocalidadChange = (loc: string) => {
+    setLocalidad(loc);
+    const combined = selectedEstado && loc ? `${selectedEstado}, ${loc}` : (selectedEstado || loc);
+    setFormData((prev) => ({ ...prev, ciudad: combined }));
   };
 
   const handleProductChange = (idx: number, field: keyof ProductoForm, val: string) => {
@@ -531,7 +581,11 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                         <option value="Comida">Comida & Postres</option>
                         <option value="Cosméticos">Cosmética natural & Maquillaje</option>
                         <option value="Plantas">Plantas & Macetas</option>
-                        <option value="Manualidades">Arte & Decoración</option>
+                        <option value="Arte & Decoración">Arte & Decoración</option>
+                        <option value="Art Toys & Coleccionables">Art Toys & Coleccionables</option>
+                        <option value="Ilustración & Papelería">Ilustración & Papelería</option>
+                        <option value="Hogar & Velas Aromáticas">Hogar & Velas Aromáticas</option>
+                        <option value="Mascotas (Pets)">Mascotas (Pets)</option>
                         <option value="Otro">Otro giro</option>
                       </select>
                     </div>
@@ -590,15 +644,32 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                 {/* PASO 3: UBICACIÓN Y DISPONIBILIDAD */}
                 {step === 3 && (
                   <div className="space-y-6">
-                    <div>
-                      <label className="block text-gray-800 font-bold mb-2 text-base">Ciudad/Zona donde vendes *</label>
-                      <input
-                        type="text"
-                        placeholder="Ej: CDMX y Área Metropolitana, o Guadalajara"
-                        value={formData.ciudad}
-                        onChange={(e) => setFormData((prev) => ({ ...prev, ciudad: e.target.value }))}
-                        className="w-full border-2 border-gray-100 rounded-xl px-5 py-4 focus:border-[#1A7A52] outline-none transition text-lg bg-[#FFFAF5]/40"
-                      />
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-gray-800 font-bold mb-2 text-base">Estado de la República *</label>
+                        <select
+                          value={selectedEstado}
+                          onChange={(e) => handleEstadoChange(e.target.value)}
+                          className="w-full border-2 border-gray-100 rounded-xl px-5 py-4 focus:border-[#1A7A52] outline-none transition text-lg bg-[#FFFAF5]/40 bg-white"
+                        >
+                          <option value="">Selecciona tu Estado</option>
+                          {ESTADOS_MEXICO.map((est) => (
+                            <option key={est} value={est}>
+                              {est}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-gray-800 font-bold mb-2 text-base">Localidad / Zona *</label>
+                        <input
+                          type="text"
+                          placeholder="Ej: Coapa, Polanco, Centro"
+                          value={localidad}
+                          onChange={(e) => handleLocalidadChange(e.target.value)}
+                          className="w-full border-2 border-gray-100 rounded-xl px-5 py-4 focus:border-[#1A7A52] outline-none transition text-lg bg-[#FFFAF5]/40"
+                        />
+                      </div>
                     </div>
                     <div>
                       <label className="block text-gray-800 font-bold mb-4 text-base">¿En qué días tienes disponibilidad para exponer? *</label>

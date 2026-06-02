@@ -34,7 +34,13 @@ export default function ExpositoresDirectoryClient({ expositoresData }: Exposito
 
   // Extract unique filter items
   const giros = useMemo(() => Array.from(new Set(expositoresData.map((e) => e.giro).filter(Boolean))), [expositoresData]);
-  const cities = useMemo(() => Array.from(new Set(expositoresData.map((e) => e.ciudad).filter(Boolean))), [expositoresData]);
+  const cities = useMemo(() => {
+    const states = expositoresData.map((e) => {
+      const parts = e.ciudad.split(",");
+      return parts[0].trim();
+    }).filter(Boolean);
+    return Array.from(new Set(states));
+  }, [expositoresData]);
 
   // Filtering & Sorting Logic
   const filteredExpositores = useMemo(() => {
@@ -47,7 +53,7 @@ export default function ExpositoresDirectoryClient({ expositoresData }: Exposito
         exp.descripcion.toLowerCase().includes(q) ||
         exp.ciudad.toLowerCase().includes(q);
       const matchesGiro = giroFilter === "" || exp.giro === giroFilter;
-      const matchesCity = cityFilter === "" || exp.ciudad === cityFilter;
+      const matchesCity = cityFilter === "" || exp.ciudad.startsWith(cityFilter);
 
       return matchesSearch && matchesGiro && matchesCity;
     });

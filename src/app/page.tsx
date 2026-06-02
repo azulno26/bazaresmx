@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getBazaresFromSheets } from "@/src/lib/sheets";
 import Link from "next/link";
+import { getExpositoresTodas } from "@/src/lib/sheets-expositores";
 
 export const revalidate = 86400;
 
@@ -31,6 +32,11 @@ export default async function LandingPage() {
       return (orden[a.plan] || 4) - (orden[b.plan] || 4)
     })
     .slice(0, 12);
+
+  const expositores = await getExpositoresTodas();
+  const expositoresTop = expositores
+    .filter((e: any) => e.planElegido === 'Top')
+    .slice(0, 6);
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. NAVBAR */}
@@ -229,6 +235,85 @@ export default async function LandingPage() {
             </div>
           </div>
         </section>
+
+        {/* 5.5. MARCAS Y EXPOSITORES DESTACADOS (EXCLUSIVO PLAN TOP) */}
+        {expositoresTop.length > 0 && (
+          <section className="bg-white py-32 px-6 border-b border-gray-50">
+            <div className="max-w-7xl mx-auto">
+              <div className="mb-16 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                  <span className="text-[#1A7A52] font-black tracking-widest uppercase text-sm">Talento Local</span>
+                  <h2 className="text-5xl font-title font-extrabold mt-4 text-[#1a1a1a] tracking-tight">Marcas y Expositores Destacados</h2>
+                  <p className="text-xl text-gray-500 mt-4 font-medium">Descubre emprendedores creativos recomendados por BazaresMX</p>
+                </div>
+                <Link
+                  href="/expositores/directorio"
+                  className="text-[#1A7A52] font-black hover:underline flex items-center justify-center gap-2 text-lg whitespace-nowrap"
+                >
+                  Explorar todas las marcas →
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {expositoresTop.map((exp: any) => (
+                  <Link key={exp.id} href={`/expositores/${exp.slug}`} className="group">
+                    <div className="bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-xl shadow-neutral-100/30 hover:shadow-2xl hover:shadow-neutral-200/40 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-between">
+                      <div>
+                        {/* Imagen de Portada */}
+                        <div className="relative w-full aspect-square overflow-hidden bg-neutral-50 border-b border-gray-100">
+                          {exp.fotoPerfil ? (
+                            <Image
+                              src={exp.fotoPerfil}
+                              alt={exp.nombreNegocio}
+                              fill
+                              className="object-cover group-hover:scale-105 transition duration-500"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-6xl bg-gray-50">
+                              📸
+                            </div>
+                          )}
+                          <div className="absolute top-4 left-4 flex gap-2">
+                            <span className="bg-[#0B5E43] text-white px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">
+                              ⭐ Destacado
+                            </span>
+                            {exp.badgeVerificado && (
+                              <span className="bg-blue-600 text-white px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">
+                                ✓ Verificado
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Info */}
+                        <div className="p-8">
+                          <span className="bg-[#1A7A52]/10 text-[#1A7A52] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                            {exp.giro}
+                          </span>
+                          <h3 className="text-2xl font-bold mt-5 mb-3 group-hover:text-[#1A7A52] transition leading-tight text-gray-900">
+                            {exp.nombreNegocio}
+                          </h3>
+                          <p className="text-gray-500 font-medium text-sm line-clamp-3 leading-relaxed mb-4">
+                            {exp.descripcion}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="px-8 pb-8 pt-0 flex justify-between items-center border-t border-gray-50 mt-auto">
+                        <span className="text-xs font-bold text-gray-400">
+                          📍 {exp.ciudad}
+                        </span>
+                        <span className="text-[#1A7A52] font-extrabold text-sm group-hover:underline flex items-center gap-1">
+                          Ver Catálogo →
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* 6. SECCIÓN ORGANIZADORES */}
         <section className="py-32 px-6 max-w-7xl mx-auto w-full">

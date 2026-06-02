@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { formatDisponibilidad } from "@/src/lib/formatters";
 
 interface Expositor {
   id: number;
@@ -225,10 +226,16 @@ export default function ExpositoresDirectoryClient({ expositoresData }: Exposito
                   </div>
 
                   {/* Footer de Tarjeta */}
-                  <div className="px-8 pb-8 pt-0 flex flex-col gap-4 border-t border-gray-50 mt-auto">
-                    <div className="flex items-center justify-between text-xs font-bold text-gray-400 pt-4">
-                      <span>📍 {exp.ciudad}</span>
-                      <span>📅 {exp.disponibilidad}</span>
+                  <div className="px-8 pb-8 pt-0 flex flex-col gap-3 border-t border-gray-50 mt-auto">
+                    <div className="flex flex-col gap-1.5 pt-4 text-xs font-bold text-gray-400">
+                      <div className="flex items-center gap-1">
+                        <span>📍</span>
+                        <span className="truncate">{exp.ciudad}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-neutral-600">
+                        <span>📅</span>
+                        <span>Expone: <span className="text-[#1A7A52] font-black">{formatDisponibilidad(exp.disponibilidad)}</span></span>
+                      </div>
                     </div>
 
                     {/* Acciones del Plan */}

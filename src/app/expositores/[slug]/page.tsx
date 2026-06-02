@@ -2,6 +2,7 @@ import { getExpositorBySlug, getExpositoresTodas } from "@/src/lib/sheets-exposi
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { formatDisponibilidad } from "@/src/lib/formatters";
 
 // ISR: Pre-generate all active ones at build time, revalidate every 24h, generate on-demand if new
 export const revalidate = 86400;
@@ -166,9 +167,9 @@ export default async function Page({ params }: Props) {
             </div>
 
             <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-2">Disponibilidad</h3>
-              <p className="text-gray-800 font-extrabold text-base">
-                📅 {exp.disponibilidad || "No especificada"}
+              <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-2">¿Cuándo puede exponer?</h3>
+              <p className="text-[#1A7A52] font-extrabold text-base">
+                📅 {formatDisponibilidad(exp.disponibilidad) || "No especificada"}
               </p>
             </div>
 

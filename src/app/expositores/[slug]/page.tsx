@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDisponibilidad } from "@/src/lib/formatters";
+import { VisitTracker } from "./VisitTracker";
 
 // ISR: Pre-generate all active ones at build time, revalidate every 24h, generate on-demand if new
 export const revalidate = 86400;
@@ -142,6 +143,12 @@ export default async function Page({ params }: Props) {
             >
               Contactar por WhatsApp
             </a>
+            <div className="w-full mt-4 bg-white border border-gray-100 rounded-2xl p-4 text-center shadow-sm flex items-center justify-center gap-2 text-xs font-bold text-gray-500">
+              <span className="text-base">👁️</span>
+              <span>
+                Perfil visto <strong className="text-[#1A7A52] font-extrabold">{exp.visitas} veces</strong>
+              </span>
+            </div>
           </div>
 
           {/* COLUMNA DERECHA: Información comercial */}
@@ -268,6 +275,7 @@ export default async function Page({ params }: Props) {
           </a>
         </section>
       </main>
+      <VisitTracker slug={exp.slug} />
     </div>
   );
 }

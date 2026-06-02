@@ -26,6 +26,8 @@ export interface Expositor {
   fotoPerfil: string;
   fotosProductos: string[];
   productos: Producto[];
+  vendimiaActiva: boolean;
+  visitas: number;
 }
 
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
@@ -39,7 +41,7 @@ export async function getExpositoresTodas(): Promise<Expositor[]> {
 
   try {
     const response = await fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Expositores%21A2%3AAF100?key=${apiKey}`,
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Expositores%21A2%3AAJ100?key=${apiKey}`,
       { next: { revalidate: 86400 } } // Cache 24h
     );
 
@@ -70,6 +72,8 @@ export async function getExpositoresTodas(): Promise<Expositor[]> {
         const status = (row[15] || 'Pendiente pago') as "Activo" | "Inactivo" | "Pendiente pago";
         const badgeVerificado = row[16] === 'Sí' || row[16] === 'VERDADERO' || row[16] === 'true';
         const fotoPerfil = row[17] || '';
+        const vendimiaActiva = row[32] === 'Sí' || row[32] === 'true' || row[32] === 'VERDADERO';
+        const visitas = parseInt(row[35]) || 0;
         
         // Fotos de productos (pueden venir separadas por comas)
         const fotosProductosRaw = row[18] || '';
@@ -131,6 +135,8 @@ export async function getExpositoresTodas(): Promise<Expositor[]> {
           fotoPerfil,
           fotosProductos,
           productos,
+          vendimiaActiva,
+          visitas,
         };
       })
       .filter((expositor) => {

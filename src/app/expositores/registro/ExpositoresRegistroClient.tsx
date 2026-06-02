@@ -434,7 +434,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
               {/* Header formulario */}
               <div className="mb-10 text-center">
                 <span className="text-[#1A7A52] text-xs font-black uppercase tracking-widest bg-[#EBF7F2] px-3.5 py-1.5 rounded-full">
-                  Paso {step === 7 ? 6 : step} de {formData.planElegido === "Básico" ? 5 : 6}
+                  Paso {step === 7 ? (formData.planElegido === "Básico" ? 5 : 6) : step} de {formData.planElegido === "Básico" ? 5 : 6}
                 </span>
                 <h3 className="font-syne font-extrabold text-3xl text-gray-900 mt-4 tracking-tight">
                   {step === 1 && "Identificación"}
@@ -453,7 +453,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                       width: `${
                         formData.planElegido === "Básico"
                           ? ((step === 7 ? 5 : step) / 5) * 100
-                          : (step / 6) * 100
+                          : ((step === 7 ? 6 : step) / 6) * 100
                       }%`,
                     }}
                   ></div>

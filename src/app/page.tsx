@@ -257,10 +257,10 @@ export default async function LandingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {expositoresTop.map((exp: any) => (
                   <Link key={exp.id} href={`/expositores/${exp.slug}`} className="group">
-                    <div className="bg-white rounded-[2.5rem] overflow-hidden border border-gray-100 shadow-xl shadow-neutral-100/30 hover:shadow-2xl hover:shadow-neutral-200/40 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-between">
+                    <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition duration-500 h-full flex flex-col justify-between">
                       <div>
                         {/* Imagen de Portada */}
-                        <div className="relative w-full aspect-square overflow-hidden bg-neutral-50 border-b border-gray-100">
+                        <div className="relative w-full aspect-[1200/630] overflow-hidden bg-neutral-50 border-b border-gray-100">
                           {exp.fotoPerfil ? (
                             <Image
                               src={exp.fotoPerfil}

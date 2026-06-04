@@ -169,64 +169,48 @@ export default function PublishBazarForm() {
         </div>
       );
     } else {
+      const whatsappText = `Hola, quise registrar mi bazar "${formData.nombreBazar}" con el Plan "${planElegido}" y quisiera conocer el número de cuenta para realizar la transferencia.`;
+      const encodedWhatsappText = encodeURIComponent(whatsappText);
+
       return (
         <div className="min-h-screen bg-[#FFFAF5] flex items-center justify-center px-6 py-20">
-          <div className="max-w-2xl w-full bg-white p-10 md:p-14 rounded-[3rem] shadow-2xl border border-gray-100">
+          <div className="max-w-2xl w-full bg-white p-10 md:p-14 rounded-[3rem] shadow-2xl border border-gray-100 text-center">
             <div className="text-center mb-8">
               <div className="text-6xl mb-6">✨</div>
-              <h1 className="text-3xl sm:text-4xl font-syne font-extrabold text-gray-900 mb-4">
+              <h1 className="text-3xl sm:text-4xl font-syne font-extrabold text-gray-900 mb-4 leading-tight">
                 ¡Tu solicitud está registrada!
               </h1>
-              <p className="text-lg text-gray-600 font-medium">
-                Para activar tu <strong className="text-primary">Plan {planElegido}</strong> y destacar tu bazar, realiza la transferencia correspondiente:
+              <p className="text-lg text-gray-600 font-medium animate-pulse-slow">
+                Hemos recibido los detalles de tu bazar para el <strong className="text-primary">Plan {planElegido}</strong>.
               </p>
             </div>
 
-            {/* Ficha de Pago */}
-            <div className="bg-[#FFFAF5] border border-primary/10 rounded-[2rem] p-8 mb-8 space-y-4">
-              <div className="flex justify-between items-center border-b border-primary/5 pb-3">
-                <span className="text-gray-400 font-bold text-sm">Banco:</span>
-                <span className="text-[#1a1a1a] font-extrabold text-lg">BBVA</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-primary/5 pb-3">
-                <span className="text-gray-400 font-bold text-sm">Beneficiario:</span>
-                <span className="text-[#1a1a1a] font-extrabold text-lg">Bazares Digital</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-primary/5 pb-3">
-                <span className="text-gray-400 font-bold text-sm">CLABE:</span>
-                <span className="text-[#1a1a1a] font-mono font-black text-lg">0121 8001 2345 6789 01</span>
-              </div>
-              <div className="flex justify-between items-center border-b border-primary/5 pb-3">
-                <span className="text-gray-400 font-bold text-sm">Monto a transferir:</span>
-                <span className="text-primary font-black text-2xl">
-                  {planElegido === "Medio" ? "$299.00 MXN" : "$499.00 MXN"}
-                </span>
-              </div>
-              <div className="flex justify-between items-center pb-1">
-                <span className="text-gray-400 font-bold text-sm">Concepto:</span>
-                <span className="text-[#1a1a1a] font-extrabold text-base truncate">Bazar {formData.nombreBazar}</span>
-              </div>
+            {/* Mensaje de Pago Leyenda */}
+            <div className="bg-[#FFFAF5] border border-primary/10 rounded-[2rem] p-8 mb-8">
+              <p className="text-[#1A7A52] font-extrabold text-xl md:text-2xl leading-relaxed">
+                📌 Publicación una vez validado el pago a realizar por transferencia.
+              </p>
             </div>
 
             <div className="bg-[#EBF7F2] p-6 rounded-2xl border border-[#1A7A52]/10 text-center mb-8">
               <p className="text-[#1A7A52] font-bold text-base leading-relaxed">
-                📱 Una vez realizada la transferencia, envía el comprobante por WhatsApp. Activaremos tu plan y publicaremos tu bazar de inmediato.
+                📱 Haz clic en el botón de abajo para solicitar los datos de cuenta por WhatsApp y finalizar la activación de tu plan destacado.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href={`https://wa.me/5215623194635?text=Hola!%20Acabo%20de%20registrar%20mi%20bazar%20*${encodeURIComponent(formData.nombreBazar)}*%20con%20el%20*Plan%20${planElegido}*%20y%20aqu%C3%AD%20est%C3%A1%20mi%20comprobante%20de%20pago.`}
+                href={`https://wa.me/5215623194635?text=${encodedWhatsappText}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 bg-[#1A7A52] text-white py-4 rounded-2xl font-extrabold text-center hover:brightness-110 transition shadow-xl shadow-[#1A7A52]/20 flex items-center justify-center gap-2"
               >
-                <span>Enviar comprobante</span>
+                <span>Solicitar datos de cuenta</span>
                 <span>💬</span>
               </a>
               <Link
                 href="/"
-                className="flex-1 border-2 border-gray-200 text-gray-600 py-4 rounded-2xl font-bold text-center hover:bg-gray-50 transition"
+                className="flex-1 border-2 border-gray-200 text-gray-600 py-4 rounded-2xl font-bold text-center hover:bg-gray-50 transition flex items-center justify-center"
               >
                 Volver al inicio
               </Link>
@@ -391,7 +375,7 @@ export default function PublishBazarForm() {
                   {[
                     "Todo lo del plan Medio",
                     "Banner destacado en la portada principal",
-                    "Escaparate premium para tus 3 mejores marcas",
+                    "Galería destacada para tus 3 mejores marcas/productos",
                     "Sello de Organizador Verificado ⭐",
                     "Soporte preferente 24/7 vía WhatsApp"
                   ].map((feat, i) => (
@@ -819,7 +803,7 @@ export default function PublishBazarForm() {
                 {planElegido === "Pro" && [
                   "Todo lo del Plan Medio",
                   "Banner destacado en la portada principal",
-                  "Escaparate premium para tus 3 mejores marcas",
+                  "Galería destacada para tus 3 mejores marcas/productos",
                   "Sello de Organizador Verificado ⭐",
                   "Soporte preferente 24/7 vía WhatsApp",
                 ].map((item, i) => (

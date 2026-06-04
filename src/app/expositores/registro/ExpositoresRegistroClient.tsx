@@ -456,25 +456,56 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
         <div className="bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 p-8 md:p-12 relative overflow-hidden">
           
           {success ? (
-            <div className="text-center py-12">
+            <div className="text-center py-12 max-w-2xl mx-auto">
               <span className="text-7xl block mb-6">🎉</span>
-              <h2 className="font-syne font-black text-4xl text-gray-900 mb-4">
+              <h2 className="font-syne font-black text-4xl text-gray-900 mb-4 tracking-tight">
                 ¡Registro Recibido con Éxito!
               </h2>
-              <p className="text-xl text-gray-600 max-w-lg mx-auto mb-10 font-medium leading-relaxed">
-                ¡Muchísimas gracias por registrarte! Hemos recibido la información de <strong>{formData.nombreNegocio}</strong>.
+              <p className="text-xl text-gray-600 mb-10 font-medium leading-relaxed">
+                ¡Muchísimas gracias por registrarte! Hemos recibido la información de <strong>{formData.nombreNegocio}</strong> para el plan <strong className="text-[#1A7A52]">{formData.planElegido}</strong>.
               </p>
-              <div className="bg-[#EBF7F2] p-6 rounded-2xl max-w-md mx-auto mb-10 border border-[#1A7A52]/10 text-[#1A7A52] font-semibold text-lg">
-                📱 Pronto nos pondremos en contacto contigo vía WhatsApp para finalizar la activación de tu perfil público.
+
+              {/* Mensaje de Pago Leyenda */}
+              <div className="bg-[#FFFAF5] border border-primary/10 rounded-[2rem] p-8 mb-8">
+                <p className="text-[#1A7A52] font-extrabold text-xl md:text-2xl leading-relaxed">
+                  📌 Publicación una vez validado el pago a realizar por transferencia.
+                </p>
               </div>
-              <p className="text-gray-500 font-bold mb-6">
+
+              <div className="bg-[#EBF7F2] p-6 rounded-2xl border border-[#1A7A52]/10 text-center mb-8">
+                <p className="text-[#1A7A52] font-semibold text-base leading-relaxed">
+                  📱 Haz clic en el botón de abajo para solicitar los datos de cuenta por WhatsApp y finalizar la activación de tu perfil público.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+                <a
+                  href={`https://wa.me/5215623194635?text=${encodeURIComponent(
+                    `Hola, quise registrar mi marca "${formData.nombreNegocio}" con el Plan "${formData.planElegido}" y quisiera conocer el número de cuenta para realizar la transferencia.`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 bg-[#1A7A52] text-white py-4 px-6 rounded-2xl font-extrabold text-center hover:brightness-110 transition shadow-xl shadow-[#1A7A52]/20 flex items-center justify-center gap-2"
+                >
+                  <span>Solicitar datos de cuenta</span>
+                  <span>💬</span>
+                </a>
+                <Link
+                  href="/"
+                  className="flex-1 border-2 border-gray-200 text-gray-600 py-4 px-6 rounded-2xl font-bold text-center hover:bg-gray-50 transition flex items-center justify-center"
+                >
+                  Volver al inicio
+                </Link>
+              </div>
+
+              <p className="text-gray-500 font-bold mb-4 text-sm">
                 Síguenos en Instagram para enterarte de eventos y novedades:
               </p>
               <a
                 href="https://www.instagram.com/bazaresmx.com.mx/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block bg-accent text-white px-8 py-4 rounded-full font-black text-lg shadow-lg hover:brightness-110 transition"
+                className="inline-block bg-[#E8621A] text-white px-8 py-4 rounded-full font-black text-base shadow-lg hover:brightness-110 transition"
               >
                 Síguenos en @bazaresmx.com.mx
               </a>

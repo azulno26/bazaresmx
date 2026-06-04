@@ -407,6 +407,9 @@ export default function PublishBazarForm() {
               <span>Continuar al registro</span>
               <span>→</span>
             </button>
+            <p className="text-xs text-gray-400 font-bold text-center mt-4">
+              * Los planes de pago (Medio y Pro) se liquidan vía transferencia y se activan al validar tu comprobante por WhatsApp.
+            </p>
           </div>
         </main>
       </div>

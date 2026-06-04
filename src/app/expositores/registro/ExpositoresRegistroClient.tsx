@@ -806,6 +806,9 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                         🎉 ¡Felicidades! Calificas para tu PRIMER MES GRATIS.
                       </div>
                     )}
+                    <p className="text-xs text-gray-400 font-bold text-center mt-2">
+                      * Todos los planes se liquidan vía transferencia y se activan al validar tu comprobante por WhatsApp.
+                    </p>
                   </div>
                 )}
 

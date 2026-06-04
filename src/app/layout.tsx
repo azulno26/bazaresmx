@@ -21,24 +21,24 @@ const dmSans = DM_Sans({
 export const metadata = {
   metadataBase: new URL('https://www.bazaresmx.com.mx'),
   title: {
-    default: 'BazaresMX — El directorio de bazares en México',
+    default: 'Bazares Digital — Conecta y haz crecer tu negocio | BazaresMX',
     template: '%s | BazaresMX'
   },
-  description: 'Encuentra bazares, vendimias y mercados en México. Descubre eventos por ciudad, fecha y categoría. Para visitantes y organizadores de bazares.',
-  keywords: ['bazares Mexico', 'bazares CDMX', 'vendimias Mexico', 'mercados artesanales', 'bazares fin de semana', 'expositores bazares'],
+  description: 'Conecta tu marca con los mejores bazares de México. Publica tu bazar gratis o registra tu marca para llenar tus espacios con expositores de calidad sin comisiones.',
+  keywords: ['bazares Mexico', 'bazares CDMX', 'vendimias Mexico', 'mercados artesanales', 'bazares fin de semana', 'expositores bazares', 'marketplace bazares', 'marcas mexicanas'],
   openGraph: {
     type: 'website',
     locale: 'es_MX',
     url: 'https://www.bazaresmx.com.mx',
     siteName: 'BazaresMX',
-    title: 'BazaresMX — El directorio de bazares en México',
-    description: 'Encuentra bazares, vendimias y mercados en México.',
+    title: 'Bazares Digital — Conecta y haz crecer tu negocio',
+    description: 'Conecta tu marca con los mejores bazares de México. Publica tu bazar gratis o registra tu marca para llenar tus espacios con expositores de calidad sin comisiones.',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'BazaresMX' }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BazaresMX — El directorio de bazares en México',
-    description: 'Encuentra bazares, vendimias y mercados en México.',
+    title: 'Bazares Digital — Conecta y haz crecer tu negocio',
+    description: 'Conecta tu marca con los mejores bazares de México. Publica tu bazar gratis o registra tu marca para llenar tus espacios con expositores de calidad sin comisiones.',
   },
   robots: {
     index: true,

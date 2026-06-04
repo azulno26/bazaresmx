@@ -2,26 +2,10 @@ import Image from "next/image";
 import { getBazaresFromSheets } from "@/src/lib/sheets";
 import Link from "next/link";
 import { getExpositoresTodas } from "@/src/lib/sheets-expositores";
+import { CalendarIcon, BriefcaseIcon } from "lucide-react";
+import BazarCard from "@/src/components/BazarCard";
 
 export const revalidate = 86400;
-
-function formatBazarDate(bazar: any) {
-  const fInicio = new Date(bazar.fecha + "T00:00:00");
-  const hasFechaFin = bazar.fechaFin && bazar.fechaFin !== "";
-  
-  if (hasFechaFin && bazar.fechaFin !== bazar.fecha) {
-    const fFin = new Date(bazar.fechaFin + "T00:00:00");
-    const dInicio = fInicio.toLocaleDateString("es-MX", { day: "numeric", month: "long" });
-    const dFin = fFin.toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
-    return `${dInicio} - ${dFin}`;
-  }
-  
-  return fInicio.toLocaleDateString("es-MX", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export default async function LandingPage() {
   const bazares = await getBazaresFromSheets();
@@ -37,24 +21,25 @@ export default async function LandingPage() {
   const expositoresTop = expositores
     .filter((e: any) => e.planElegido === 'Top')
     .slice(0, 6);
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-white">
       {/* 1. NAVBAR */}
-      <nav className="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100/55">
+      <nav className="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3.5">
-          <Link href="/" className="text-xl sm:text-2xl font-title font-extrabold text-[#1a1a1a] tracking-tight">
-            Bazares<span className="text-accent">MX</span>
+          <Link href="/" className="text-xl sm:text-2xl font-title font-extrabold text-gray-900 tracking-tight">
+            Bazares<span className="text-[#1A7A52]">MX</span>
           </Link>
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
               href="/publica-tu-bazar"
-              className="text-[#1A7A52] hover:text-[#1D9E75] font-black text-xs sm:text-sm transition duration-300 whitespace-nowrap bg-[#EBF7F2] px-4 py-2 rounded-full"
+              className="text-[#1A7A52] hover:text-[#156a46] font-bold text-xs sm:text-sm transition duration-300 whitespace-nowrap bg-[#EBF7F2] px-4 py-2 rounded-full"
             >
               Publicar Bazar (Gratis)
             </Link>
             <Link 
               href="/expositores/registro"
-              className="bg-accent text-white px-4 py-2 rounded-full font-bold hover:brightness-110 transition shadow-lg shadow-accent/20 text-xs sm:text-sm whitespace-nowrap"
+              className="bg-[#1A7A52] text-white px-4 py-2 rounded-full font-bold hover:bg-[#156a46] transition text-xs sm:text-sm whitespace-nowrap"
             >
               Registrar mi Marca
             </Link>
@@ -63,83 +48,57 @@ export default async function LandingPage() {
       </nav>
 
       <main>
-        {/* 2. HERO SPLIT SECTION */}
-        <section className="bg-gradient-to-b from-[#EBF7F2] to-[#FFFAF5] border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 text-center">
-            <div className="inline-flex items-center bg-[#D1F2E8] text-primary px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold mb-8">
+        {/* 2. HERO SPLIT SECTION (BIFURCADO) */}
+        <section className="bg-gradient-to-b from-gray-50 to-white py-16 md:py-24 border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <div className="inline-flex items-center bg-[#EBF7F2] text-[#1A7A52] px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold mb-8">
               🚀 Bazares Digital — Donde Crece tu Negocio
             </div>
-            <h1 className="font-syne font-extrabold text-4xl sm:text-6xl md:text-7xl tracking-tighter leading-none text-[#1a1a1a] mb-6">
-              Conecta tu marca con los <br className="hidden md:block" /> mejores <span className="text-accent">bazares</span> de México
+            <h1 className="font-syne font-extrabold text-4xl sm:text-6xl md:text-7xl tracking-tighter leading-none text-gray-900 mb-6">
+              Conecta tu marca con los <br className="hidden md:block" /> mejores <span className="text-[#1A7A52]">bazares</span> de México
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-16 max-w-2xl mx-auto font-medium">
               Conecta bazares con expositores. Sin límites. Sin complicaciones.
             </p>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto text-left">
-              {/* ORGANIZADORES HERO CARD */}
-              <div className="bg-white p-8 sm:p-10 rounded-[2rem] border border-gray-100 shadow-xl shadow-neutral-100/50 flex flex-col justify-between">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto text-left">
+              {/* Card Organizadores */}
+              <div className="p-8 bg-white rounded-xl border border-gray-200 hover:border-green-300 hover:shadow-md transition-all flex flex-col justify-between">
                 <div>
-                  <span className="text-xs bg-[#EBF7F2] text-primary px-3 py-1 rounded-full font-black uppercase tracking-wider mb-4 inline-block">
-                    Para Organizadores
-                  </span>
-                  <h2 className="text-3xl font-title font-extrabold text-[#1a1a1a] tracking-tight mb-4">
-                    Publicar tu bazar es gratis
-                  </h2>
-                  <p className="text-gray-600 mb-8 font-medium leading-relaxed">
-                    Llena tus espacios con expositores de calidad sin pagar comisiones. En BazaresMX te conectamos con emprendedores listos para vender.
+                  <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center mb-4">
+                    <CalendarIcon className="w-6 h-6 text-[#1A7A52]" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2">¿Organizas Bazares?</h2>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                    Llena tus espacios con expositores de calidad sin comisiones. Publica gratis 
+                    y gestiona solicitudes en un solo lugar.
                   </p>
-                  <ul className="space-y-3 mb-8">
-                    {[
-                      "Publicación instantánea en el directorio",
-                      "Contacto directo con expositores por WhatsApp",
-                      "Sin intermediarios ni cobros ocultos",
-                      "Sin requerir tarjeta de crédito"
-                    ].map((benefit, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm text-gray-500 font-bold">
-                        <span className="text-primary text-base">✓</span> {benefit}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-                <Link
-                  href="/publica-tu-bazar"
-                  className="w-full bg-primary text-white py-4 rounded-2xl font-extrabold text-center hover:brightness-110 transition shadow-lg shadow-primary/20 block"
+                <Link 
+                  href="/publica-tu-bazar" 
+                  className="block w-full py-3 px-4 bg-[#1A7A52] text-white font-bold rounded-lg hover:bg-[#156a46] transition-colors text-center text-sm"
                 >
-                  Publicar Bazar Ahora
+                  Publicar Bazar Gratis
                 </Link>
               </div>
 
-              {/* EXPOSITORES HERO CARD */}
-              <div className="bg-white p-8 sm:p-10 rounded-[2rem] border border-gray-100 shadow-xl shadow-neutral-100/50 flex flex-col justify-between">
+              {/* Card Expositores */}
+              <div className="p-8 bg-white rounded-xl border border-gray-200 hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between">
                 <div>
-                  <span className="text-xs bg-[#FFF3EC] text-accent px-3 py-1 rounded-full font-black uppercase tracking-wider mb-4 inline-block">
-                    Para Expositores
-                  </span>
-                  <h2 className="text-3xl font-title font-extrabold text-[#1a1a1a] tracking-tight mb-4">
-                    Vende en los mejores bazares
-                  </h2>
-                  <p className="text-gray-600 mb-8 font-medium leading-relaxed">
-                    Descubre eventos que encajen a la perfección con tu marca. Crea tu perfil comercial y haz que los organizadores te descubran.
+                  <div className="w-12 h-12 bg-orange-50 rounded-lg flex items-center justify-center mb-4">
+                    <BriefcaseIcon className="w-6 h-6 text-[#E8621A]" />
+                  </div>
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2">¿Eres Expositor?</h2>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                    Descubre bazares que encajen con tu marca. Vende, conecta y crece 
+                    sin límites.
                   </p>
-                  <ul className="space-y-3 mb-8">
-                    {[
-                      "Perfil digital con catálogo de productos",
-                      "Aparece de forma prioritaria en búsquedas",
-                      "Contacto directo con organizadores por WhatsApp",
-                      "Sin requerir tarjeta de crédito"
-                    ].map((benefit, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-sm text-gray-500 font-bold">
-                        <span className="text-accent text-base">✓</span> {benefit}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-                <Link
-                  href="/expositores/registro"
-                  className="w-full bg-accent text-white py-4 rounded-2xl font-extrabold text-center hover:brightness-110 transition shadow-lg shadow-accent/20 block"
+                <Link 
+                  href="/expositores/registro" 
+                  className="block w-full py-3 px-4 bg-[#E8621A] text-white font-bold rounded-lg hover:bg-[#d85015] transition-colors text-center text-sm"
                 >
-                  Registrar mi Marca Ahora
+                  Registrar mi Marca
                 </Link>
               </div>
             </div>
@@ -168,49 +127,50 @@ export default async function LandingPage() {
           </div>
         </section>
 
-        {/* 4. CÓMO FUNCIONA (DOBLE AUDIENCIA) */}
-        <section className="py-32 px-6 max-w-7xl mx-auto w-full">
-          <div className="text-center mb-24">
-            <span className="text-accent font-black tracking-widest uppercase text-sm">El Proceso</span>
-            <h2 className="text-5xl font-title font-extrabold mt-4 tracking-tight">Cómo funciona la plataforma</h2>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* LADO ORGANIZADORES */}
-            <div className="bg-[#FFFAF5] p-8 sm:p-12 rounded-[2rem] border border-gray-100 shadow-sm">
-              <h3 className="text-2xl font-black text-[#1a1a1a] uppercase tracking-wider mb-10 flex items-center gap-2">
-                <span>🏢</span> Para Organizadores
-              </h3>
-              <div className="space-y-12">
+        {/* 4. CÓMO FUNCIONA */}
+        <section className="py-20 px-6 bg-white border-t border-gray-200">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-syne font-extrabold text-center text-gray-900 mb-16 tracking-tight">Cómo funciona</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {/* Para Organizadores */}
+              <div className="bg-[#FFFAF5]/50 p-8 rounded-2xl border border-gray-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-8">Para Organizadores</h3>
+                
                 {[
-                  { num: "01", title: "Publicas tu Bazar", desc: "Sube los detalles de tu evento, ubicación, fechas y requisitos para participar." },
-                  { num: "02", title: "Expositores te Encuentran", desc: "Las marcas y artesanos interesados ven tu publicación y revisan si cumplen tu perfil." },
-                  { num: "03", title: "Tú Decides y Apruebas", desc: "Recibes las solicitudes directo en tu WhatsApp para negociar el espacio sin intermediarios." }
-                ].map((step, i) => (
-                  <div key={i} className="border-l-[6px] border-[#9FE1CB] pl-8 py-2 relative text-left">
-                    <span className="text-5xl font-title font-extrabold text-[#9FE1CB] opacity-60 block mb-2 leading-none">{step.num}</span>
-                    <h4 className="text-2xl font-bold mb-2 tracking-tight text-[#1a1a1a]">{step.title}</h4>
-                    <p className="text-gray-600 text-base leading-relaxed">{step.desc}</p>
+                  { num: 1, title: "Publicas tu bazar", desc: "Nombre, fecha, ubicación y requisitos." },
+                  { num: 2, title: "Recibe solicitudes", desc: "Expositores te encuentran y solicitan espacio." },
+                  { num: 3, title: "Negocias directo", desc: "Contacto por WhatsApp, sin intermediarios." },
+                ].map((step) => (
+                  <div key={step.num} className="flex gap-4 mb-6 last:mb-0">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="font-semibold text-[#1A7A52] text-lg">{step.num}</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 mb-1">{step.title}</p>
+                      <p className="text-sm text-gray-600 font-medium leading-relaxed">{step.desc}</p>
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
 
-            {/* LADO EXPOSITORES */}
-            <div className="bg-white p-8 sm:p-12 rounded-[2rem] border border-gray-100 shadow-sm">
-              <h3 className="text-2xl font-black text-[#1a1a1a] uppercase tracking-wider mb-10 flex items-center gap-2">
-                <span>🛍️</span> Para Expositores
-              </h3>
-              <div className="space-y-12">
+              {/* Para Expositores */}
+              <div className="bg-white p-8 rounded-2xl border border-gray-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-8">Para Expositores</h3>
+                
                 {[
-                  { num: "01", title: "Registras tu Marca", desc: "Crea tu perfil con fotos de tus productos, giro, ubicación y links a tus redes sociales." },
-                  { num: "02", title: "Encuentras Bazares", desc: "Explora la cartelera y busca bazares activos por ciudad o tipo que encajen con tu marca." },
-                  { num: "03", title: "Contactas al Organizador", desc: "Solicita tu lugar directo al WhatsApp del organizador enviándole tu catálogo digital con un clic." }
-                ].map((step, i) => (
-                  <div key={i} className="border-l-[6px] border-[#FBDCD0] pl-8 py-2 relative text-left">
-                    <span className="text-5xl font-title font-extrabold text-accent opacity-40 block mb-2 leading-none">{step.num}</span>
-                    <h4 className="text-2xl font-bold mb-2 tracking-tight text-[#1a1a1a]">{step.title}</h4>
-                    <p className="text-gray-600 text-base leading-relaxed">{step.desc}</p>
+                  { num: 1, title: "Te registras", desc: "Tu marca, productos y ubicación." },
+                  { num: 2, title: "Descubres bazares", desc: "Filtramos eventos que encajen contigo." },
+                  { num: 3, title: "Contactas y vendes", desc: "Directo al organizador, sin esperas." },
+                ].map((step) => (
+                  <div key={step.num} className="flex gap-4 mb-6 last:mb-0">
+                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="font-semibold text-[#E8621A] text-lg">{step.num}</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 mb-1">{step.title}</p>
+                      <p className="text-sm text-gray-600 font-medium leading-relaxed">{step.desc}</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -218,75 +178,25 @@ export default async function LandingPage() {
           </div>
         </section>
 
-        {/* 5. BAZARES DESTACADOS */}
-        <section className="bg-[#FFF3EC] py-32 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        {/* 5. BAZARES ACTIVOS SECTION */}
+        <section className="py-20 px-6 bg-gray-50 border-t border-gray-200">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div>
-                <span className="text-accent font-black tracking-widest uppercase text-sm">Próximos eventos</span>
-                <h2 className="text-5xl font-title font-extrabold mt-4 text-[#1a1a1a] tracking-tight">Bazares destacados</h2>
-                <p className="text-xl text-gray-600 mt-4 font-medium">Los eventos más populares esta temporada</p>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">Bazares Activos</h2>
+                <p className="text-gray-600">Descubre eventos donde tu marca puede crecer</p>
               </div>
               <Link
                 href="/bazares"
-                className="text-[#1A7A52] font-black hover:underline flex items-center justify-center gap-2 text-lg whitespace-nowrap"
+                className="text-[#1A7A52] font-black hover:underline flex items-center justify-center gap-2 text-sm whitespace-nowrap bg-white px-5 py-2.5 rounded-full border border-gray-100 shadow-sm"
               >
                 Ver todos los bazares →
               </Link>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {bazaresDestacados.map((bazar: any) => (
-                <Link key={bazar.id} href={`/bazares/${bazar.slug}`}>
-                  <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition duration-500 group cursor-pointer h-full">
-                    <div className="relative w-full aspect-[1200/630] overflow-hidden">
-                      {bazar.imagen && bazar.imagen !== "" ? (
-                        <Image 
-                          src={bazar.imagen} 
-                          alt={bazar.nombre} 
-                          fill 
-                          className="object-cover group-hover:scale-105 transition duration-700"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400 font-bold text-lg p-4 text-center">
-                          📸 Imagen próximamente
-                        </div>
-                      )}
-                      {(bazar as any).badge === "destacado" && (
-                        <div className="absolute top-4 left-4 z-10">
-                          <span className="bg-[#0B5E43] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm">
-                            ⭐ Destacado
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-8">
-                      <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
-                        {bazar.tipo}
-                      </span>
-                      <h3 className="text-2xl font-bold mt-5 mb-3 group-hover:text-primary transition">{bazar.nombre}</h3>
-                      <div className="flex flex-col gap-2 text-gray-500 font-medium">
-                        {(() => {
-                          const coloniasParsed = bazar.colonias?.length > 0 ? bazar.colonias : [bazar.colonia];
-                          const sedesExtra = coloniasParsed.length - 1;
-                          return (
-                            <span className="flex items-center gap-2">
-                              📍 {bazar.ciudad}, {coloniasParsed[0]}
-                              {sedesExtra > 0 && (
-                                <span className="text-xs text-gray-400 ml-1">+{sedesExtra} sedes más</span>
-                              )}
-                            </span>
-                          );
-                        })()}
-                        <span className="flex items-center gap-2">
-                          📅 {formatBazarDate(bazar)}
-                        </span>
-                        {bazar.horario && bazar.horario !== "" && bazar.horario.toLowerCase() !== "por confirmar" && (
-                          <span className="flex items-center gap-2">📅 {bazar.horario}</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                <BazarCard key={bazar.id} bazar={bazar} />
               ))}
             </div>
           </div>
@@ -294,7 +204,7 @@ export default async function LandingPage() {
 
         {/* 5.5. MARCAS Y EXPOSITORES DESTACADOS (EXCLUSIVO PLAN TOP) */}
         {expositoresTop.length > 0 && (
-          <section className="bg-white py-32 px-6 border-b border-gray-50">
+          <section className="bg-white py-24 px-6 border-b border-gray-50">
             <div className="max-w-7xl mx-auto">
               <div className="mb-16 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
@@ -371,7 +281,6 @@ export default async function LandingPage() {
           </section>
         )}
 
-
         {/* 5.9. TESTIMONIOS */}
         <section className="bg-white py-24 px-6 text-center border-b border-gray-50">
           <div className="max-w-3xl mx-auto">
@@ -379,39 +288,36 @@ export default async function LandingPage() {
             <blockquote className="text-2xl sm:text-3xl font-title font-extrabold italic text-gray-900 leading-tight mb-8">
               "Vendí 3x más cuando registré mi marca en BazaresMX. Los organizadores de bazares me contactan directo por WhatsApp para invitarme sin rodeos."
             </blockquote>
-            <cite className="font-extrabold text-primary text-base sm:text-lg not-italic">
+            <cite className="font-extrabold text-[#1A7A52] text-base sm:text-lg not-italic">
               — Sandra, Joyería Artesanal, Ciudad de México
             </cite>
           </div>
         </section>
 
-        {/* 6. SECCIÓN LLAMADO A LA ACCIÓN FINAL */}
-        <section className="py-32 px-6 max-w-7xl mx-auto w-full text-center">
-          <div className="bg-primary p-12 md:p-20 rounded-[3rem] text-white shadow-2xl shadow-primary/30 relative overflow-hidden max-w-5xl mx-auto">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-            <h3 className="text-4xl sm:text-5xl font-syne font-extrabold mb-4 relative z-10">¿Listo para hacer crecer tu negocio?</h3>
-            <p className="text-lg text-white/80 max-w-xl mx-auto mb-12 font-medium relative z-10 leading-relaxed">
-              Publica tu bazar de forma completamente gratuita o registra tu emprendimiento comercial hoy mismo en la plataforma de bazares más activa de México.
+        {/* 6. FINAL CTA SECTION */}
+        <section className="py-16 md:py-20 px-4 md:px-8 bg-white border-t border-gray-200 text-center">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              ¿Listo para crecer?
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Sin tarjeta de crédito. Sin esperas. Comienza hoy.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto relative z-10">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/publica-tu-bazar"
-                className="w-full bg-[#1a1a1a] text-white py-4.5 rounded-2xl font-extrabold text-lg hover:bg-neutral-800 transition block text-center"
+                className="px-6 py-3 border-2 border-[#1A7A52] text-[#1A7A52] font-bold rounded-lg hover:bg-green-50 transition-colors text-center text-sm"
               >
-                Soy Organizador
+                Publicar Bazar Gratis
               </Link>
               <Link 
                 href="/expositores/registro"
-                className="w-full bg-accent text-white py-4.5 rounded-2xl font-extrabold text-lg hover:brightness-110 transition block text-center shadow-lg shadow-accent/20"
+                className="px-6 py-3 bg-[#1A7A52] text-white font-bold rounded-lg hover:bg-[#156a46] transition-colors text-center text-sm"
               >
-                Soy Expositor
+                Registrar mi Marca
               </Link>
             </div>
-            
-            <p className="text-[10px] md:text-xs text-white/50 text-center mt-6 relative z-10 font-bold">
-              ✓ Sin requerir tarjeta de crédito · ✓ Activación rápida · ✓ Sin intermediarios
-            </p>
           </div>
         </section>
       </main>
@@ -420,7 +326,7 @@ export default async function LandingPage() {
       <footer className="bg-[#1a1a1a] text-white py-20 px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
           <div className="text-4xl font-title font-extrabold mb-4 tracking-tight">
-            Bazares<span className="text-accent">MX</span>
+            Bazares<span className="text-[#1A7A52]">MX</span>
           </div>
 
           {/* Redes Sociales */}
@@ -454,7 +360,7 @@ export default async function LandingPage() {
             El directorio digital de bazares en México · 2026
           </p>
           <p className="text-white/30 text-xs">
-            Desarrollado por 💡 <a href="https://www.flowisolutions.com/" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline font-bold">Flowi Solutions</a>
+            Desarrollado por 💡 <a href="https://www.flowisolutions.com/" target="_blank" rel="noopener noreferrer" className="text-[#1A7A52] hover:underline font-bold">Flowi Solutions</a>
           </p>
         </div>
       </footer>

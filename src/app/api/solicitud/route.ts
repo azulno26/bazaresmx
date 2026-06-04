@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Acepta expositores:</strong> ${data.aceptaExpositores}</p>
         <p><strong>Entrada:</strong> ${data.entrada}</p>
         <p><strong>Organizador:</strong> ${data.organizador}</p>
+        <p><strong>Plan Elegido:</strong> ${data.planElegido || 'Básico'}</p>
         <p><strong>Imagen:</strong> ${imageInfo}</p>
       `
     })

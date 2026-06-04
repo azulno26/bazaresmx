@@ -38,7 +38,7 @@ interface BazarCardProps {
 }
 
 export default function BazarCard({ bazar }: BazarCardProps) {
-  const isPremium = bazar.plan === "pro" || bazar.plan === "medio" || bazar.plan === "promo";
+  const isPremium = bazar.plan === "pro";
   
   return (
     <Link href={`/bazares/${bazar.slug}`} className="group block h-full">

@@ -35,7 +35,7 @@ export default async function LandingPage() {
               href="/publica-tu-bazar"
               className="text-[#1A7A52] hover:text-[#156a46] font-bold text-xs sm:text-sm transition duration-300 whitespace-nowrap bg-[#EBF7F2] px-4 py-2 rounded-full"
             >
-              Publicar Bazar (Gratis)
+              Publicar Bazar
             </Link>
             <Link 
               href="/expositores/registro"
@@ -78,7 +78,7 @@ export default async function LandingPage() {
                   href="/publica-tu-bazar" 
                   className="block w-full py-3 px-4 bg-[#1A7A52] text-white font-bold rounded-lg hover:bg-[#156a46] transition-colors text-center text-sm"
                 >
-                  Publicar Bazar Gratis
+                  Publicar Bazar
                 </Link>
               </div>
 
@@ -220,31 +220,31 @@ export default async function LandingPage() {
                 </Link>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {expositoresTop.map((exp: any) => (
                   <Link key={exp.id} href={`/expositores/${exp.slug}`} className="group">
-                    <div className="bg-white rounded-[2rem] overflow-hidden shadow-2xl shadow-accent/5 hover:shadow-accent/10 transition duration-500 h-full flex flex-col justify-between">
+                    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col justify-between h-full">
                       <div>
                         {/* Imagen de Portada */}
-                        <div className="relative w-full aspect-[1200/630] overflow-hidden bg-neutral-50 border-b border-gray-100">
+                        <div className="relative h-48 w-full overflow-hidden bg-neutral-50 flex items-center justify-center text-white border-b border-gray-100">
                           {exp.fotoPerfil ? (
                             <Image
                               src={exp.fotoPerfil}
                               alt={exp.nombreNegocio}
                               fill
-                              className="object-cover group-hover:scale-105 transition duration-500"
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                           ) : (
                             <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-6xl bg-gray-50">
                               📸
                             </div>
                           )}
-                          <div className="absolute top-4 left-4 flex gap-2">
-                            <span className="bg-[#0B5E43] text-white px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">
-                              ⭐ Destacado
+                          <div className="absolute top-4 left-4 flex gap-2 z-10">
+                            <span className="bg-green-50 text-[#1A7A52] text-xs font-semibold px-3 py-1 rounded-lg shadow-sm">
+                              🏆 Destacado
                             </span>
                             {exp.badgeVerificado && (
-                              <span className="bg-blue-600 text-white px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">
+                              <span className="bg-blue-50 text-blue-600 text-xs font-semibold px-3 py-1 rounded-lg shadow-sm">
                                 ✓ Verificado
                               </span>
                             )}
@@ -252,25 +252,30 @@ export default async function LandingPage() {
                         </div>
 
                         {/* Info */}
-                        <div className="p-8">
-                          <span className="bg-[#1A7A52]/10 text-[#1A7A52] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
-                            {exp.giro}
-                          </span>
-                          <h3 className="text-2xl font-bold mt-5 mb-3 group-hover:text-[#1A7A52] transition leading-tight text-gray-900">
+                        <div className="p-5">
+                          {exp.giro && (
+                            <span className="bg-[#1A7A52]/10 text-[#1A7A52] text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-md inline-block mb-3">
+                              {exp.giro}
+                            </span>
+                          )}
+                          <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight group-hover:text-[#1A7A52] transition">
                             {exp.nombreNegocio}
                           </h3>
-                          <p className="text-gray-500 font-medium text-sm line-clamp-3 leading-relaxed mb-4">
+                          <div className="text-xs text-gray-500 font-semibold mb-3 space-y-1">
+                            <p className="flex items-center gap-1.5">
+                              <span>📍</span> 
+                              <span>{exp.ciudad}</span>
+                            </p>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
                             {exp.descripcion}
                           </p>
                         </div>
                       </div>
 
-                      <div className="px-8 pb-8 pt-0 flex justify-between items-center border-t border-gray-50 mt-auto">
-                        <span className="text-xs font-bold text-gray-400">
-                          📍 {exp.ciudad}
-                        </span>
-                        <span className="text-[#1A7A52] font-extrabold text-sm group-hover:underline flex items-center gap-1">
-                          Ver Catálogo →
+                      <div className="px-5 pb-5">
+                        <span className="block w-full py-2.5 bg-[#1A7A52] text-white font-semibold text-sm rounded-lg hover:bg-[#156a46] transition-colors text-center shadow-sm hover:shadow">
+                          Ver Catálogo
                         </span>
                       </div>
                     </div>
@@ -309,7 +314,7 @@ export default async function LandingPage() {
                 href="/publica-tu-bazar"
                 className="px-6 py-3 border-2 border-[#1A7A52] text-[#1A7A52] font-bold rounded-lg hover:bg-green-50 transition-colors text-center text-sm"
               >
-                Publicar Bazar Gratis
+                Publicar Bazar
               </Link>
               <Link 
                 href="/expositores/registro"

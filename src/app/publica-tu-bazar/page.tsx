@@ -514,7 +514,7 @@ export default function PublishBazarForm() {
 
                 {/* Colonia */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-gray-700">Colonia *</label>
+                  <label className="text-sm font-bold text-gray-700">Colonia o Plaza/Sede *</label>
                   <input
                     type="text"
                     name="colonia"
@@ -522,7 +522,7 @@ export default function PublishBazarForm() {
                     value={formData.colonia}
                     onChange={handleChange}
                     className="border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-primary outline-none transition"
-                    placeholder="Ej. Colonia Roma Norte"
+                    placeholder="Ej. Roma Norte o Galerías Coapa"
                   />
                 </div>
 

@@ -70,6 +70,34 @@ export default function PublishBazarForm() {
     setError("");
 
     try {
+      let uploadedImageUrl = "";
+      if (imageFile) {
+        const cloudName = "duonm6wku";
+        const preset = "bmx_social";
+        const uploadData = new FormData();
+        uploadData.append("file", imageFile);
+        uploadData.append("upload_preset", preset);
+
+        try {
+          const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+            method: "POST",
+            body: uploadData,
+          });
+
+          if (!uploadRes.ok) {
+            throw new Error("Fallo al subir la imagen a Cloudinary");
+          }
+
+          const resData = await uploadRes.json();
+          uploadedImageUrl = resData.secure_url;
+        } catch (err) {
+          console.error("Cloudinary upload error:", err);
+          setError("Error al subir la imagen de portada. Intenta de nuevo.");
+          setLoading(false);
+          return;
+        }
+      }
+
       const formState = {
         nombre: formData.nombreBazar,
         estado: formData.ciudad,
@@ -91,6 +119,7 @@ export default function PublishBazarForm() {
         entrada: formData.entradaLibre,
         organizador: formData.nombreOrganizador,
         planElegido: planElegido,
+        imagenUrl: uploadedImageUrl,
       };
 
       const submitFormData = new FormData();

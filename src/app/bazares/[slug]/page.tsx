@@ -11,6 +11,19 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+function slugifyCiudad(ciudad: string): string {
+  const norm = (ciudad || "").toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove accents
+    .replace(/[^a-z0-9]/g, "-")      // replace non-alphanumeric with hyphen
+    .replace(/-+/g, "-")            // merge duplicate hyphens
+    .replace(/^-|-$/g, "");          // trim hyphens
+
+  if (norm === "ciudad-de-mexico" || norm === "cdmx" || norm === "distrito-federal") return "cdmx";
+  if (norm === "estado-de-mexico" || norm === "edomex") return "edomex";
+  return norm;
+}
+
 export async function generateStaticParams() {
   const bazares = await getBazaresFromSheets();
   return bazares.map((b: any) => ({
@@ -29,12 +42,34 @@ export async function generateMetadata({ params }: Props) {
     };
   }
 
+  // Título natural y óptimo para SERP (máx 60 caracteres)
+  let rawTitle = "";
+  if (bazar.tipo) {
+    rawTitle = `${bazar.nombre}: bazar de ${bazar.tipo.toLowerCase()} en ${bazar.ciudad}`;
+  } else {
+    rawTitle = `${bazar.nombre}: bazar en ${bazar.ciudad}`;
+  }
+
+  let finalTitle = rawTitle;
+  if (finalTitle.length > 50) {
+    finalTitle = `${bazar.nombre} | Bazar en ${bazar.ciudad}`;
+  } else {
+    finalTitle = `${finalTitle} | BazaresMX`;
+  }
+
+  // Descripción dinámica optimizada
+  const cleanDesc = bazar.descripcion ? bazar.descripcion.substring(0, 130).trim() : '';
+  const defaultDesc = `¿Cuándo es ${bazar.nombre}? Conoce las fechas, horarios, entrada libre y ubicación exacta en ${bazar.colonia || bazar.ciudad}. Toda la información del bazar aquí.`;
+  const description = cleanDesc 
+    ? `${cleanDesc}... Conoce horarios, ubicación y fechas de ${bazar.nombre} en ${bazar.ciudad}.` 
+    : defaultDesc;
+
   return {
-    title: bazar.nombre,
-    description: bazar.descripcion,
+    title: finalTitle,
+    description: description,
     openGraph: {
       title: `${bazar.nombre} | BazaresMX`,
-      description: bazar.descripcion,
+      description: description,
       images: [{ url: bazar.imagen }],
       type: 'website',
     }
@@ -60,6 +95,19 @@ function getAbsoluteImageUrl(img: string | undefined | null): string {
   return `https://www.bazaresmx.com.mx${clean.startsWith("/") ? "" : "/"}${clean}`;
 }
 
+// Dynamic dynamic text to prevent duplicate content penalty
+function getPorQueVisitar(bazar: any): string {
+  const tipoText = bazar.tipo ? ` de tipo ${bazar.tipo.toLowerCase()}` : '';
+  const entradaText = (bazar.entrada || '').toLowerCase() === 'libre' 
+    ? 'cuenta con entrada libre, lo que lo hace un plan ideal y accesible' 
+    : 'es una excelente oportunidad';
+  const expositoresText = bazar.acepta_expositores 
+    ? ' Además, si tienes un emprendimiento o marca local, es el espacio perfecto para darte a conocer y conectar con otros creadores.' 
+    : '';
+  
+  return `Visitar ${bazar.nombre} es una excelente oportunidad para apoyar el comercio local y descubrir propuestas de diseño independientes en ${bazar.ciudad}. Este evento ${tipoText} ${entradaText} para pasar el fin de semana con amigos o familia.${expositoresText}`;
+}
+
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const bazares = await getBazaresFromSheets();
@@ -77,6 +125,22 @@ export default async function Page({ params }: Props) {
     ? `${fechaInicio} - ${fechaFin}` 
     : fechaInicio
 
+  // Enlazado interno & recomendados
+  const ciudadSlug = slugifyCiudad(bazar.ciudad);
+  const otrosBazares = bazares
+    .filter((b: any) => b.slug !== slug && b.ciudad.toLowerCase() === bazar.ciudad.toLowerCase())
+    .slice(0, 3);
+
+  // Schema Event Dates Validation (Null-safety)
+  const isoStartDate = formatIsoDate(bazar.fecha);
+  const isoEndDate = formatIsoDate(bazar.fechaFin || bazar.fecha);
+  const todayIso = new Date().toISOString().split('T')[0];
+  const hasValidStart = /^\d{4}-\d{2}-\d{2}$/.test(isoStartDate);
+  const hasValidEnd = /^\d{4}-\d{2}-\d{2}$/.test(isoEndDate);
+
+  const startDateSchema = hasValidStart ? isoStartDate : todayIso;
+  const endDateSchema = hasValidEnd ? isoEndDate : startDateSchema;
+
   return (
     <div className="min-h-screen bg-[#FFFAF5] pb-20">
       {/* NAVBAR / BREADCRUMB */}
@@ -85,7 +149,7 @@ export default async function Page({ params }: Props) {
           href="/" 
           className="text-primary font-bold hover:underline flex items-center gap-2"
         >
-          ← Volver a bazares
+          ← Volver al directorio
         </Link>
       </nav>
 
@@ -148,10 +212,11 @@ export default async function Page({ params }: Props) {
         <div className="grid lg:grid-cols-3 gap-12">
           {/* COLUMNA IZQUIERDA */}
           <div className="lg:col-span-2 space-y-12">
+            {/* 1. SOBRE EL BAZAR */}
             <section>
-              <h2 className="text-2xl font-bold mb-4 text-primary">Sobre el bazar</h2>
+              <h2 className="text-2xl font-bold mb-4 text-primary">¿Qué es {bazar.nombre}?</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                {bazar.descripcion}
+                {bazar.descripcion || `Conoce los detalles de ${bazar.nombre}, un espacio creado para impulsar emprendimientos locales y marcas independientes de diseño.`}
               </p>
               {bazar.tags && bazar.tags.length > 0 && (
                 <div className="flex flex-wrap gap-3 mt-6">
@@ -167,9 +232,18 @@ export default async function Page({ params }: Props) {
               )}
             </section>
 
+            {/* 2. ¿POR QUÉ VISITAR ESTE BAZAR? (Dinámico) */}
+            <section className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+              <h2 className="text-2xl font-bold mb-4 text-primary">¿Por qué visitar este bazar?</h2>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {getPorQueVisitar(bazar)}
+              </p>
+            </section>
+
+            {/* 3. QUÉ ENCONTRARÁS */}
             {bazar.queEncontraras && bazar.queEncontraras.length > 0 && (
               <section>
-                <h2 className="text-2xl font-bold mb-4 text-primary">Qué encontrarás</h2>
+                <h2 className="text-2xl font-bold mb-4 text-primary">¿Qué puedes encontrar en este bazar?</h2>
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-4 mb-6">
                   {bazar.queEncontraras.map((item: any, i: number) => (
                     <div key={i} className="flex items-start gap-3 text-lg text-gray-700">
@@ -194,9 +268,10 @@ export default async function Page({ params }: Props) {
               </section>
             )}
 
+            {/* 4. SEDES Y UBICACIÓN */}
             {bazar.colonias && bazar.colonias.length > 1 ? (
               <section>
-                <h2 className="text-2xl font-bold mb-6 text-primary">Sedes</h2>
+                <h2 className="text-2xl font-bold mb-6 text-primary">¿Dónde se realiza {bazar.nombre}? Ubicaciones y Sedes</h2>
                 <div className="grid md:grid-cols-2 gap-6">
                   {bazar.colonias.map((colonia: string, i: number) => (
                     <div key={i} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col justify-between">
@@ -221,6 +296,7 @@ export default async function Page({ params }: Props) {
                           allowFullScreen
                           loading="lazy"
                           className="shadow-sm border border-gray-100 mt-4"
+                          title={`Mapa de la sede en ${colonia}`}
                         />
                       )}
                     </div>
@@ -230,7 +306,7 @@ export default async function Page({ params }: Props) {
             ) : (
               bazar.direccion && (
                 <section>
-                  <h2 className="text-2xl font-bold mb-4 text-primary">Ubicación</h2>
+                  <h2 className="text-2xl font-bold mb-4 text-primary">¿Dónde se realiza {bazar.nombre}? Ubicación exacta</h2>
                   <div className="flex items-start gap-3 text-lg text-gray-700 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-4">
                     <span className="text-2xl">🗺️</span>
                     <p>{bazar.direccion}</p>
@@ -244,6 +320,7 @@ export default async function Page({ params }: Props) {
                       allowFullScreen
                       loading="lazy"
                       className="shadow-md border border-gray-100"
+                      title={`Mapa del bazar ${bazar.nombre}`}
                     />
                   )}
                 </section>
@@ -255,14 +332,14 @@ export default async function Page({ params }: Props) {
           <div className="lg:col-span-1 space-y-6">
             <div className="bg-primary p-8 rounded-[2rem] text-white shadow-xl">
               <h3 className="text-xl font-bold mb-6 border-b border-white/20 pb-4">
-                Información clave
+                Fechas y Horarios de {bazar.nombre}
               </h3>
               <ul className="space-y-6">
                 <li className="flex flex-col">
                   <span className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">
                     {"fechas" in bazar && Array.isArray((bazar as any).fechas)
-                      ? (hasValidHorario ? "Fechas y Horario" : "Fechas")
-                      : (hasValidHorario ? "Próxima Fecha y Horario" : "Próxima Fecha")}
+                      ? "Fechas y Horario"
+                      : "Próxima Fecha y Horario"}
                   </span>
                   <span className="text-lg font-bold">{fechaDisplay}</span>
                   {bazar.horario && bazar.horario !== '' && (
@@ -348,6 +425,55 @@ export default async function Page({ params }: Props) {
           </div>
         </div>
 
+        {/* OTROS RECOMENDADOS */}
+        {otrosBazares.length > 0 && (
+          <section className="mt-16 pt-12 border-t border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-900 mb-8">Otros bazares recomendados en {bazar.ciudad}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {otrosBazares.map((ot: any) => (
+                <Link key={ot.id} href={`/bazares/${ot.slug}`}>
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition border border-gray-100 flex flex-col h-full">
+                    <div className="relative aspect-[16/9] w-full bg-gray-50">
+                      {ot.imagen ? (
+                        <Image
+                          src={ot.imagen}
+                          alt={ot.nombre}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-300">📸</div>
+                      )}
+                    </div>
+                    <div className="p-4 flex-1 flex flex-col justify-between">
+                      <h3 className="font-bold text-gray-900 group-hover:text-primary mb-2 line-clamp-1">{ot.nombre}</h3>
+                      <p className="text-xs text-gray-500 font-semibold">📍 {ot.colonia || ot.ciudad}</p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ENLAZADO INTERNO */}
+        <div className="mt-16 pt-8 border-t border-gray-200">
+          <h3 className="text-base font-bold text-gray-800 mb-4">Explora el directorio</h3>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold text-gray-600">
+            <Link href="/" className="text-primary hover:underline">
+              Inicio
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href={`/bazares-en-${ciudadSlug}`} className="text-primary hover:underline">
+              Bazares en {bazar.ciudad}
+            </Link>
+            <span className="text-gray-300">|</span>
+            <Link href="/publica-tu-bazar" className="text-[#E8621A] hover:underline flex items-center gap-1">
+              📢 ¿Organizas un bazar? Anúncialo gratis aquí
+            </Link>
+          </div>
+        </div>
+
         {(bazar as any).publicado && (
           <p className="text-xs text-gray-300 mt-8 text-right">
             Publicado el {(() => {
@@ -384,9 +510,9 @@ export default async function Page({ params }: Props) {
             "@context": "https://schema.org",
             "@type": "Event",
             "name": bazar.nombre,
-            "description": bazar.descripcion,
-            "startDate": formatIsoDate(bazar.fecha),
-            "endDate": formatIsoDate(bazar.fechaFin || bazar.fecha),
+            "description": bazar.descripcion || `Detalles de fecha, ubicación y expositores del bazar ${bazar.nombre}`,
+            "startDate": startDateSchema,
+            "endDate": endDateSchema,
             "eventStatus": "https://schema.org/EventScheduled",
             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
             "image": getAbsoluteImageUrl(bazar.imagen),
@@ -395,9 +521,9 @@ export default async function Page({ params }: Props) {
               "name": bazar.nombre,
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": (bazar as any).direccion || "",
-                "addressLocality": bazar.colonia || "",
-                "addressRegion": bazar.ciudad || "",
+                "streetAddress": bazar.direccion || "Dirección por confirmar",
+                "addressLocality": bazar.colonia || bazar.ciudad || "Colonia por confirmar",
+                "addressRegion": bazar.ciudad || "México",
                 "addressCountry": "MX"
               }
             },
@@ -417,7 +543,7 @@ export default async function Page({ params }: Props) {
               "availability": "https://schema.org/InStock",
               "url": `https://www.bazaresmx.com.mx/bazares/${bazar.slug}`
             },
-            "isAccessibleForFree": true,
+            "isAccessibleForFree": (bazar.entrada === "libre"),
             "url": `https://www.bazaresmx.com.mx/bazares/${bazar.slug}`
           })
         }}

@@ -7,6 +7,13 @@ import BazarCard from "@/src/components/BazarCard";
 
 export const revalidate = 86400;
 
+export const metadata = {
+  title: "Bazares en México 2026 — Directorio y Calendario de Eventos",
+  description: "Descubre los mejores bazares de ropa, diseño, arte y emprendimientos locales en México. Directorio de eventos en CDMX, Puebla y más regiones.",
+  keywords: ["bazares Mexico", "bazares CDMX", "directorio de bazares", "calendario de bazares", "bazares en Puebla"],
+};
+
+
 export default async function LandingPage() {
   const bazares = await getBazaresFromSheets();
   const bazaresDestacados = bazares
@@ -321,6 +328,24 @@ export default async function LandingPage() {
                 className="px-6 py-3 bg-[#1A7A52] text-white font-bold rounded-lg hover:bg-[#156a46] transition-colors text-center text-sm"
               >
                 Registrar mi Marca
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 6.5 SECCIÓN ENLACES RÁPIDOS SEO (CIUDADES) */}
+        <section className="py-10 bg-gray-50 border-t border-gray-100 text-center">
+          <div className="max-w-5xl mx-auto px-6">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+              Directorio de Bazares por Región
+            </h3>
+            <div className="flex flex-wrap justify-center gap-6 text-base font-bold text-[#1A7A52]">
+              <Link href="/bazares-en-cdmx" className="hover:underline">
+                Bazares en CDMX
+              </Link>
+              <span className="text-gray-300">|</span>
+              <Link href="/bazares-en-puebla" className="hover:underline">
+                Bazares en Puebla
               </Link>
             </div>
           </div>

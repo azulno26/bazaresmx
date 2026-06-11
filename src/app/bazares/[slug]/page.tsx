@@ -141,6 +141,19 @@ export default async function Page({ params }: Props) {
   const startDateSchema = hasValidStart ? isoStartDate : todayIso;
   const endDateSchema = hasValidEnd ? isoEndDate : startDateSchema;
 
+  // validFrom Schema calculation (with Published date or Fallback to startDateSchema)
+  let validFromSchema = "";
+  if (bazar.publicado && bazar.publicado.trim() !== "") {
+    const isoPublicado = formatIsoDate(bazar.publicado);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(isoPublicado)) {
+      validFromSchema = isoPublicado;
+    }
+  }
+  if (!validFromSchema) {
+    validFromSchema = startDateSchema;
+  }
+
+
   return (
     <div className="min-h-screen bg-[#FFFAF5] pb-20">
       {/* NAVBAR / BREADCRUMB */}
@@ -541,6 +554,7 @@ export default async function Page({ params }: Props) {
               "price": "0",
               "priceCurrency": "MXN",
               "availability": "https://schema.org/InStock",
+              "validFrom": validFromSchema,
               "url": `https://www.bazaresmx.com.mx/bazares/${bazar.slug}`
             },
             "isAccessibleForFree": (bazar.entrada === "libre"),

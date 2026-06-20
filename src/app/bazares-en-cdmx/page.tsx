@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBazaresFromSheets } from "@/src/lib/sheets";
+import { getBazares } from "@/src/lib/supabase";
 import BazarCard from "@/src/components/BazarCard";
 import type { Metadata } from "next";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function BazaresCdmxPage() {
-  const bazares = await getBazaresFromSheets();
+  const bazares = await getBazares();
   
   // Filter for CDMX bazares
   const bazaresCdmx = bazares.filter((b: any) => {

@@ -1,7 +1,7 @@
-import { getBazaresFromSheets } from '@/src/lib/sheets'
+import { getBazares } from '@/src/lib/supabase'
 
 export default async function sitemap() {
-  const bazares = await getBazaresFromSheets()
+  const bazares = await getBazares()
   const bazarUrls = bazares.map((b: any) => ({
     url: `https://www.bazaresmx.com.mx/bazares/${b.slug}`,
     lastModified: new Date(),

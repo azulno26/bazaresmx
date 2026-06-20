@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getBazaresFromSheets } from "@/src/lib/sheets";
+import { getBazares } from "@/src/lib/supabase";
 import BazarCard from "@/src/components/BazarCard";
 import type { Metadata } from "next";
 
@@ -32,7 +32,7 @@ const municipiosEdomex = [
 ];
 
 export default async function BazaresEdomexPage() {
-  const bazares = await getBazaresFromSheets();
+  const bazares = await getBazares();
   
   // Filter for Estado de Mexico bazares
   const bazaresEdomex = bazares.filter((b: any) => {

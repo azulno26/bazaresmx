@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { getBazaresFromSheets } from "@/src/lib/sheets";
+import { getBazares, getExpositores } from "@/src/lib/supabase";
 import Link from "next/link";
-import { getExpositoresTodas } from "@/src/lib/sheets-expositores";
 import { CalendarIcon, BriefcaseIcon } from "lucide-react";
 import BazarCard from "@/src/components/BazarCard";
 
@@ -15,7 +14,7 @@ export const metadata = {
 
 
 export default async function LandingPage() {
-  const bazares = await getBazaresFromSheets();
+  const bazares = await getBazares();
   const bazaresDestacados = bazares
     .filter((b: any) => ['pro','medio','promo'].includes(b.plan))
     .sort((a: any, b: any) => {
@@ -24,7 +23,7 @@ export default async function LandingPage() {
     })
     .slice(0, 12);
 
-  const expositores = await getExpositoresTodas();
+  const expositores = await getExpositores();
   const expositoresTop = expositores
     .filter((e: any) => e.planElegido === 'Top')
     .slice(0, 6);

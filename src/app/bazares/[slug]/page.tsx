@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBazaresFromSheets } from "@/src/lib/sheets";
+import { getBazares, getBazarBySlug } from "@/src/lib/supabase";
 import BazarCarrusel from "./BazarCarrusel";
 
 export const revalidate = 86400;
@@ -25,7 +25,7 @@ function slugifyCiudad(ciudad: string): string {
 }
 
 export async function generateStaticParams() {
-  const bazares = await getBazaresFromSheets();
+  const bazares = await getBazares();
   return bazares.map((b: any) => ({
     slug: b.slug,
   }));
@@ -33,8 +33,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const bazares = await getBazaresFromSheets();
-  const bazar = bazares.find((b: any) => b.slug === slug);
+  const bazar = await getBazarBySlug(slug);
 
   if (!bazar) {
     return {
@@ -110,8 +109,7 @@ function getPorQueVisitar(bazar: any): string {
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const bazares = await getBazaresFromSheets();
-  const bazar = bazares.find((b: any) => b.slug === slug);
+  const bazar = await getBazarBySlug(slug);
 
   if (!bazar) {
     notFound();
@@ -127,6 +125,7 @@ export default async function Page({ params }: Props) {
 
   // Enlazado interno & recomendados
   const ciudadSlug = slugifyCiudad(bazar.ciudad);
+  const bazares = await getBazares();
   const otrosBazares = bazares
     .filter((b: any) => b.slug !== slug && b.ciudad.toLowerCase() === bazar.ciudad.toLowerCase())
     .slice(0, 3);

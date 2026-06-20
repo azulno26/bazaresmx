@@ -1,4 +1,5 @@
-import { getExpositoresTodas, Expositor } from "@/src/lib/sheets-expositores";
+import { getExpositores } from "@/src/lib/supabase";
+import { Expositor } from "@/src/lib/sheets-expositores";
 import ExpositoresIndexClient from "./ExpositoresIndexClient";
 
 export const revalidate = 86400; // Cache 24h
@@ -7,7 +8,7 @@ export default async function Page() {
   let featuredExpositores: Expositor[] = [];
 
   try {
-    const expositores = await getExpositoresTodas();
+    const expositores = await getExpositores();
     // Only featured (Plan = Top) active exhibitors, capped at 10 (Top 10)
     featuredExpositores = expositores
       .filter((e) => e.planElegido === "Top" && e.status === "Activo")

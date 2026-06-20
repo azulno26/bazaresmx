@@ -1,4 +1,4 @@
-import { getExpositorBySlug, getExpositoresTodas } from "@/src/lib/sheets-expositores";
+import { getExpositorBySlug, getExpositores } from "@/src/lib/supabase";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  const expositores = await getExpositoresTodas();
+  const expositores = await getExpositores();
   // Only pre-generate static profiles for Media and Top plans
   return expositores
     .filter((e) => e.planElegido === 'Media' || e.planElegido === 'Top')

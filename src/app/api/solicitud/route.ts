@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
@@ -110,6 +111,64 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Escribir en Supabase
+    let supabaseWritten = false;
+    let supabaseError = null;
+    let insertedBazarId = null;
+
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      try {
+        const supabaseAdminClient = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL,
+          process.env.SUPABASE_SERVICE_ROLE_KEY
+        );
+        
+        const tags: string[] = [];
+        const que_encontraras: string[] = [];
+
+        const { data: insertedBazar, error: subErr } = await supabaseAdminClient
+          .from('bazares')
+          .insert({
+            nombre: data.nombre,
+            slug: slug,
+            descripcion: data.descripcion || '',
+            ciudad: data.estado,
+            colonia: data.colonia,
+            direccion: data.direccion || '',
+            horario: `${data.horarioInicio} - ${data.horarioFin}`,
+            fecha: data.fechaInicio,
+            fecha_fin: data.fechaFin || null,
+            organizador: data.organizador || '',
+            whatsapp: data.whatsapp || '',
+            instagram: data.instagram || '',
+            facebook: data.facebook || '',
+            tiktok: data.plataformaOtraRed === 'TikTok' ? data.otraRedSocial : '',
+            acepta_expositores: data.aceptaExpositores === 'Sí',
+            entrada: data.entradaLibre || 'libre',
+            imagen_url: data.imagenUrl || '',
+            plan: planLower,
+            status: planLower === 'básico' || planLower === 'basico' ? 'activo' : 'pendiente',
+            vencimiento: null,
+            tags,
+            que_encontraras,
+            tipo: 'artesanal'
+          })
+          .select()
+          .single();
+
+        if (subErr) {
+          supabaseError = subErr.message;
+          console.error("Error writing to Supabase:", subErr);
+        } else {
+          supabaseWritten = true;
+          insertedBazarId = insertedBazar.id;
+        }
+      } catch (err: any) {
+        supabaseError = err.message;
+        console.error("Critical error writing to Supabase:", err);
+      }
+    }
+
     // Send notification email to admin via Resend
     await resend.emails.send({
       from: 'onboarding@resend.dev',
@@ -118,7 +177,8 @@ export async function POST(req: NextRequest) {
       attachments,
       html: `
         <h2>Nueva solicitud de publicación en BazaresMX</h2>
-        <p><strong>ID Asignado:</strong> ${nextId}</p>
+        <p><strong>ID Asignado (Sheets):</strong> ${nextId}</p>
+        <p><strong>ID Asignado (Supabase):</strong> ${insertedBazarId || 'Error / No guardado'}</p>
         <p><strong>Slug:</strong> ${slug}</p>
         <p><strong>Nombre del bazar:</strong> ${data.nombre}</p>
         <p><strong>Estado:</strong> ${data.estado}</p>
@@ -141,10 +201,11 @@ export async function POST(req: NextRequest) {
         <p><strong>Imagen adjunta:</strong> ${imageInfo}</p>
         <hr />
         <p><em>Estatus de escritura en Google Sheet (pestaña Bazares): ${sheetsWritten ? '✓ Exitoso (Apps Script)' : '✗ Fallido/Pendiente (Configurar URL)'}</em></p>
+        <p><em>Estatus de escritura en Supabase: ${supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`}</em></p>
       `
     });
 
-    return NextResponse.json({ ok: true, sheetsWritten });
+    return NextResponse.json({ ok: true, sheetsWritten, supabaseWritten, supabaseError, id: insertedBazarId });
   } catch (error) {
     console.error("Error sending email or writing to Sheets:", error);
     return NextResponse.json({ ok: false }, { status: 500 });

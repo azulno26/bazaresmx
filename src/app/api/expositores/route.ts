@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
@@ -113,15 +114,96 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // Escribir en Supabase
+    let supabaseWritten = false;
+    let supabaseError = null;
+    let insertedExpositorId = null;
+
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      try {
+        const supabaseAdminClient = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL,
+          process.env.SUPABASE_SERVICE_ROLE_KEY
+        );
+
+        const planLower = (data.planElegido || 'Básico').toLowerCase().trim();
+        const planMapped = planLower === 'básico' || planLower === 'basico' ? 'basico' : (planLower === 'media' ? 'media' : 'top');
+        const dbStatus = planMapped === 'basico' ? 'activo' : 'pendiente';
+
+        const { data: insertedExpositor, error: expErr } = await supabaseAdminClient
+          .from('expositores')
+          .insert({
+            nombre_completo: data.nombreCompleto,
+            nombre_negocio: data.nombreNegocio,
+            slug: slug,
+            email: data.correo,
+            whatsapp: data.whatsapp,
+            descripcion: data.descripcion || '',
+            giro: data.giro,
+            ciudad: data.ciudad,
+            disponibilidad: data.disponibilidad || '',
+            instagram: data.instagram || '',
+            facebook: data.facebook || '',
+            tiktok: data.tiktok || '',
+            foto_perfil: perfilImg,
+            galeria_urls: productGallery ? productGallery.split(',').filter(Boolean) : [],
+            plan: planMapped,
+            mes_gratis: mesGratis === 'Sí',
+            status: dbStatus,
+            badge_verificado: false,
+            vencimiento: null
+          })
+          .select()
+          .single();
+
+        if (expErr) {
+          supabaseError = expErr.message;
+          console.error("Error writing expositor to Supabase:", expErr);
+        } else {
+          supabaseWritten = true;
+          insertedExpositorId = insertedExpositor.id;
+
+          // Insertar productos si existen
+          if (data.productos && data.productos.length > 0) {
+            const productsToInsert = data.productos
+              .filter((p: any) => p.nombre || p.foto)
+              .map((p: any) => ({
+                expositor_id: insertedExpositor.id,
+                nombre: p.nombre || 'Producto',
+                descripcion: p.descripcion || '',
+                precio: parseFloat(p.precio) || 0,
+                imagen_url: p.foto || ''
+              }));
+
+            if (productsToInsert.length > 0) {
+              const { error: prodErr } = await supabaseAdminClient
+                .from('productos')
+                .insert(productsToInsert);
+              if (prodErr) {
+                console.error("Error writing products to Supabase:", prodErr);
+              }
+            }
+          }
+        }
+      } catch (err: any) {
+        supabaseError = err.message;
+        console.error("Critical error writing expositor to Supabase:", err);
+      }
+    }
+
     // Send confirmation email via Resend
     try {
+      const emailStatusText = statusDefault === 'Activo' ? 'Activo (Perfil público)' : 'Pendiente de validación de pago';
+      const supabaseStatusText = supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`;
+
       await resend.emails.send({
         from: 'onboarding@resend.dev',
         to: 'azulno26@hotmail.com',
         subject: `Nuevo registro de expositor: ${data.nombreNegocio} (${data.planElegido})`,
         html: `
           <h2>Nuevo Expositor Registrado en BazaresMX</h2>
-          <p><strong>ID Asignado:</strong> ${nextId}</p>
+          <p><strong>ID Asignado (Sheets):</strong> ${nextId}</p>
+          <p><strong>ID Asignado (Supabase):</strong> ${insertedExpositorId || 'Error / No guardado'}</p>
           <p><strong>Slug:</strong> ${slug}</p>
           <p><strong>Nombre del Negocio:</strong> ${data.nombreNegocio}</p>
           <p><strong>Emprendedor:</strong> ${data.nombreCompleto}</p>
@@ -132,7 +214,7 @@ export async function POST(req: NextRequest) {
           <p><strong>Descripción:</strong> ${data.descripcion || 'Sin descripción'}</p>
           <p><strong>WhatsApp:</strong> ${data.whatsapp}</p>
           <p><strong>Correo:</strong> ${data.correo}</p>
-          <p><strong>Estatus:</strong> ${statusDefault}</p>
+          <p><strong>Estatus:</strong> ${emailStatusText}</p>
           <hr />
           <h3>Productos Subidos:</h3>
           ${data.productos && data.productos.length > 0
@@ -145,6 +227,7 @@ export async function POST(req: NextRequest) {
           }
           <hr />
           <p><em>Estatus de escritura en Google Sheet: ${sheetsWritten ? '✓ Exitoso (Apps Script)' : '✗ Pendiente (Configurar EXPOSITORES_SCRIPT_URL)'}</em></p>
+          <p><em>Estatus de escritura en Supabase: ${supabaseStatusText}</em></p>
         `
       });
 
@@ -172,7 +255,7 @@ export async function POST(req: NextRequest) {
       console.error("Error sending notification emails:", emailErr);
     }
 
-    return NextResponse.json({ ok: true, slug, nextId, mesGratis: mesGratis === 'Sí', sheetsWritten });
+    return NextResponse.json({ ok: true, slug, nextId, mesGratis: mesGratis === 'Sí', sheetsWritten, supabaseWritten, supabaseError, id: insertedExpositorId });
   } catch (error) {
     console.error("Error in API route:", error);
     return NextResponse.json({ ok: false, error: 'Internal Server Error' }, { status: 500 });

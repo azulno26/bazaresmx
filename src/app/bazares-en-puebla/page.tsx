@@ -82,7 +82,7 @@ export default async function BazaresPueblaPage() {
             <div className="text-5xl mb-4">🎪</div>
             <h3 className="text-2xl font-bold text-gray-800 mb-3">No hay eventos activos programados por ahora</h3>
             <p className="text-gray-500 font-medium mb-8 leading-relaxed">
-              Estamos actualizando el calendario de fechas de los próximos bazares en Puebla. Si organizas un evento en Puebla o Cholula, publícalo gratis hoy para recibir solicitudes de expositores locales.
+              Por ahora no hay bazares activos en Puebla. Puedes explorar bazares en la <Link href="/bazares-en-cdmx" className="text-primary hover:underline font-bold">Ciudad de México (CDMX)</Link>, en el <Link href="/bazares-en-estado-de-mexico" className="text-primary hover:underline font-bold">Estado de México (Edomex)</Link> o publicar tu bazar gratis en BazaresMX.
             </p>
             <Link 
               href="/publica-tu-bazar" 
@@ -117,6 +117,8 @@ export default async function BazaresPueblaPage() {
             <Link href="/" className="hover:underline">Directorio Principal</Link>
             <span>|</span>
             <Link href="/bazares-en-cdmx" className="hover:underline">Bazares en CDMX</Link>
+            <span>|</span>
+            <Link href="/bazares-en-estado-de-mexico" className="hover:underline">Bazares en Estado de México</Link>
             <span>|</span>
             <Link href="/publica-tu-bazar" className="hover:underline">Publicar Evento</Link>
           </div>

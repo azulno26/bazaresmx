@@ -344,6 +344,10 @@ export default async function LandingPage() {
                 Bazares en CDMX
               </Link>
               <span className="text-gray-300">|</span>
+              <Link href="/bazares-en-estado-de-mexico" className="hover:underline">
+                Bazares en Estado de México
+              </Link>
+              <span className="text-gray-300">|</span>
               <Link href="/bazares-en-puebla" className="hover:underline">
                 Bazares en Puebla
               </Link>

@@ -20,7 +20,7 @@ function slugifyCiudad(ciudad: string): string {
     .replace(/^-|-$/g, "");          // trim hyphens
 
   if (norm === "ciudad-de-mexico" || norm === "cdmx" || norm === "distrito-federal") return "cdmx";
-  if (norm === "estado-de-mexico" || norm === "edomex") return "edomex";
+  if (norm === "estado-de-mexico" || norm === "edomex") return "estado-de-mexico";
   return norm;
 }
 

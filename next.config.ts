@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/bazares-en-edomex',
+        destination: '/bazares-en-estado-de-mexico',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -53,7 +53,7 @@ export default async function BazaresCdmxPage() {
               La **Ciudad de México** es el epicentro de la cultura de los bazares y mercaditos de diseño en el país. Colonias como la **Roma Norte, Condesa, Juárez, Coyoacán y el Centro Histórico** se transforman cada fin de semana en puntos de encuentro vibrantes donde el talento local, la moda vintage, la ilustración y la gastronomía artesanal cobran vida.
             </p>
             <p>
-              Ya sea que busques renovar tu clóset con prendas únicas de segunda mano (*slow fashion*), comprar piezas de diseño independiente mexicano o simplemente pasar una tarde agradable apoyando a marcas locales y emprendedores, en nuestro **directorio actualizado** encontrarás las fechas, horarios y ubicaciones exactas de los próximos eventos en la capital.
+              Ya sea que busques renovar tu clóset con prendas únicas de segunda mano (*slow fashion*), comprar piezas de diseño independiente mexicano o simplemente pasar una tarde agradable apoyando a marcas locales y emprendedores, en nuestro **directorio actualizado** encontrarás las fechas, horarios y ubicaciones exactas de los próximos eventos en la capital. También puedes explorar <Link href="/bazares-en-estado-de-mexico" className="text-primary hover:underline font-bold">bazares en Estado de México</Link> si buscas eventos cerca de CDMX.
             </p>
           </div>
         </div>
@@ -115,6 +115,8 @@ export default async function BazaresCdmxPage() {
         <div className="max-w-4xl mx-auto space-y-4">
           <div className="flex justify-center gap-6 text-sm text-white/80">
             <Link href="/" className="hover:underline">Directorio Principal</Link>
+            <span>|</span>
+            <Link href="/bazares-en-estado-de-mexico" className="hover:underline">Bazares en Estado de México</Link>
             <span>|</span>
             <Link href="/bazares-en-puebla" className="hover:underline">Bazares en Puebla</Link>
             <span>|</span>

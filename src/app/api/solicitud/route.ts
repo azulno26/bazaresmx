@@ -171,7 +171,7 @@ export async function POST(req: NextRequest) {
 
     // Send notification email to admin via Resend
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'contacto@bazaresmx.com.mx',
       to: 'azulno26@hotmail.com',
       subject: `Nueva solicitud de bazar: ${data.nombre}`,
       attachments,

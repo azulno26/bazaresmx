@@ -174,7 +174,7 @@ export async function GET(req: NextRequest) {
           `;
 
         await resend.emails.send({
-          from: 'onboarding@resend.dev',
+          from: 'contacto@bazaresmx.com.mx',
           to: recipientEmail,
           subject: welcomeSubject,
           html: htmlBody

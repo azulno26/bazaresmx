@@ -197,7 +197,7 @@ export async function POST(req: NextRequest) {
       const supabaseStatusText = supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`;
 
       await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: 'contacto@bazaresmx.com.mx',
         to: 'azulno26@hotmail.com',
         subject: `Nuevo registro de expositor: ${data.nombreNegocio} (${data.planElegido})`,
         html: `
@@ -233,7 +233,7 @@ export async function POST(req: NextRequest) {
 
       // Optional: Send auto-reply to the exhibitor
       await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: 'contacto@bazaresmx.com.mx',
         to: data.correo,
         subject: `¡Bienvenido a BazaresMX, ${data.nombreNegocio}!`,
         html: `

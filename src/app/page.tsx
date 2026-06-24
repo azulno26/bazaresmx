@@ -4,7 +4,7 @@ import Link from "next/link";
 import { CalendarIcon, BriefcaseIcon } from "lucide-react";
 import BazarCard from "@/src/components/BazarCard";
 
-export const revalidate = 86400;
+export const revalidate = 60;
 
 export const metadata = {
   title: "Bazares en México 2026 — Directorio y Calendario de Eventos",

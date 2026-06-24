@@ -6,7 +6,7 @@ import { formatDisponibilidad } from "@/src/lib/formatters";
 import { VisitTracker } from "./VisitTracker";
 
 // ISR: Pre-generate all active ones at build time, revalidate every 24h, generate on-demand if new
-export const revalidate = 86400;
+export const revalidate = 60;
 export const dynamicParams = true;
 
 type Props = {

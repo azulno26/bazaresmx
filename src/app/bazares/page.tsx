@@ -1,7 +1,7 @@
 import { getBazares } from "@/src/lib/supabase";
 import BazaresDirectoryClient from "./BazaresDirectoryClient";
 
-export const revalidate = 86400;
+export const revalidate = 60;
 
 export default async function Page() {
   const bazares = await getBazares();

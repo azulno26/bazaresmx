@@ -1,16 +1,16 @@
-import { getExpositoresTodas } from "@/src/lib/sheets-expositores";
+import { getExpositores } from "@/src/lib/supabase";
 import ExpositoresRegistroClient from "./ExpositoresRegistroClient";
 
-export const revalidate = 86400; // Cache 24h
+export const revalidate = 60;
 
 export default async function Page() {
   let spotsLeft = 11;
   
   try {
-    const expositores = await getExpositoresTodas();
-    // Count active exhibitors with ID <= 11
+    const expositores = await getExpositores();
+    // Count active exhibitors who have the free month flag
     const activeUnderEleven = expositores.filter(
-      (e) => e.status === 'Activo' && e.id <= 11
+      (e: any) => e.status === 'Activo' && e.mesGratis
     ).length;
     spotsLeft = Math.max(0, 11 - activeUnderEleven);
   } catch (err) {
@@ -19,3 +19,4 @@ export default async function Page() {
 
   return <ExpositoresRegistroClient initialSpotsLeft={spotsLeft} />;
 }
+

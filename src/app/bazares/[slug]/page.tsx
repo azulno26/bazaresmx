@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getBazares, getBazarBySlug } from "@/src/lib/supabase";
 import BazarCarrusel from "./BazarCarrusel";
 
-export const revalidate = 86400;
+export const revalidate = 60;
 export const dynamicParams = true;
 
 type Props = {

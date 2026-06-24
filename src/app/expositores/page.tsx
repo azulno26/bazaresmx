@@ -2,7 +2,7 @@ import { getExpositores } from "@/src/lib/supabase";
 import { Expositor } from "@/src/lib/sheets-expositores";
 import ExpositoresIndexClient from "./ExpositoresIndexClient";
 
-export const revalidate = 86400; // Cache 24h
+export const revalidate = 60; // Cache 60s
 
 export default async function Page() {
   let featuredExpositores: Expositor[] = [];

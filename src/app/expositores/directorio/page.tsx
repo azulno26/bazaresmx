@@ -1,16 +1,17 @@
-import { getExpositoresTodas, Expositor } from "@/src/lib/sheets-expositores";
+import { getExpositores } from "@/src/lib/supabase";
 import ExpositoresDirectoryClient from "./ExpositoresDirectoryClient";
 
-export const revalidate = 86400; // Cache 24h
+export const revalidate = 60;
 
 export default async function Page() {
-  let expositores: Expositor[] = [];
+  let expositores: any[] = [];
 
   try {
-    expositores = await getExpositoresTodas();
+    expositores = await getExpositores();
   } catch (err) {
     console.error("Error loading exhibitors directory:", err);
   }
 
   return <ExpositoresDirectoryClient expositoresData={expositores} />;
 }
+

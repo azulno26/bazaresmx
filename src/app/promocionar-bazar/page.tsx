@@ -94,7 +94,7 @@ const paquetes = [
       "Prioridad máxima en portada y páginas de ciudad",
       "Difusión recurrente en redes sociales",
       "Apoyo con redacción SEO de copys",
-      "Mención de honor en el boletín del mes"
+      "Aparición destacada en redes sociales de BazaresMX"
     ],
     cta: "Ser Organizador Pro",
     href: `https://wa.me/5215623194635?text=${encodeURIComponent("Hola, me interesa la suscripción de Organizador Pro de $1,499/mes")}`,

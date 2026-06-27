@@ -92,7 +92,7 @@ export default async function BazaresEdomexPage() {
           </h1>
           <div className="text-lg text-gray-600 leading-relaxed font-medium space-y-4">
             <p>
-              Encuentra bazares en Estado de México, también conocido como Edomex, con fechas, horarios, ubicaciones y detalles para visitar eventos de diseño, moda, comida, productos artesanales, emprendimientos locales y propuestas independientes cerca de CDMX.
+              Encuentra bazares en Estado de México, también conocido como Edomex, con fechas, horarios, ubicaciones y detalles para visitar eventos de diseño, moda, comida, productos artesanales, emprendimientos locales y propuestas independientes cerca de CDMX. Si buscas plan inmediato, conoce los <Link href="/bazares-este-fin-de-semana" className="text-[#1A7A52] hover:underline font-bold">bazares este fin de semana</Link> confirmados en la región.
             </p>
           </div>
         </div>

@@ -225,22 +225,69 @@ export default function PublishBazarForm() {
     return (
       <div className="min-h-screen bg-[#FFFAF5] pb-20">
         {/* HEADER */}
-        <header className="max-w-7xl mx-auto px-6 pt-12 pb-16">
+        <header className="max-w-7xl mx-auto px-6 pt-12 pb-12">
           <Link href="/" className="text-primary font-bold hover:underline mb-6 block">
             ← Volver al inicio
           </Link>
           <div className="inline-flex items-center bg-[#D1F2E8] text-primary px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest mb-6">
             Paso 1 de 2
           </div>
-          <h1 className="text-4xl md:text-6xl font-syne font-extrabold text-[#1a1a1a] tracking-tight mb-4">
-            Elige el plan para tu bazar
+          <h1 className="text-4xl md:text-6xl font-syne font-extrabold text-[#1a1a1a] tracking-tight mb-4 max-w-4xl">
+            Publica tu bazar gratis y haz que más personas lo encuentren
           </h1>
-          <p className="text-xl text-gray-500 font-medium max-w-2xl leading-relaxed">
-            Selecciona el plan ideal para publicar tu bazar y atraer la mayor cantidad de expositores y visitantes.
+          <p className="text-xl text-gray-500 font-medium max-w-3xl leading-relaxed mb-8">
+            BazaresMX ayuda a organizadores a mostrar sus eventos en Google con información clara: fecha, horario, ubicación y detalles para visitantes y expositores.
           </p>
+          <div className="flex flex-wrap gap-4 items-center mb-6">
+            <a 
+              href="#formulario-planes" 
+              className="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-[#156a46] transition shadow-md"
+            >
+              Registrar mi bazar
+            </a>
+            <Link 
+              href="/promocionar-bazar" 
+              className="border-2 border-primary text-primary px-8 py-4 rounded-xl font-bold hover:bg-[#EBF7F2]/20 transition"
+            >
+              Ver opciones de promoción
+            </Link>
+            <a 
+              href="https://wa.me/5215623194635?text=Hola,%20quiero%20publicar%20mi%20bazar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#25D366] text-white px-6 py-4 rounded-xl font-bold hover:brightness-110 transition flex items-center gap-2 shadow-md"
+            >
+              <span>💬 Publicar por WhatsApp</span>
+            </a>
+          </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-6">
+        {/* POR QUÉ PUBLICAR SECTION */}
+        <section className="max-w-7xl mx-auto px-6 py-12 border-t border-gray-100">
+          <h2 className="text-3xl font-extrabold text-[#1a1a1a] mb-6">¿Por qué publicar tu bazar en BazaresMX?</h2>
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl">
+            {[
+              { title: "Directorio Especializado", desc: "Tu bazar aparece en una plataforma dedicada exclusivamente a bazares y emprendedores locales." },
+              { title: "Detalles Claros", desc: "Muestra fecha, horario, ubicación exacta y si estás buscando expositores de forma sencilla." },
+              { title: "Mayor Alcance en Google", desc: "Optimizamos tu página para que más personas interesadas descubran tu evento buscando en su zona." },
+              { title: "Enlace Directo", desc: "Conecta a tus redes sociales o canal de WhatsApp directamente con los interesados sin comisiones." },
+              { title: "Publicación Gratuita", desc: "La publicación básica es y siempre será 100% gratuita para apoyar a la comunidad." },
+              { title: "Soporte Rápido", desc: "Validamos los eventos en menos de 24 horas para que empieces a captar tráfico de inmediato." }
+            ].map((reason, i) => (
+              <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                <span className="text-2xl mb-3 block">✨</span>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{reason.title}</h3>
+                <p className="text-sm text-gray-600 font-medium leading-relaxed">{reason.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <main id="formulario-planes" className="max-w-7xl mx-auto px-6 pt-8">
+          <div className="mb-10 text-center md:text-left">
+            <h2 className="text-2xl font-bold text-gray-900 mb-1">Selecciona el plan para tu bazar</h2>
+            <p className="text-sm text-gray-500 font-semibold">Elige la visibilidad ideal para publicar tu evento</p>
+          </div>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto text-left mb-12">
             {/* PLAN BÁSICO */}
             <div 
@@ -398,7 +445,7 @@ export default function PublishBazarForm() {
             </div>
           </div>
 
-          <div className="text-center max-w-md mx-auto">
+          <div className="text-center max-w-md mx-auto mb-20">
             <button
               type="button"
               onClick={() => setStep(2)}
@@ -410,7 +457,43 @@ export default function PublishBazarForm() {
             <p className="text-xs text-gray-400 font-bold text-center mt-4">
               * Los planes de pago (Medio y Pro) se liquidan vía transferencia y se activan al validar tu comprobante por WhatsApp.
             </p>
+            <p className="text-sm font-semibold text-gray-600 mt-6">
+              ¿Quieres más visibilidad para tu marca o evento?{" "}
+              <Link href="/promocionar-bazar" className="text-primary hover:underline font-bold">
+                Ver opciones de promoción →
+              </Link>
+            </p>
           </div>
+
+          {/* SECCIÓN FAQ */}
+          <section className="max-w-3xl mx-auto border-t border-gray-100 pt-16">
+            <h2 className="text-3xl font-extrabold text-[#1a1a1a] text-center mb-10">Preguntas Frecuentes</h2>
+            <div className="space-y-6">
+              {[
+                {
+                  q: "¿Publicar mi bazar tiene costo?",
+                  a: "La publicación básica es gratuita. También existen opciones destacadas (Medio y Pro) para mayor visibilidad y captar más expositores y visitantes."
+                },
+                {
+                  q: "¿Cuánto tarda en aparecer?",
+                  a: "Una vez enviado el formulario, nuestro equipo revisa y publica tu bazar en menos de 24 horas."
+                },
+                {
+                  q: "¿Puedo publicar convocatoria para expositores?",
+                  a: "Sí, en el formulario puedes indicar si tu bazar acepta expositores e incluir tu contacto directo de WhatsApp."
+                },
+                {
+                  q: "¿Puedo promocionar mi bazar?",
+                  a: "Sí, contamos con opciones de promoción activa en redes sociales y banners destacados en portada. Conoce más en nuestra sección de promoción."
+                }
+              ].map((faq, idx) => (
+                <div key={idx} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                  <h3 className="font-bold text-gray-900 text-lg mb-2">❓ {faq.q}</h3>
+                  <p className="text-sm text-gray-600 font-medium leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         </main>
       </div>
     );

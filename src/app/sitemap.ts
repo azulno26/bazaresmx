@@ -46,6 +46,18 @@ export default async function sitemap() {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
+    {
+      url: 'https://www.bazaresmx.com.mx/bazares-este-fin-de-semana',
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
+    {
+      url: 'https://www.bazaresmx.com.mx/promocionar-bazar',
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
     ...bazarUrls,
   ]
 }

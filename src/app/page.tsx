@@ -63,9 +63,25 @@ export default async function LandingPage() {
             <h1 className="font-syne font-extrabold text-4xl sm:text-6xl md:text-7xl tracking-tighter leading-none text-gray-900 mb-6">
               Conecta tu marca con los <br className="hidden md:block" /> mejores <span className="text-[#1A7A52]">bazares</span> de México
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-16 max-w-2xl mx-auto font-medium">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto font-medium">
               Conecta bazares con expositores. Sin límites. Sin complicaciones.
             </p>
+            <div className="flex flex-wrap justify-center gap-4 mb-16">
+              <Link 
+                href="/bazares-este-fin-de-semana"
+                className="bg-[#1D9E75] text-white px-6 py-3.5 rounded-full font-bold text-sm hover:bg-[#156a46] transition flex items-center gap-2 shadow-sm"
+              >
+                <span>🎪 Bazares este fin de semana</span>
+                <span>→</span>
+              </Link>
+              <Link 
+                href="/promocionar-bazar"
+                className="border-2 border-primary text-primary px-6 py-3 rounded-full font-bold text-sm hover:bg-[#EBF7F2]/20 transition flex items-center gap-2"
+              >
+                <span>📢 Promociona tu bazar</span>
+                <span>→</span>
+              </Link>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto text-left">
               {/* Card Organizadores */}

@@ -31,7 +31,7 @@ export default async function sitemap() {
     {
       url: 'https://www.bazaresmx.com.mx/bazares-en-estado-de-mexico',
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {

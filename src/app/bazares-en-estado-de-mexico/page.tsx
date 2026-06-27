@@ -7,7 +7,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Bazares en Estado de México 2026 | BazaresMX",
-  description: "Encuentra bazares en Estado de México y Edomex con fechas, horarios, ubicaciones y detalles para visitar eventos de diseño, moda, comida, emprendimientos locales y más.",
+  description: "Encuentra bazares en Estado de México y Edomex con fechas, horarios y ubicaciones. Moda, diseño, comida y emprendimientos locales cerca de CDMX.",
   keywords: [
     "bazares en estado de mexico",
     "bazares edomex",
@@ -24,42 +24,25 @@ export const metadata: Metadata = {
 };
 
 const municipiosEdomex = [
-  "naucalpan", "satelite", "satélite", "tlalnepantla", "ecatepec", "metepec", "toluca", 
-  "nezahualcoyotl", "nezahualcóyotl", "neza", "huixquilucan", "interlomas", "atizapan", 
-  "atizapán", "cuautitlan", "cuautitlán", "coacalco", "tultitlan", "tultitlán", "tecamac", 
-  "tecámac", "chalco", "chimalhuacan", "chimalhuacán", "valle de chalco", "texcoco", 
-  "ixtapaluca", "nicolas romero", "nicolás romero", "chicoloapan", "zona esmeralda"
+  'Estado de México', 'Edomex', 'Edo. Méx.', 'EdoMex',
+  'Naucalpan', 'Tlalnepantla', 'Metepec', 'Toluca',
+  'Ecatepec', 'Huixquilucan', 'Satélite', 'Atizapán',
+  'Texcoco', 'Chalco', 'Ixtapaluca', 'Valle de México'
 ];
 
 export default async function BazaresEdomexPage() {
   const bazares = await getBazares();
   
-  // Filter for Estado de Mexico bazares
+  // Filter for Edomex bazares
   const bazaresEdomex = bazares.filter((b: any) => {
-    const ciudadLower = (b.ciudad || "").toLowerCase().trim();
-    
-    // Detección preferente y explícita
-    const esEdomexDirecto = 
-      ciudadLower === "estado de mexico" ||
-      ciudadLower === "estado de méxico" ||
-      ciudadLower === "edomex" ||
-      ciudadLower === "edo. mex." ||
-      ciudadLower === "edo. méx." ||
-      ciudadLower === "edo mex" ||
-      ciudadLower === "edo méx";
+    const ciudadLower = (b.ciudad || "").toLowerCase();
+    return municipiosEdomex.some(m => ciudadLower.includes(m.toLowerCase()));
+  });
 
-    const esMunicipioEdomex = municipiosEdomex.some(m => ciudadLower === m || ciudadLower.includes(m));
-
-    // Evitar falsos positivos
-    const esCdmxOPuebla = 
-      ciudadLower.includes("cdmx") || 
-      ciudadLower.includes("ciudad de mexico") || 
-      ciudadLower.includes("df") || 
-      ciudadLower.includes("distrito federal") ||
-      ciudadLower.includes("puebla") ||
-      ciudadLower.includes("cholula");
-
-    return (esEdomexDirecto || esMunicipioEdomex) && !esCdmxOPuebla;
+  // Sort: pro > medio > basico (same order as CDMX)
+  bazaresEdomex.sort((a: any, b: any) => {
+    const orden: Record<string, number> = { pro: 1, medio: 2, basico: 3 };
+    return (orden[a.plan] || 4) - (orden[b.plan] || 4);
   });
 
   return (
@@ -90,16 +73,28 @@ export default async function BazaresEdomexPage() {
           <h1 className="text-4xl md:text-6xl font-syne font-extrabold text-[#1a1a1a] tracking-tight mb-6 leading-tight">
             Bazares en Estado de México
           </h1>
-          <div className="text-lg text-gray-600 leading-relaxed font-medium space-y-4">
-            <p>
-              Encuentra bazares en Estado de México, también conocido como Edomex, con fechas, horarios, ubicaciones y detalles para visitar eventos de diseño, moda, comida, productos artesanales, emprendimientos locales y propuestas independientes cerca de CDMX. Si buscas plan inmediato, conoce los <Link href="/bazares-este-fin-de-semana" className="text-[#1A7A52] hover:underline font-bold">bazares este fin de semana</Link> confirmados en la región.
-            </p>
+          <p className="text-lg sm:text-xl text-gray-600 leading-relaxed font-medium mb-8">
+            Descubre bazares en Edomex con fechas, horarios y ubicaciones. Moda, diseño, comida, artesanías y emprendimientos locales cerca de CDMX.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+            <a 
+              href="#bazares" 
+              className="bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-[#156a46] transition shadow-md"
+            >
+              Ver bazares activos
+            </a>
+            <Link 
+              href="/publica-tu-bazar" 
+              className="border-2 border-primary text-primary px-6 py-3 rounded-xl font-bold hover:bg-[#EBF7F2]/20 transition"
+            >
+              Publicar mi bazar
+            </Link>
           </div>
         </div>
       </header>
 
       {/* 3. LISTADO */}
-      <main className="max-w-6xl mx-auto px-6 py-16">
+      <main id="bazares" className="max-w-6xl mx-auto px-6 py-16">
         <div className="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-1">Bazares activos en Estado de México</h2>
@@ -110,6 +105,7 @@ export default async function BazaresEdomexPage() {
           </div>
         </div>
 
+        {/* Sección 1: Grid de Bazares */}
         {bazaresEdomex.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {bazaresEdomex.map((bazar) => (
@@ -119,54 +115,70 @@ export default async function BazaresEdomexPage() {
         ) : (
           <div className="bg-white rounded-[2rem] border border-gray-100 p-12 text-center max-w-xl mx-auto shadow-sm">
             <div className="text-5xl mb-4">🎪</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-3">No hay eventos activos programados por ahora</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mb-3">Por ahora no hay bazares activos en Estado de México</h3>
             <p className="text-gray-500 font-medium mb-8 leading-relaxed">
-              Estamos validando las fechas de los próximos bazares en el Estado de México. Si organizas un bazar en Edomex, publícalo hoy mismo para captar marcas y expositores.
+              ¿Organizas uno? Publícalo gratis en BazaresMX.
             </p>
             <Link 
               href="/publica-tu-bazar" 
               className="inline-block bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-[#156a46] transition shadow-md"
             >
-              Publicar mi bazar gratis
+              Publicar mi bazar
             </Link>
           </div>
         )}
 
         {/* CONTENIDO SEO SEMÁNTICO ADICIONAL */}
         <div className="mt-20 border-t border-gray-100 pt-16 grid md:grid-cols-2 gap-12 text-gray-700 leading-relaxed">
+          {/* Sección 2 */}
           <section>
             <h2 className="text-xl font-extrabold text-gray-900 mb-4">Bazares en Edomex cerca de CDMX</h2>
-            <p className="text-gray-600">
-              Si buscas bazares cerca de CDMX, el Estado de México puede ser una excelente opción para descubrir eventos locales, emprendimientos, productos de diseño, moda, gastronomía y propuestas independientes en municipios conectados con la zona metropolitana.
+            <p className="text-gray-600 font-medium text-sm leading-relaxed">
+              El Estado de México es clave para encontrar bazares cerca de CDMX. En municipios como Naucalpan, Tlalnepantla, Metepec, Toluca, Ecatepec, Huixquilucan, Satélite y Atizapán, emprendedores organizan eventos de moda, diseño, comida, arte y artesanías.
             </p>
           </section>
 
+          {/* Sección 3 */}
           <section>
-            <h2 className="text-xl font-extrabold text-gray-900 mb-4">¿Qué puedes encontrar en los bazares del Estado de México?</h2>
-            <ul className="grid grid-cols-2 gap-2 text-sm font-semibold text-gray-600">
-              <li className="flex items-center gap-1.5"><span>✨</span> Moda y calzado</li>
-              <li className="flex items-center gap-1.5"><span>✨</span> Accesorios hechos a mano</li>
-              <li className="flex items-center gap-1.5"><span>✨</span> Diseño independiente</li>
-              <li className="flex items-center gap-1.5"><span>✨</span> Repostería y comida</li>
-              <li className="flex items-center gap-1.5"><span>✨</span> Artículos para regalo</li>
-              <li className="flex items-center gap-1.5"><span>✨</span> Productos kawaii y coleccionables</li>
-            </ul>
+            <h2 className="text-xl font-extrabold text-gray-900 mb-2">¿Qué puedes encontrar?</h2>
+            <p className="text-xs text-gray-500 font-bold mb-4">Categorías populares en mercaditos locales</p>
+            <div className="flex flex-wrap gap-2">
+              {["Moda", "Diseño", "Comida", "Artesanías", "Accesorios", "Emprendimientos", "Regalos"].map((tag, idx) => (
+                <span key={idx} className="bg-primary/10 text-primary px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </section>
         </div>
+
+        {/* Sección 5: Enlace a fin de semana */}
+        <section className="mt-16 bg-white rounded-3xl border border-gray-100 p-8 shadow-sm text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">¿Buscas plan para este fin de semana?</h3>
+            <p className="text-sm text-gray-600 font-semibold">Encuentra los bazares confirmados para el sábado y domingo en Edomex y alrededores.</p>
+          </div>
+          <Link 
+            href="/bazares-este-fin-de-semana"
+            className="bg-[#E8621A] text-white px-6 py-3.5 rounded-xl font-bold hover:bg-[#d85015] transition shadow-md shrink-0 text-sm whitespace-nowrap"
+          >
+            Ver bazares en Edomex este fin de semana →
+          </Link>
+        </section>
       </main>
 
-      {/* 4. SECCIÓN SEO DE CAPTACIÓN (ORGANIZADORES) */}
+      {/* 4. SECCIÓN SEO DE CAPTACIÓN (ORGANIZADORES) - Sección 4 */}
       <section className="bg-primary text-white py-16 px-6 text-center border-t border-gray-200">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4">¿Quieres anunciar un bazar en Estado de México?</h2>
-          <p className="text-white/80 text-lg mb-8 leading-relaxed">
-            Si organizas un bazar en Estado de México, puedes publicarlo en BazaresMX para que más personas encuentren tu evento en Google y conozcan fechas, horarios, ubicación y detalles para asistir.
+          <h2 className="text-3xl font-bold mb-4">¿Organizas un bazar en Estado de México?</h2>
+          <p className="text-white/80 text-lg mb-8 leading-relaxed font-medium">
+            Publícalo en BazaresMX para que más personas lo encuentren en Google.
           </p>
           <Link 
             href="/publica-tu-bazar" 
             className="inline-block bg-white text-primary px-8 py-4 rounded-2xl font-extrabold hover:bg-gray-50 transition shadow-xl"
           >
-            Anunciar mi Bazar Gratis 🚀
+            Publicar mi bazar gratis
           </Link>
         </div>
       </section>

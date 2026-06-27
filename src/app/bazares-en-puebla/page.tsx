@@ -53,7 +53,7 @@ export default async function BazaresPueblaPage() {
               La escena de **bazares en Puebla** y la zona conurbada de **San Andrés y San Pedro Cholula** ha crecido exponencialmente. Estos eventos se han convertido en plataformas clave para el florecimiento de marcas creativas de moda local, joyería artesanal, cosmética natural, repostería gourmet y diseño para el hogar.
             </p>
             <p>
-              Desde el emblemático **Centro Histórico de Puebla**, con su arquitectura colonial única, hasta el ambiente alternativo y universitario de **Cholula** cerca de la pirámide, los bazares de fin de semana ofrecen un plan alternativo de esparcimiento cultural. En nuestro **directorio y calendario actualizado** puedes encontrar ubicaciones exactas, fechas y costos para visitar o solicitar espacios como expositor.
+              Desde el emblemático **Centro Histórico de Puebla**, con su arquitectura colonial única, hasta el ambiente alternativo y universitario de **Cholula** cerca de la pirámide, los bazares de fin de semana ofrecen un plan alternativo de esparcimiento cultural. En nuestro **directorio y calendario actualizado** puedes encontrar ubicaciones exactas, fechas y costos para visitar o solicitar espacios como expositor. También puedes explorar <Link href="/bazares-en-estado-de-mexico" className="text-primary hover:underline font-bold">bazares en Estado de México</Link> si buscas eventos en el centro del país.
             </p>
           </div>
         </div>

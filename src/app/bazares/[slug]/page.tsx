@@ -123,6 +123,14 @@ export default async function Page({ params }: Props) {
     ? `${fechaInicio} - ${fechaFin}` 
     : fechaInicio
 
+  const ciudadLower = (bazar.ciudad || "").toLowerCase();
+  const isEdomexBazar = [
+    'estado de méxico', 'edomex', 'edo. méx.', 'edomex',
+    'naucalpan', 'tlalnepantla', 'metepec', 'toluca',
+    'ecatepec', 'huixquilucan', 'satélite', 'atizapán',
+    'texcoco', 'chalco', 'ixtapaluca', 'valle de méxico'
+  ].some(m => ciudadLower.includes(m.toLowerCase()));
+
   // Enlazado interno & recomendados
   const ciudadSlug = slugifyCiudad(bazar.ciudad);
   const bazares = await getBazares();
@@ -156,13 +164,21 @@ export default async function Page({ params }: Props) {
   return (
     <div className="min-h-screen bg-[#FFFAF5] pb-20">
       {/* NAVBAR / BREADCRUMB */}
-      <nav className="max-w-5xl mx-auto px-6 py-6">
+      <nav className="max-w-5xl mx-auto px-6 py-6 flex flex-wrap items-center justify-between gap-4">
         <Link 
           href="/" 
           className="text-primary font-bold hover:underline flex items-center gap-2"
         >
           ← Volver al directorio
         </Link>
+        {isEdomexBazar && (
+          <Link 
+            href="/bazares-en-estado-de-mexico" 
+            className="text-primary font-bold hover:underline"
+          >
+            ← Ver más bazares en Estado de México
+          </Link>
+        )}
       </nav>
 
       <main className="max-w-5xl mx-auto px-6">

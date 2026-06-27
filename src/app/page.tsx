@@ -24,9 +24,7 @@ export default async function LandingPage() {
     .slice(0, 12);
 
   const expositores = await getExpositores();
-  const expositoresTop = expositores
-    .filter((e: any) => e.planElegido === 'Top' || e.planElegido === 'Media')
-    .slice(0, 6);
+  const expositoresTop = expositores.slice(0, 12);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">

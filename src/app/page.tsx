@@ -25,7 +25,7 @@ export default async function LandingPage() {
 
   const expositores = await getExpositores();
   const expositoresTop = expositores
-    .filter((e: any) => e.planElegido === 'Top')
+    .filter((e: any) => e.planElegido === 'Top' || e.planElegido === 'Media')
     .slice(0, 6);
 
   return (

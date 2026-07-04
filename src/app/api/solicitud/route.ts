@@ -93,8 +93,7 @@ export async function POST(req: NextRequest) {
     ];
 
     let sheetsWritten = false;
-    // BAZARES_SCRIPT_URL or EXPOSITORES_SCRIPT_URL (fallback since they are on the same spreadsheet)
-    const scriptUrl = process.env.BAZARES_SCRIPT_URL || process.env.EXPOSITORES_SCRIPT_URL;
+    const scriptUrl = process.env.BAZARES_SCRIPT_URL;
 
     if (scriptUrl) {
       try {
@@ -199,7 +198,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Imagen Cloudinary:</strong> ${data.imagenUrl ? `<a href="${data.imagenUrl}" target="_blank">${data.imagenUrl}</a>` : 'Sin URL Cloudinary'}</p>
         <p><strong>Imagen adjunta:</strong> ${imageInfo}</p>
         <hr />
-        <p><em>Estatus de escritura en Google Sheet (pestaña Bazares): ${sheetsWritten ? '✓ Exitoso (Apps Script)' : '✗ Fallido/Pendiente (Configurar URL)'}</em></p>
+        <p><em>Estatus de escritura en Google Sheet (pestaña Bazares): ${sheetsWritten ? '✓ Exitoso (Apps Script)' : '✗ Pendiente (Configurar BAZARES_SCRIPT_URL)'}</em></p>
         <p><em>Estatus de escritura en Supabase: ${supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`}</em></p>
       `
     });

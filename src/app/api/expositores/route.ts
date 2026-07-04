@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
     const slug = generateSlug(data.nombreNegocio, data.ciudad);
     const mesGratis = nextId <= 11 ? 'Sí' : 'No';
-    const statusDefault = data.planElegido === 'Básico' ? 'Activo' : 'Pendiente pago'; // Paid plans are pending until validation
+    const statusDefault = mesGratis === 'Sí' ? 'activo' : 'pendiente';
 
     // Gather product images for the gallery field
     const perfilImg = data.fotoPerfil || (data.productos?.[0]?.foto || '');
@@ -128,7 +128,6 @@ export async function POST(req: NextRequest) {
 
         const planLower = (data.planElegido || 'Básico').toLowerCase().trim();
         const planMapped = planLower === 'básico' || planLower === 'basico' ? 'basico' : (planLower === 'media' ? 'media' : 'top');
-        const dbStatus = planMapped === 'basico' ? 'activo' : 'pendiente';
 
         const hoy = new Date();
         const vencimientoDate = new Date(hoy);
@@ -154,7 +153,7 @@ export async function POST(req: NextRequest) {
             galeria_urls: productGallery ? productGallery.split(',').filter(Boolean) : [],
             plan: planMapped,
             mes_gratis: mesGratis === 'Sí',
-            status: dbStatus,
+            status: statusDefault,
             badge_verificado: false,
             vencimiento: fechaVencimiento
           })
@@ -198,7 +197,24 @@ export async function POST(req: NextRequest) {
 
     // Send confirmation email via Resend
     try {
-      const emailStatusText = statusDefault === 'Activo' ? 'Activo (Perfil público)' : 'Pendiente de validación de pago';
+      const isActivo = statusDefault === 'activo';
+      const emailStatusText = isActivo ? '✅ Activo — Primer mes GRATIS' : '⏳ Pendiente de pago';
+      const accionRequerida = isActivo 
+        ? 'Ninguna, ya aparece en el sitio.' 
+        : 'Esperar comprobante de transferencia en contacto@bazaresmx.com.mx.<br/>Una vez recibido, activar en: <a href="https://www.bazaresmx.com.mx/admin/vencimientos">bazaresmx.com.mx/admin/vencimientos</a>';
+
+      const planPrices: Record<string, string> = {
+        basico: '$99 MXN/mes',
+        media: '$199 MXN/mes',
+        top: '$349 MXN/mes'
+      };
+      const planLower = (data.planElegido || 'Básico').toLowerCase().trim();
+      const planMapped = planLower === 'básico' || planLower === 'basico' ? 'basico' : (planLower === 'media' ? 'media' : 'top');
+      const montoACobrar = planPrices[planMapped] || '$99 MXN/mes';
+
+      const clabeVal = process.env.CLABE || '';
+      const titularVal = process.env.TITULAR || '';
+
       const supabaseStatusText = supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`;
 
       await resend.emails.send({
@@ -220,6 +236,17 @@ export async function POST(req: NextRequest) {
           <p><strong>WhatsApp:</strong> ${data.whatsapp}</p>
           <p><strong>Correo:</strong> ${data.correo}</p>
           <p><strong>Estatus:</strong> ${emailStatusText}</p>
+          <p><strong>Acción requerida:</strong> ${accionRequerida}</p>
+          <hr />
+          <h3>Datos de Cobro:</h3>
+          <p><strong>Monto a cobrar:</strong> ${montoACobrar}</p>
+          <p><strong>Datos de transferencia:</strong><br/>
+            🏦 Banco: Scotiabank<br/>
+            💳 CLABE: ${clabeVal}<br/>
+            👤 Titular: ${titularVal}<br/>
+            📝 Concepto: ${data.nombreNegocio} + ${data.planElegido}<br/>
+            📧 Comprobante a: contacto@bazaresmx.com.mx
+          </p>
           <hr />
           <h3>Productos Subidos:</h3>
           ${data.productos && data.productos.length > 0
@@ -237,6 +264,21 @@ export async function POST(req: NextRequest) {
       });
 
       // Optional: Send auto-reply to the exhibitor
+      let customerInstructions = '';
+      if (!isActivo) {
+        customerInstructions = `
+          <p><strong>Para activar tu perfil público, realiza la transferencia correspondiente:</strong></p>
+          <ul>
+            <li><strong>Monto a pagar:</strong> ${montoACobrar}</li>
+            <li>🏦 <strong>Banco:</strong> Scotiabank</li>
+            <li>💳 <strong>CLABE:</strong> ${clabeVal}</li>
+            <li>👤 <strong>Titular:</strong> ${titularVal}</li>
+            <li>📝 <strong>Concepto:</strong> ${data.nombreNegocio} + ${data.planElegido}</li>
+            <li>📧 <strong>Comprobante a:</strong> contacto@bazaresmx.com.mx</li>
+          </ul>
+        `;
+      }
+
       await resend.emails.send({
         from: 'contacto@bazaresmx.com.mx',
         to: data.correo,
@@ -248,8 +290,9 @@ export async function POST(req: NextRequest) {
           <ul>
             <li><strong>Tu enlace de perfil reservado:</strong> /expositores/${slug}</li>
             <li><strong>¿Primer mes GRATIS?:</strong> ${mesGratis === 'Sí' ? '¡Sí, calificados entre los primeros 11!' : 'No (sujeto a cuota normal)'}</li>
-            <li><strong>Estatus actual:</strong> ${statusDefault === 'Activo' ? 'Activo (Perfil público)' : 'Pendiente de validación de pago'}</li>
+            <li><strong>Estatus actual:</strong> ${isActivo ? 'Activo (Perfil público)' : 'Pendiente de validación de pago'}</li>
           </ul>
+          ${customerInstructions}
           <p>Pronto nos pondremos en contacto contigo vía WhatsApp para validar los últimos detalles y activar tu perfil público si elegiste un plan de catálogo.</p>
           <p>Síguenos en nuestra cuenta oficial de Instagram para novedades: <a href="https://www.instagram.com/bazaresmx.com.mx/">@bazaresmx.com.mx</a></p>
           <br/>

@@ -67,7 +67,7 @@ export default function AdminClientPage({ expositores, adminSecret, clabe, titul
     (e) => e.status === 'activo' && e.vencimiento && e.vencimiento > todayStr && e.vencimiento <= limitStr
   );
 
-  const inactivos = expositores.filter((e) => e.status === 'inactivo');
+  const inactivos = expositores.filter((e) => e.status === 'inactivo' || e.status === 'pendiente' || e.status === 'pendiente pago');
 
   const todosActivos = expositores.filter(
     (e) => e.status === 'activo' && (!e.vencimiento || e.vencimiento > limitStr)
@@ -231,7 +231,7 @@ Comprobante a: contacto@bazaresmx.com.mx`;
                     </button>
 
                     {/* Activar / Inactivar Actions */}
-                    {e.status === 'inactivo' ? (
+                    {e.status === 'inactivo' || e.status === 'pendiente' || e.status === 'pendiente pago' ? (
                       <button
                         onClick={() => handleAction(e.id, 'activar')}
                         disabled={loadingId === `${e.id}-activar`}

@@ -51,8 +51,8 @@ export default async function VencimientosAdminPage() {
     );
   }
 
-  const clabe = process.env.NEXT_PUBLIC_CLABE || '';
-  const titular = process.env.NEXT_PUBLIC_TITULAR || '';
+  const clabe = process.env.CLABE || '';
+  const titular = process.env.TITULAR || '';
 
   return (
     <AdminClientPage 

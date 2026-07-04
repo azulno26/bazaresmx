@@ -130,6 +130,11 @@ export async function POST(req: NextRequest) {
         const planMapped = planLower === 'básico' || planLower === 'basico' ? 'basico' : (planLower === 'media' ? 'media' : 'top');
         const dbStatus = planMapped === 'basico' ? 'activo' : 'pendiente';
 
+        const hoy = new Date();
+        const vencimientoDate = new Date(hoy);
+        vencimientoDate.setDate(hoy.getDate() + 30);
+        const fechaVencimiento = vencimientoDate.toISOString().split('T')[0];
+
         const { data: insertedExpositor, error: expErr } = await supabaseAdminClient
           .from('expositores')
           .insert({
@@ -151,7 +156,7 @@ export async function POST(req: NextRequest) {
             mes_gratis: mesGratis === 'Sí',
             status: dbStatus,
             badge_verificado: false,
-            vencimiento: null
+            vencimiento: fechaVencimiento
           })
           .select()
           .single();

@@ -150,8 +150,7 @@ export async function POST(req: NextRequest) {
             status: planLower === 'básico' || planLower === 'basico' ? 'activo' : 'pendiente',
             vencimiento: null,
             tags,
-            que_encontraras,
-            tipo: 'artesanal'
+            que_encontraras
           })
           .select()
           .single();

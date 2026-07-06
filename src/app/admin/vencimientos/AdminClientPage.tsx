@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getPlanDisplayName } from '@/src/lib/plan-names';
 
 interface Expositor {
   id: string;
@@ -85,9 +86,9 @@ export default function AdminClientPage({ expositores, adminSecret, clabe, titul
     const formattedVenc = formatDate(e.vencimiento);
     if (type === 'vencido') {
       return `Hola ${e.nombre_completo} 👋 Tu perfil de ${e.nombre_negocio} en BazaresMX venció el ${formattedVenc}. Para seguir apareciendo:
-• Básico: $99/mes
-• Media: $199/mes
-• Top: $349/mes
+• Presencia: $99/mes
+• Catálogo: $199/mes
+• Mi Tienda: $349/mes
 
 ¿Con cuál seguimos? 💚
 Transfiere a CLABE: ${clabe}
@@ -95,9 +96,9 @@ Concepto: ${e.nombre_negocio} + plan
 Comprobante a: contacto@bazaresmx.com.mx`;
     } else {
       return `Hola ${e.nombre_completo} 👋 Tu primer mes en BazaresMX vence el ${formattedVenc}. Para seguir:
-• Básico: $99/mes
-• Media: $199/mes
-• Top: $349/mes
+• Presencia: $99/mes
+• Catálogo: $199/mes
+• Mi Tienda: $349/mes
 
 ¿Continuamos? 💚
 Transfiere a CLABE: ${clabe}
@@ -180,7 +181,7 @@ Comprobante a: contacto@bazaresmx.com.mx`;
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium capitalize">
-                    {e.plan}
+                    {getPlanDisplayName(e.plan)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${

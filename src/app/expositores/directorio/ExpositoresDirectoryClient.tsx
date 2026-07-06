@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { formatDisponibilidad } from "@/src/lib/formatters";
+import { getPlanDisplayName } from "@/src/lib/plan-names";
 
 interface Expositor {
   id: number;
@@ -206,7 +207,7 @@ export default function ExpositoresDirectoryClient({ expositoresData }: Exposito
                           </span>
                         )}
                         <span className="bg-white/90 backdrop-blur-md text-[#1A7A52] px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">
-                          Plan {exp.planElegido}
+                          Plan {getPlanDisplayName(exp.planElegido)}
                         </span>
                       </div>
                     </div>

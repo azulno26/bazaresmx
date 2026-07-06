@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getPlanDisplayName, getPlanInternalName } from '@/src/lib/plan-names';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
@@ -126,8 +127,7 @@ export async function POST(req: NextRequest) {
           process.env.SUPABASE_SERVICE_ROLE_KEY
         );
 
-        const planLower = (data.planElegido || 'Básico').toLowerCase().trim();
-        const planMapped = planLower === 'básico' || planLower === 'basico' ? 'basico' : (planLower === 'media' ? 'media' : 'top');
+        const planMapped = getPlanInternalName(data.planElegido);
 
         const hoy = new Date();
         const vencimientoDate = new Date(hoy);
@@ -208,8 +208,7 @@ export async function POST(req: NextRequest) {
         media: '$199 MXN/mes',
         top: '$349 MXN/mes'
       };
-      const planLower = (data.planElegido || 'Básico').toLowerCase().trim();
-      const planMapped = planLower === 'básico' || planLower === 'basico' ? 'basico' : (planLower === 'media' ? 'media' : 'top');
+      const planMapped = getPlanInternalName(data.planElegido);
       const montoACobrar = planPrices[planMapped] || '$99 MXN/mes';
 
       const clabeVal = process.env.CLABE || '';
@@ -220,7 +219,7 @@ export async function POST(req: NextRequest) {
       await resend.emails.send({
         from: 'contacto@bazaresmx.com.mx',
         to: 'azulno26@hotmail.com',
-        subject: `Nuevo registro de expositor: ${data.nombreNegocio} (${data.planElegido})`,
+        subject: `Nuevo registro de expositor: ${data.nombreNegocio} (${getPlanDisplayName(planMapped)})`,
         html: `
           <h2>Nuevo Expositor Registrado en BazaresMX</h2>
           <p><strong>ID Asignado (Sheets):</strong> ${nextId}</p>
@@ -228,7 +227,7 @@ export async function POST(req: NextRequest) {
           <p><strong>Slug:</strong> ${slug}</p>
           <p><strong>Nombre del Negocio:</strong> ${data.nombreNegocio}</p>
           <p><strong>Emprendedor:</strong> ${data.nombreCompleto}</p>
-          <p><strong>Plan Elegido:</strong> ${data.planElegido}</p>
+          <p><strong>Plan Elegido:</strong> ${getPlanDisplayName(planMapped)}</p>
           <p><strong>¿Califica para Primer Mes Gratis?</strong> ${mesGratis}</p>
           <p><strong>Giro:</strong> ${data.giro}</p>
           <p><strong>Ciudad/Zona:</strong> ${data.ciudad}</p>
@@ -244,7 +243,7 @@ export async function POST(req: NextRequest) {
             🏦 Banco: Scotiabank<br/>
             💳 CLABE: ${clabeVal}<br/>
             👤 Titular: ${titularVal}<br/>
-            📝 Concepto: ${data.nombreNegocio} + ${data.planElegido}<br/>
+            📝 Concepto: ${data.nombreNegocio} + ${getPlanDisplayName(planMapped)}<br/>
             📧 Comprobante a: contacto@bazaresmx.com.mx
           </p>
           <hr />
@@ -273,7 +272,7 @@ export async function POST(req: NextRequest) {
             <li>🏦 <strong>Banco:</strong> Scotiabank</li>
             <li>💳 <strong>CLABE:</strong> ${clabeVal}</li>
             <li>👤 <strong>Titular:</strong> ${titularVal}</li>
-            <li>📝 <strong>Concepto:</strong> ${data.nombreNegocio} + ${data.planElegido}</li>
+            <li>📝 <strong>Concepto:</strong> ${data.nombreNegocio} + ${getPlanDisplayName(planMapped)}</li>
             <li>📧 <strong>Comprobante a:</strong> contacto@bazaresmx.com.mx</li>
           </ul>
         `;
@@ -285,7 +284,7 @@ export async function POST(req: NextRequest) {
         subject: `¡Bienvenido a BazaresMX, ${data.nombreNegocio}!`,
         html: `
           <h2>¡Gracias por registrarte en BazaresMX, ${data.nombreCompleto}!</h2>
-          <p>Hemos recibido el perfil de tu marca <strong>${data.nombreNegocio}</strong> con el plan <strong>${data.planElegido}</strong>.</p>
+          <p>Hemos recibido el perfil de tu marca <strong>${data.nombreNegocio}</strong> con el plan <strong>${getPlanDisplayName(planMapped)}</strong>.</p>
           <p><strong>Detalles de tu registro:</strong></p>
           <ul>
             <li><strong>Tu enlace de perfil reservado:</strong> /expositores/${slug}</li>

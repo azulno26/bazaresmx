@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatDisponibilidad } from "@/src/lib/formatters";
 import { VisitTracker } from "./VisitTracker";
+import { getPlanDisplayName } from "@/src/lib/plan-names";
 
 // ISR: Pre-generate all active ones at build time, revalidate every 24h, generate on-demand if new
 export const revalidate = 60;
@@ -188,7 +189,7 @@ export default async function Page({ params }: Props) {
             </div>
 
             <div className="bg-[#FFF3EC] p-6 rounded-2xl border border-amber-500/10 text-accent font-semibold text-sm">
-              👑 Expositor afiliado al plan <strong>{exp.planElegido}</strong> de BazaresMX.
+              👑 Expositor afiliado al plan <strong>{getPlanDisplayName(exp.planElegido)}</strong> de BazaresMX.
             </div>
           </div>
         </div>

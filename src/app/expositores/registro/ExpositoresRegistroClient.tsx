@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { getPlanDisplayName, getPlanPrice } from "@/src/lib/plan-names";
 
 type ExpositoresRegistroClientProps = {
   initialSpotsLeft: number;
@@ -352,23 +353,23 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
             {[
               {
                 title: "Básico",
-                price: "$99",
-                desc: "Ideal para iniciar en el directorio.",
-                features: ["Perfil público listado", "1 foto de perfil", "Enlace a tus redes sociales", "Contacto directo de organizadores"],
+                price: getPlanPrice("basico").split("/")[0],
+                desc: "Aparece en el directorio de BazaresMX",
+                features: ["Foto de perfil", "Descripción de tu marca", "Ciudad y disponibilidad", "Botón WhatsApp directo", "Links a tus redes"],
                 badge: ""
               },
               {
                 title: "Media",
-                price: "$199",
-                desc: "Recomendado para marcas activas.",
-                features: ["Apareces prioritario en búsquedas", "Catálogo dinámico", "Hasta 5 fotos en galería", "Muestra tus 3 productos destacados", "Soporte vía correo"],
+                price: getPlanPrice("media").split("/")[0],
+                desc: "Muestra lo que vendes antes de llegar al bazar",
+                features: ["Todo lo de Presencia", "Galería de hasta 5 fotos", "3 productos destacados con foto y precio", "Apareces en búsquedas por giro y ciudad", "Soporte por email"],
                 badge: "POPULAR"
               },
               {
                 title: "Top",
-                price: "$349",
-                desc: "Para marcas que quieren brillar.",
-                features: ["Posicionamiento VIP destacado", "Sello de 'Expositor Verificado'", "Hasta 20 fotos en galería", "Estadísticas de visualizaciones", "WhatsApp de soporte prioritario"],
+                price: getPlanPrice("top").split("/")[0],
+                desc: "Tu perfil en BazaresMX como una tienda completa",
+                features: ["Todo lo de Catálogo", "Galería de hasta 20 fotos", "Catálogo completo de productos", "Destacado en portada principal", "Badge ✓ Verificado", "Estadísticas de visitas", "Apareces primero en búsquedas", "Soporte WhatsApp prioritario"],
                 badge: "MEJOR VALOR"
               }
             ].map((plan, i) => (
@@ -410,7 +411,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                       : "bg-[#1A7A52]/10 text-[#1A7A52] hover:bg-[#1A7A52]/15"
                   }`}
                 >
-                  Elegir {plan.title}
+                  Elegir {getPlanDisplayName(plan.title)}
                 </button>
               </div>
             ))}
@@ -429,7 +430,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
             ¡Los primeros 11 expositores tienen su PRIMER MES GRATIS!
           </h2>
           <p className="text-gray-700 font-medium text-lg mb-8 leading-relaxed">
-            Elige el plan que quieras (Básico, Media o Top). Tu primer mes de suscripción corre por nuestra cuenta.
+            Elige el plan que quieras (Presencia, Catálogo o Mi Tienda). Tu primer mes de suscripción corre por nuestra cuenta.
           </p>
           
           {/* Contador y barra visual */}
@@ -462,7 +463,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                 ¡Registro Recibido con Éxito!
               </h2>
               <p className="text-xl text-gray-600 mb-10 font-medium leading-relaxed">
-                ¡Muchísimas gracias por registrarte! Hemos recibido la información de <strong>{formData.nombreNegocio}</strong> para el plan <strong className="text-[#1A7A52]">{formData.planElegido}</strong>.
+                ¡Muchísimas gracias por registrarte! Hemos recibido la información de <strong>{formData.nombreNegocio}</strong> para el plan <strong className="text-[#1A7A52]">{getPlanDisplayName(formData.planElegido)}</strong>.
               </p>
 
               {/* Mensaje de Pago Leyenda */}
@@ -481,7 +482,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
                 <a
                   href={`https://wa.me/5215623194635?text=${encodeURIComponent(
-                    `Hola, quise registrar mi marca "${formData.nombreNegocio}" con el Plan "${formData.planElegido}" y quisiera conocer el número de cuenta para realizar la transferencia.`
+                    `Hola, quise registrar mi marca "${formData.nombreNegocio}" con el Plan "${getPlanDisplayName(formData.planElegido)}" y quisiera conocer el número de cuenta para realizar la transferencia.`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -785,15 +786,15 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                           >
                             <div>
                               <div className="text-xl font-extrabold flex items-center gap-2">
-                                {p === "Básico" && "🥉 Plan Básico ($99)"}
-                                {p === "Media" && "🥈 Plan Media ($199)"}
-                                {p === "Top" && "🥇 Plan Top ($349)"}
+                                {p === "Básico" && `🥉 Plan ${getPlanDisplayName(p)} (${getPlanPrice(p)})`}
+                                {p === "Media" && `🥈 Plan ${getPlanDisplayName(p)} (${getPlanPrice(p)})`}
+                                {p === "Top" && `🥇 Plan ${getPlanDisplayName(p)} (${getPlanPrice(p)})`}
                                 {isSelected && <span className="text-sm bg-[#1A7A52] text-white px-2 py-0.5 rounded-md font-black">ELEGIDO</span>}
                               </div>
                               <p className="text-xs text-gray-400 mt-1 font-medium">
-                                {p === "Básico" && "Perfil público listado con 1 imagen."}
-                                {p === "Media" && "Aparición prioritario en búsquedas, catálogo de hasta 3 productos y 5 fotos de galería."}
-                                {p === "Top" && "Posicionamiento VIP prioritario en la cima de búsquedas, catálogo de 3 productos, 20 fotos de galería y sello verificado."}
+                                {p === "Básico" && "Aparece en el directorio de BazaresMX"}
+                                {p === "Media" && "Muestra lo que vendes antes de llegar al bazar"}
+                                {p === "Top" && "Tu perfil en BazaresMX como una tienda completa"}
                               </p>
                             </div>
                             <span className="text-2xl">{isSelected ? "💚" : "⚪"}</span>
@@ -919,7 +920,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                       </div>
                       <div className="flex justify-between border-b border-gray-100 pb-2">
                         <span className="text-gray-400 font-bold text-sm">Plan Elegido:</span>
-                        <span className="text-gray-800 font-extrabold text-[#1A7A52]">{formData.planElegido}</span>
+                        <span className="text-gray-800 font-extrabold text-[#1A7A52]">{getPlanDisplayName(formData.planElegido)}</span>
                       </div>
                       {spotsLeft > 0 && (
                         <div className="flex justify-between text-accent font-extrabold">

@@ -3,6 +3,7 @@ import { ImapFlow } from 'imapflow';
 import { simpleParser } from 'mailparser';
 import { createClient } from '@supabase/supabase-js';
 import { generateToken } from '@/src/lib/security';
+import { getPlanDisplayName } from '@/src/lib/plan-names';
 
 export const dynamic = 'force-dynamic';
 
@@ -157,7 +158,7 @@ export async function GET(req: NextRequest) {
 <b>Asunto:</b> ${subject}
 <b>Registro Asociado:</b> ${matchedType === 'bazar' ? '🎪 Bazar' : '👤 Expositor'}
 <b>Nombre:</b> ${matchedType === 'bazar' ? matchedRecord.nombre : matchedRecord.nombre_negocio}
-<b>Plan:</b> ${matchedRecord.plan?.toUpperCase()}
+<b>Plan:</b> ${getPlanDisplayName(matchedRecord.plan || '').toUpperCase()}
 <b>Comprobante:</b> ${validAttachments[0].filename}
 --------------------------------------
 👉 <a href="${activationLink}"><b>Haga clic aquí para Activar Plan</b></a>`;

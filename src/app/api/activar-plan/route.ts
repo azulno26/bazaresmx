@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { verifyToken } from '@/src/lib/security';
+import { getPlanDisplayName } from '@/src/lib/plan-names';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,6 +85,8 @@ export async function GET(req: NextRequest) {
       slug = data.slug || '';
       name = data.nombre_negocio || '';
     }
+    
+    const displayPlanName = type === 'bazar' ? plan.toUpperCase() : getPlanDisplayName(plan).toUpperCase();
 
     // Si ya está activo, avisamos
     if (record.status === 'activo') {
@@ -159,11 +162,11 @@ export async function GET(req: NextRequest) {
           : `
             <h2>¡Tu marca ya está activa en BazaresMX! 🎉</h2>
             <p>Hola <strong>${record.nombre_completo || 'Emprendedor'}</strong>,</p>
-            <p>Hemos verificado tu comprobante de pago con éxito y el perfil de tu marca <strong>${name}</strong> ya se encuentra activo con el plan <strong>${plan.toUpperCase()}</strong>.</p>
+            <p>Hemos verificado tu comprobante de pago con éxito y el perfil de tu marca <strong>${name}</strong> ya se encuentra activo con el plan <strong>${displayPlanName}</strong>.</p>
             <p><strong>Detalles de tu membresía:</strong></p>
             <ul>
               <li><strong>Estatus:</strong> Activo (Visible en el directorio de expositores)</li>
-              <li><strong>Plan contratado:</strong> ${plan.toUpperCase()}</li>
+              <li><strong>Plan contratado:</strong> ${displayPlanName}</li>
               <li><strong>Válido hasta:</strong> ${vencimientoStr}</li>
               <li><strong>Enlace a tu perfil público:</strong> <a href="${detailLink}" target="_blank">${detailLink}</a></li>
             </ul>
@@ -191,7 +194,7 @@ export async function GET(req: NextRequest) {
         <p>El registro <strong>${name}</strong> (${type === 'bazar' ? 'Bazar' : 'Expositor'}) ha sido activado con éxito.</p>
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0" />
         <ul style="list-style: none; padding: 0; line-height: 1.6">
-          <li><strong>Plan:</strong> ${plan.toUpperCase()}</li>
+          <li><strong>Plan:</strong> ${displayPlanName}</li>
           <li><strong>Nueva fecha de vencimiento:</strong> ${vencimientoStr}</li>
           <li><strong>Correo de bienvenida enviado:</strong> ${emailSent ? `✓ Sí (${recipientEmail})` : '✗ No enviado (no se detectó correo)'}</li>
         </ul>

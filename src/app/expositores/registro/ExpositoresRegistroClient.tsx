@@ -385,7 +385,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                       {plan.badge}
                     </span>
                   )}
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.title}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{getPlanDisplayName(plan.title)}</h3>
                   <p className="text-gray-500 text-sm mb-6 font-medium">{plan.desc}</p>
                   <div className="flex items-baseline gap-1 mb-8">
                     <span className="text-5xl font-extrabold text-[#1a1a1a]">{plan.price}</span>
@@ -419,38 +419,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
         </div>
       </section>
 
-      {/* SECCIÓN 4: PRIMEROS 11 GRATIS */}
-      <section className="py-24 px-6">
-        <div className="max-w-2xl mx-auto bg-[#F5E6D3] rounded-[3rem] p-8 md:p-12 text-center border border-amber-900/10 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-amber-800/5 rounded-full -mr-12 -mt-12"></div>
-          <span className="bg-accent text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg mb-6 inline-block">
-            OFERTA LIMITADA
-          </span>
-          <h2 className="font-syne font-extrabold text-3xl md:text-4xl text-gray-900 mb-4 leading-tight">
-            ¡Los primeros 11 expositores tienen su PRIMER MES GRATIS!
-          </h2>
-          <p className="text-gray-700 font-medium text-lg mb-8 leading-relaxed">
-            Elige el plan que quieras (Presencia, Catálogo o Mi Tienda). Tu primer mes de suscripción corre por nuestra cuenta.
-          </p>
-          
-          {/* Contador y barra visual */}
-          <div className="max-w-sm mx-auto mb-4">
-            <div className="flex justify-between font-bold text-gray-900 mb-2 text-sm">
-              <span>{spotsLeft} lugares disponibles</span>
-              <span>11 en total</span>
-            </div>
-            <div className="w-full bg-white/60 h-4 rounded-full overflow-hidden p-0.5 border border-amber-950/10">
-              <div 
-                className="bg-accent h-full rounded-full transition-all duration-1000 ease-out" 
-                style={{ width: `${(spotsLeft / 11) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-          <p className="text-xs text-amber-900/60 font-bold">
-            *Válido únicamente para los primeros 11 expositores activos registrados.
-          </p>
-        </div>
-      </section>
+
 
       {/* SECCIÓN 5: FORMULARIO PROGRESIVO */}
       <section ref={formRef} className="py-20 px-6 max-w-4xl mx-auto w-full scroll-mt-6">
@@ -802,11 +771,6 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                         );
                       })}
                     </div>
-                    {spotsLeft > 0 && (
-                      <div className="bg-[#FFF3EC] p-5 rounded-2xl border border-amber-500/10 text-accent font-black text-center text-base">
-                        🎉 ¡Felicidades! Calificas para tu PRIMER MES GRATIS.
-                      </div>
-                    )}
                     <p className="text-xs text-gray-400 font-bold text-center mt-2">
                       * Todos los planes se liquidan vía transferencia y se activan al validar tu comprobante por WhatsApp.
                     </p>
@@ -922,12 +886,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                         <span className="text-gray-400 font-bold text-sm">Plan Elegido:</span>
                         <span className="text-gray-800 font-extrabold text-[#1A7A52]">{getPlanDisplayName(formData.planElegido)}</span>
                       </div>
-                      {spotsLeft > 0 && (
-                        <div className="flex justify-between text-accent font-extrabold">
-                          <span>Oferta Aplicada:</span>
-                          <span>🎁 1er Mes GRATIS</span>
-                        </div>
-                      )}
+
                     </div>
                   </div>
                 )}

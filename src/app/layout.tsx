@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
+import GoogleAnalyticsWrapper from "@/src/components/GoogleAnalyticsWrapper";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -58,6 +59,7 @@ export default function RootLayout({
     <html lang="es" className={`${plusJakarta.variable} ${dmSans.variable}`}>
       <body className="antialiased">
         {children}
+        <GoogleAnalyticsWrapper gaId={process.env.NEXT_PUBLIC_GA_ID!} />
         
         {/* BOTÓN FLOTANTE WHATSAPP */}
         <a

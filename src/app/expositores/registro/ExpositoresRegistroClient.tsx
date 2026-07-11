@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getPlanDisplayName, getPlanPrice } from "@/src/lib/plan-names";
+import { trackEvent } from "@/src/lib/analytics";
 
 type ExpositoresRegistroClientProps = {
   initialSpotsLeft: number;
@@ -249,6 +250,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
       const resData = await res.json();
 
       if (resData.ok) {
+        trackEvent('registro_expositor', { plan: formData.planElegido });
         setSuccess(true);
       } else {
         setErrorMsg(resData.error || "Hubo un error en el envío. Intenta de nuevo.");

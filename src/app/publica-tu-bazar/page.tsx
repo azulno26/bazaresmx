@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { trackEvent } from "@/src/lib/analytics";
 
 const estadosMexico = [
   "Ciudad de México", "Estado de México", "Aguascalientes", "Baja California", "Baja California Sur",
@@ -135,6 +136,7 @@ export default function PublishBazarForm() {
 
       const result = await response.json();
       if (result.ok) {
+        trackEvent('registro_bazar', { plan: planElegido });
         setSubmitted(true);
       } else {
         setError("Hubo un error, intenta de nuevo.");

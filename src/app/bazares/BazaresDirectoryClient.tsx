@@ -8,6 +8,7 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
   const [search, setSearch] = useState("");
   const [cityFilter, setCityFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState(""); // "", "este-fin", "sig-fin"
   const [freeEntryOnly, setFreeEntryOnly] = useState(false);
   const [acceptsExhibitorsOnly, setAcceptsExhibitorsOnly] = useState(false);
 
@@ -17,6 +18,39 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
 
   // Filtering logic
   const filteredBazares = useMemo(() => {
+    // Calcular fechas del fin de semana de forma dinámica
+    const today = new Date();
+    const dayOfWeek = today.getDay(); // 0: Domingo, 1: Lunes, ..., 6: Sábado
+
+    // Determinar el viernes de "este fin de semana"
+    let daysToFriday = 0;
+    if (dayOfWeek >= 1 && dayOfWeek <= 4) {
+      daysToFriday = 5 - dayOfWeek;
+    } else if (dayOfWeek === 0) {
+      daysToFriday = -2;
+    } else if (dayOfWeek === 6) {
+      daysToFriday = -1;
+    } // Si es 5 (viernes), daysToFriday es 0
+
+    const friday = new Date(today);
+    friday.setDate(today.getDate() + daysToFriday);
+    
+    const sat = new Date(friday);
+    sat.setDate(friday.getDate() + 1);
+    
+    const sun = new Date(friday);
+    sun.setDate(friday.getDate() + 2);
+
+    const formatDateStr = (d: Date) => d.toISOString().split('T')[0];
+
+    const thisWeekend = [formatDateStr(friday), formatDateStr(sat), formatDateStr(sun)];
+    
+    const nextWeekend = thisWeekend.map(dateStr => {
+      const d = new Date(dateStr + "T00:00:00");
+      d.setDate(d.getDate() + 7);
+      return formatDateStr(d);
+    });
+
     const res = bazaresData.filter((bazar) => {
       const q = search.toLowerCase();
       const matchesSearch = !search || 
@@ -32,19 +66,33 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
       const matchesFreeEntry = !freeEntryOnly || (bazar.entrada || '').toLowerCase() === 'libre';
       const matchesExhibitors = !acceptsExhibitorsOnly || bazar.acepta_expositores;
 
-      return matchesSearch && matchesCity && matchesType && matchesFreeEntry && matchesExhibitors;
+      // Filtro de fecha
+      let matchesDate = true;
+      if (dateFilter !== "") {
+        const targetRange = dateFilter === "este-fin" ? thisWeekend : nextWeekend;
+        if (bazar.fechas && bazar.fechas.length > 0) {
+          matchesDate = bazar.fechas.some((f: string) => targetRange.includes(f));
+        } else {
+          const start = bazar.fecha;
+          const end = bazar.fechaFin || bazar.fecha;
+          matchesDate = targetRange.some(f => f >= start && f <= end);
+        }
+      }
+
+      return matchesSearch && matchesCity && matchesType && matchesFreeEntry && matchesExhibitors && matchesDate;
     });
 
     const ordenPlan: Record<string, number> = { pro: 1, promo: 2, medio: 3, básico: 4 };
     return res.sort((a, b) => 
       (ordenPlan[a.plan] || 5) - (ordenPlan[b.plan] || 5)
     );
-  }, [bazaresData, search, cityFilter, typeFilter, freeEntryOnly, acceptsExhibitorsOnly]);
+  }, [bazaresData, search, cityFilter, typeFilter, freeEntryOnly, acceptsExhibitorsOnly, dateFilter]);
 
   const resetFilters = () => {
     setSearch("");
     setCityFilter("");
     setTypeFilter("");
+    setDateFilter("");
     setFreeEntryOnly(false);
     setAcceptsExhibitorsOnly(false);
   };
@@ -113,6 +161,17 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
                 {city}
               </option>
             ))}
+          </select>
+
+          {/* Fecha */}
+          <select
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            className="w-full lg:w-48 border-2 border-gray-100 rounded-xl px-4 py-2 focus:border-primary outline-none transition bg-white"
+          >
+            <option value="">Cualquier fecha</option>
+            <option value="este-fin">Este fin de semana</option>
+            <option value="sig-fin">Siguiente fin de semana</option>
           </select>
 
           {/* Tipo */}

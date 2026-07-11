@@ -9,6 +9,20 @@ const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey) 
   : null;
 
+const BAZAR_TYPES_MAP: Record<string, string> = {
+  "bazarista": "expo",
+  "kitty-fest-kawaii-cdmx": "kawaii",
+  "eremos-bazar": "vintage",
+  "bazarpato2": "Creativo",
+  "emprendiendo-ando": "Emprendedor",
+  "ciculo-del-emprendedor": "Emprendedor",
+  "impulsa-bazar": "Emprendedor",
+  "manos-unidas-artesanas-ciudad-de-mexico": "Emprendedor",
+  "zavana-bazar": "artesanal",
+  "bazar-dulce-cempasuchil-azcapotzalco": "artesanal",
+  "lucky-bell-bazar-estado-de-mexico": "artesanal",
+};
+
 // Helper para parsear fechas de forma segura
 function parseDate(dateStr: string | null | undefined): Date | null {
   if (!dateStr) return null;
@@ -70,7 +84,7 @@ export async function getBazares() {
         vencimiento: b.vencimiento ? new Date(b.vencimiento) : null,
         tags: b.tags || [],
         queEncontraras: b.que_encontraras || [],
-        tipo: b.tipo || 'artesanal',
+        tipo: b.tipo || BAZAR_TYPES_MAP[b.slug] || 'artesanal',
         publicado: b.publicado || '',
         destacado: b.plan === 'pro',
         badge: b.plan === 'pro' ? 'destacado' : '',
@@ -140,7 +154,7 @@ export async function getBazarBySlug(slug: string) {
       vencimiento: data.vencimiento ? new Date(data.vencimiento) : null,
       tags: data.tags || [],
       queEncontraras: data.que_encontraras || [],
-      tipo: data.tipo || 'artesanal',
+      tipo: data.tipo || BAZAR_TYPES_MAP[data.slug] || 'artesanal',
       publicado: data.publicado || '',
       destacado: data.plan === 'pro',
       badge: data.plan === 'pro' ? 'destacado' : '',

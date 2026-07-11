@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBazares, getBazarBySlug } from "@/src/lib/supabase";
 import BazarCarrusel from "./BazarCarrusel";
+import TrackedLink from "@/src/components/TrackedLink";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -439,7 +440,8 @@ export default async function Page({ params }: Props) {
                 </a>
               )}
               {bazar.plan === 'pro' && bazar.acepta_expositores && bazar.whatsapp && bazar.whatsapp !== "" && (
-                <a
+                <TrackedLink
+                  eventName="click_quiero_exponer"
                   href={`https://wa.me/${bazar.whatsapp}?text=Hola,%20vi%20tu%20bazar%20en%20BazaresMX%20y%20me%20interesa%20exponer%20en%20${encodeURIComponent(bazar.nombre)}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -447,7 +449,7 @@ export default async function Page({ params }: Props) {
                   style={{ backgroundColor: '#D85A30' }}
                 >
                   <span>🛍️ Quiero exponer aquí</span>
-                </a>
+                </TrackedLink>
               )}
             </div>
           </div>

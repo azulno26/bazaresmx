@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import TrackedLink from "@/src/components/TrackedLink";
 
 export const revalidate = 86400; // Cache de 24 horas (página comercial estática)
 
@@ -134,14 +135,15 @@ export default function PromocionarBazarPage() {
         <p className="text-xl text-gray-600 font-medium max-w-3xl mx-auto leading-relaxed mb-10">
           En BazaresMX puedes destacar tu evento para aparecer con mayor visibilidad en nuestras páginas de ciudad, secciones recomendadas y canales de difusión en redes. Atrae más expositores y llena tus espacios rápidamente.
         </p>
-        <a 
+        <TrackedLink 
+          eventName="click_promocionar_bazar"
           href="https://wa.me/5215623194635?text=Hola,%20quiero%20conocer%20las%20opciones%20de%20promocion%20de%20bazar"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 bg-[#25D366] text-white px-8 py-5 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-xl shadow-green-500/10"
         >
           <span>💬 Hablar con un asesor por WhatsApp</span>
-        </a>
+        </TrackedLink>
       </header>
 
       {/* 3. TABLA DE PAQUETES */}
@@ -178,7 +180,8 @@ export default function PromocionarBazarPage() {
                 </ul>
               </div>
 
-              <a 
+              <TrackedLink 
+                eventName="click_promocionar_bazar"
                 href={p.href}
                 target={p.href.startsWith("http") ? "_blank" : "_self"}
                 rel={p.href.startsWith("http") ? "noopener noreferrer" : ""}
@@ -193,7 +196,7 @@ export default function PromocionarBazarPage() {
                 }`}
               >
                 {p.cta}
-              </a>
+              </TrackedLink>
             </div>
           ))}
         </div>
@@ -257,20 +260,22 @@ export default function PromocionarBazarPage() {
             Únete a decenas de organizadores que ya promocionan sus bazares en México con nosotros de forma rápida y efectiva.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <a 
+            <TrackedLink 
+              eventName="click_promocionar_bazar"
               href="https://wa.me/5215623194635?text=Hola,%20quiero%20promocionar%20mi%20bazar"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#25D366] text-white px-8 py-4 rounded-2xl font-extrabold hover:brightness-110 transition shadow-xl"
             >
               💬 Hablar por WhatsApp
-            </a>
-            <Link 
+            </TrackedLink>
+            <TrackedLink 
+              eventName="click_promocionar_bazar"
               href="/publica-tu-bazar" 
               className="bg-white text-primary px-8 py-4 rounded-2xl font-extrabold hover:bg-gray-50 transition shadow-xl"
             >
               Publicar gratis primero
-            </Link>
+            </TrackedLink>
           </div>
         </section>
       </main>

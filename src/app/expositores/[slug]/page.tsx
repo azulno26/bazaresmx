@@ -5,6 +5,7 @@ import Link from "next/link";
 import { formatDisponibilidad } from "@/src/lib/formatters";
 import { VisitTracker } from "./VisitTracker";
 import { getPlanDisplayName } from "@/src/lib/plan-names";
+import TrackedLink from "@/src/components/TrackedLink";
 
 // ISR: Pre-generate all active ones at build time, revalidate every 24h, generate on-demand if new
 export const revalidate = 60;
@@ -136,14 +137,15 @@ export default async function Page({ params }: Props) {
             </div>
 
             {/* Botón principal de contacto */}
-            <a
+            <TrackedLink
+              eventName="click_whatsapp_expositor"
               href={`https://wa.me/${exp.whatsapp}?text=Hola%20${encodeURIComponent(exp.nombreNegocio)},%20vi%20tu%20perfil%20en%20BazaresMX%20y%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20tus%20productos.`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full bg-[#1A7A52] text-white py-4 rounded-2xl font-extrabold text-center hover:brightness-110 transition shadow-lg shadow-[#1A7A52]/20 block"
             >
               Contactar por WhatsApp
-            </a>
+            </TrackedLink>
             <div className="w-full mt-4 bg-white border border-gray-100 rounded-2xl p-4 text-center shadow-sm flex items-center justify-center gap-2 text-xs font-bold text-gray-500">
               <span className="text-base">👁️</span>
               <span>
@@ -241,14 +243,15 @@ export default async function Page({ params }: Props) {
                       <span className="text-2xl font-extrabold text-[#1A7A52]">
                         ${prod.precio.toLocaleString("es-MX")}
                       </span>
-                      <a
+                      <TrackedLink
+                        eventName="click_whatsapp_expositor"
                         href={`https://wa.me/${exp.whatsapp}?text=Hola%20${encodeURIComponent(exp.nombreNegocio)},%20me%20interesa%20el%20producto:%20${encodeURIComponent(prod.nombre)}%20que%20vi%20en%20su%20cat%C3%A1logo%20de%20BazaresMX.`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-[#1A7A52]/10 text-[#1A7A52] px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-[#1A7A52] hover:text-white transition duration-200"
                       >
                         Preguntar
-                      </a>
+                      </TrackedLink>
                     </div>
                   </div>
                 </div>
@@ -266,14 +269,15 @@ export default async function Page({ params }: Props) {
           <p className="text-gray-600 font-medium max-w-lg mx-auto mb-8 leading-relaxed">
             Este expositor cuenta con una propuesta excelente para complementar tu evento. Contáctalo directamente para invitarlo.
           </p>
-          <a
+          <TrackedLink
+            eventName="click_whatsapp_expositor"
             href={`https://wa.me/${exp.whatsapp}?text=Hola%20${encodeURIComponent(exp.nombreNegocio)},%20somos%20organizadores%20de%20bazares%20y%20nos%20gustar%C3%ADa%20invitarte%20a%20nuestro%20pr%C3%B3ximo%20evento.`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex bg-accent text-white px-8 py-4 rounded-2xl font-extrabold text-lg shadow-lg hover:brightness-110 transition shadow-accent/20"
           >
             Invitar a mi Bazar
-          </a>
+          </TrackedLink>
         </section>
       </main>
       <VisitTracker slug={exp.slug} />

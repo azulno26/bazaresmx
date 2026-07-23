@@ -7,7 +7,11 @@
     "colonia": "Plaza Universidad; Galerías Insurgentes",
     "direccion": "Av. Universidad 1000, Sta Cruz Atoyac, Benito Juárez, 03310 Ciudad de México, CDMX; Parroquia 194, Colonia del Valle, Benito Juárez, 03100 Ciudad de México, CDMX",
     "fecha": "2026-07-10",
-    "fechas": ["2026-07-10", "2026-07-11", "2026-07-12"],
+    "fechas": [
+      "2026-07-10",
+      "2026-07-11",
+      "2026-07-12"
+    ],
     "horario": "",
     "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1779489362/bazarista-1_fmdhif.jpg",
     "imagenes": [
@@ -25,7 +29,11 @@
     "instagram": "https://instagram.com/bazarista.mx",
     "facebook": "https://facebook.com/bazarista.mx",
     "whatsapp": "5215528543109",
-    "tags": ["emprendimiento", "artesanal", "diseño independiente"],
+    "tags": [
+      "emprendimiento",
+      "artesanal",
+      "diseño independiente"
+    ],
     "destacado": true,
     "acepta_expositores": true,
     "entrada": "libre",
@@ -39,26 +47,33 @@
     "id": "1",
     "slug": "bazar-dulce-cempasuchil-azcapotzalco",
     "nombre": "Bazar Dulce Cempasúchil",
-    "ciudad": "Estado de México",
-    "colonia": "Huixquilican",
-    "direccion": "Palo Solo, 52778 Naucalpan de Juárez, Méx.",
-    "fecha": "2026-07-04",
-    "fechas": ["2026-07-04"],
+    "ciudad": "CDMX",
+    "colonia": "Narciso 168",
+    "direccion": "Hogar y Seguridad, Azcapotzalco, 02820 Ciudad de México, CDMX",
+    "fecha": "2026-07-26",
+    "fechas": [
+      "2026-07-26"
+    ],
     "horario": "",
+    "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1779489358/bazar-dulce-cempasuchil_gjqgqz.jpg",
+    "imagenes": [
+      "https://res.cloudinary.com/duonm6wku/image/upload/v1779489358/bazar-dulce-cempasuchil_gjqgqz.jpg"
+    ],
     "descripcion": "Bazar artesanal recurrente con repostería, joyería, alimentos, velas, aromaterapia y snacks.",
     "queEncontraras": [
       "🎨Marcas emergentes y diseño independiente",
       "🛍️Productos artesanales y de consumo local",
       "🌱Emprendimiento y economía creativa"
     ],
-    "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1779489358/bazar-dulce-cempasuchil_gjqgqz.jpg",
-    "imagenes": [
-      "https://res.cloudinary.com/duonm6wku/image/upload/v1779489358/bazar-dulce-cempasuchil_gjqgqz.jpg"
-    ],
     "instagram": "https://instagram.com/dulcecempasuchil",
     "facebook": "",
     "whatsapp": "5215633393838",
-    "tags": ["artesanal", "repostería", "joyería", "velas"],
+    "tags": [
+      "artesanal",
+      "repostería",
+      "joyería",
+      "velas"
+    ],
     "destacado": true,
     "acepta_expositores": true,
     "entrada": "libre",
@@ -82,7 +97,11 @@
     "instagram": "https://instagram.com/kitty_fest_kawaii",
     "facebook": "https://www.facebook.com/kittykawaiifest/",
     "whatsapp": "5215617221276",
-    "tags": ["kawaii", "diseño", "temático"],
+    "tags": [
+      "kawaii",
+      "diseño",
+      "temático"
+    ],
     "destacado": true,
     "acepta_expositores": true,
     "entrada": "libre",
@@ -98,13 +117,21 @@
     "colonia": "Nola Restaurante",
     "direccion": "Nola Restaurante, CDMX",
     "fecha": "2026-06-13",
-    "fechas": ["2026-06-13", "2026-06-14"],
+    "fechas": [
+      "2026-06-13",
+      "2026-06-14"
+    ],
     "horario": "Por confirmar",
     "imagen": "/images/Eremos.jpg",
     "descripcion": "El primer bazar con shows en vivo y talleres de la ciudad. Concepto vintage y circense para todas las edades.",
     "instagram": "https://www.instagram.com/eremosbazar/",
     "whatsapp": "",
-    "tags": ["vintage", "circense", "shows en vivo", "talleres"],
+    "tags": [
+      "vintage",
+      "circense",
+      "shows en vivo",
+      "talleres"
+    ],
     "destacado": false,
     "acepta_expositores": true,
     "entrada": "libre",
@@ -120,14 +147,21 @@
     "colonia": "Analco",
     "direccion": "Avenida 7 Oriente 807, Analco, Puebla",
     "fecha": "2026-06-06",
-    "fechas": ["2026-06-06", "2026-06-07"],
+    "fechas": [
+      "2026-06-06",
+      "2026-06-07"
+    ],
     "horario": "11:00 - 17:00",
     "descripcion": "Bazar del mundo mágico de Harry Potter. Una experiencia única para todos los fans del mundo mágico.",
     "imagen": "",
     "instagram": "https://instagram.com/ordendelosblack",
     "facebook": "https://facebook.com/OrdendelosBlack",
     "whatsapp": "5212211961915",
-    "tags": ["temático", "harry potter", "fantasia"],
+    "tags": [
+      "temático",
+      "harry potter",
+      "fantasia"
+    ],
     "destacado": false,
     "acepta_expositores": true,
     "entrada": "pagada",
@@ -139,28 +173,41 @@
     "id": "9",
     "slug": "impulsa-bazar",
     "nombre": "Impulsa Bazar",
-    "ciudad": "Estado de México",
-    "colonia": "Cosmopol",
-    "direccion": "Av. José López Portillo 1, Bosques del Valle, 55717 San Francisco Coacalco, Méx.",
-    "fecha": "2026-07-03",
-    "fechas": ["2026-07-03", "2026-07-04", "2026-07-05"],
-    "horario": "11:00 - 21:00",
-    "descripcion": "Impulsa Bazar es un concepto enfocado en la organización y desarrollo de bazares comerciales dentro de espacios de alto flujo, creando experiencias atractivas para visitantes y oportunidades de crecimiento para emprendedores y marcas emergentes.",
-    "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1781750163/Impulsa_Bazar_vo5k95.jpg",
-    "imagenes": [
-      "https://res.cloudinary.com/duonm6wku/image/upload/v1781750163/Impulsa_Bazar_vo5k95.jpg"
+    "ciudad": "CDMX",
+    "colonia": "Town Center El Rosario",
+    "direccion": "Av El Rosario 1025, El Rosario, Azcapotzalco, 02100 Ciudad de México, CDMX",
+    "fecha": "2026-07-31",
+    "fechas": [
+      "2026-07-31",
+      "2026-08-01",
+      "2026-08-02"
     ],
+    "horario": "11:00 - 21:00",
+    "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1784078567/Impulsa_Bazar_q7hts4.jpg",
+    "imagenes": [
+      "https://res.cloudinary.com/duonm6wku/image/upload/v1784078567/Impulsa_Bazar_q7hts4.jpg"
+    ],
+    "descripcion": "Impulsa Bazar es un concepto enfocado en la organización y desarrollo de bazares comerciales dentro de espacios de alto flujo, creando experiencias atractivas para visitantes y oportunidades de crecimiento para emprendedores y marcas emergentes.",
+    "queEncontraras": [],
     "instagram": "https://www.instagram.com/impulsa_bazar/",
     "facebook": "https://www.facebook.com/profile.php?id=61572088223235",
     "whatsapp": "5513759646",
-    "tags": ["arte", "joyeria", "ropa", "artesanal", "dulces"],
+    "tags": [
+      "arte",
+      "joyeria",
+      "ropa",
+      "artesanal",
+      "dulces"
+    ],
     "destacado": true,
     "acepta_expositores": true,
     "entrada": "libre",
     "tipo": "Emprendedor",
     "recurrente": false,
     "badge": "destacado",
-    "publicado": "02-06-2026"
+    "publicado": "02-06-2026",
+    "vencimiento": "2026-09-02",
+    "organizador": "Ernesto Contreras"
   },
   {
     "id": "7",
@@ -169,19 +216,29 @@
     "ciudad": "CDMX",
     "colonia": "Encuentro Fortuna",
     "direccion": "Av Fortuna 334, Magdalena de las Salinas, Gustavo A. Madero, 07760 Ciudad de México",
-    "fecha": "2026-07-10",
-    "fechas": ["2026-07-10", "2026-07-11", "2026-07-12"],
-    "horario": "",
-    "descripcion": "",
-    "organizador": "Alina Macías",
-    "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1783793769/Emprendiendo_Ando_ywmh5u.jpg",
-    "imagenes": [
-      "https://res.cloudinary.com/duonm6wku/image/upload/v1783793769/Emprendiendo_Ando_ywmh5u.jpg"
+    "fecha": "2026-07-17",
+    "fechas": [
+      "2026-07-17",
+      "2026-07-18",
+      "2026-07-19"
     ],
+    "horario": "",
+    "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1784078680/emprendiendoando_pqz4bk.jpg",
+    "imagenes": [
+      "https://res.cloudinary.com/duonm6wku/image/upload/v1784078680/emprendiendoando_pqz4bk.jpg"
+    ],
+    "descripcion": "",
+    "queEncontraras": [],
     "instagram": "https://www.instagram.com/emprendiendoando_mexico/",
     "facebook": "https://www.facebook.com/profile.php?id=100064609091619",
     "whatsapp": "5551586749",
-    "tags": ["arte", "joyeria", "ropa", "artesanal", "dulces"],
+    "tags": [
+      "arte",
+      "joyeria",
+      "ropa",
+      "artesanal",
+      "dulces"
+    ],
     "destacado": true,
     "acepta_expositores": true,
     "entrada": "libre",
@@ -189,6 +246,51 @@
     "recurrente": false,
     "badge": "destacado",
     "publicado": "02-06-2026",
-    "vencimiento": "2026-09-02"
+    "vencimiento": "2026-09-02",
+    "organizador": "Alina Macías"
+  },
+  {
+    "id": "10",
+    "slug": "manos-unidas-artesanas-ciudad-de-mexico",
+    "nombre": "Manos Unidas Artesanas",
+    "ciudad": "CDMX",
+    "colonia": "Alcaldía Cuajimalpa de Morelos",
+    "direccion": "Av. Juárez S/n, Cuajimalpa, Cuajimalpa de Morelos, 05000 Ciudad de México, CDMX",
+    "fecha": "2026-07-26",
+    "fechas": [
+      "2026-07-26",
+      "2026-07-27",
+      "2026-07-28",
+      "2026-07-29",
+      "2026-07-30",
+      "2026-07-31",
+      "2026-08-01",
+      "2026-08-02"
+    ],
+    "horario": "08:00 - 19:00",
+    "imagen": "https://res.cloudinary.com/duonm6wku/image/upload/v1784078770/manosunidas_jgm2pz.jpg",
+    "imagenes": [
+      "https://res.cloudinary.com/duonm6wku/image/upload/v1784078770/manosunidas_jgm2pz.jpg"
+    ],
+    "descripcion": "Feria artesanal en Cuajimalpa",
+    "queEncontraras": [],
+    "instagram": "https://www.instagram.com/manosunidasartesanas.mx/",
+    "facebook": "",
+    "whatsapp": "5544837560",
+    "tags": [
+      "Ropa",
+      "Dulces mexicanos",
+      "Comida",
+      "Mezcal"
+    ],
+    "destacado": false,
+    "acepta_expositores": true,
+    "entrada": "libre",
+    "tipo": "Emprendedor",
+    "recurrente": false,
+    "badge": "",
+    "publicado": "14-06-2026",
+    "vencimiento": "2026-07-14",
+    "organizador": "Ross Vilchis"
   }
 ]

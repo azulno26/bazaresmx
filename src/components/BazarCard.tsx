@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 
 function formatBazarDate(bazar: any) {
   if (!bazar.fecha) return "";
@@ -48,10 +49,11 @@ export default function BazarCard({ bazar }: BazarCardProps) {
           <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-green-600 to-green-700 flex items-center justify-center text-white">
             {bazar.imagen && bazar.imagen !== "" ? (
               <Image 
-                src={bazar.imagen} 
+                src={cloudinaryUrl(bazar.imagen, { width: 600 })} 
                 alt={bazar.nombre} 
                 fill 
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
+                unoptimized
               />
             ) : (
               <span className="text-lg font-bold text-center p-4">

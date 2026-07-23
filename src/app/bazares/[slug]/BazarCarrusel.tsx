@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 
 type BazarCarruselProps = {
   imagenes: string[];
@@ -34,21 +35,23 @@ export default function BazarCarrusel({ imagenes, nombre, tipo }: BazarCarruselP
             >
               {/* Blurred background */}
               <Image
-                src={img}
+                src={cloudinaryUrl(img, { width: 200, quality: 30, blur: true })}
                 alt=""
                 fill
                 className="object-cover blur-2xl scale-110 opacity-30 select-none pointer-events-none"
                 priority={idx === 0}
+                unoptimized
               />
               {/* Padded foreground image */}
               <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8">
                 <div className="relative w-full h-full">
                   <Image
-                    src={img}
+                    src={cloudinaryUrl(img, { width: 1200 })}
                     alt={`${nombre} - ${idx + 1}`}
                     fill
                     className="object-contain"
                     priority={idx === 0}
+                    unoptimized
                   />
                 </div>
               </div>

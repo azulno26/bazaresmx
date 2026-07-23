@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 
 export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: any[] }) {
   const [search, setSearch] = useState("");
@@ -231,10 +232,11 @@ export default function BazaresDirectoryClient({ bazaresData }: { bazaresData: a
                   <div className="relative w-full aspect-[1200/630] overflow-hidden">
                     {bazar.imagen && bazar.imagen !== "" ? (
                       <Image
-                        src={bazar.imagen}
+                        src={cloudinaryUrl(bazar.imagen, { width: 600 })}
                         alt={bazar.nombre}
                         fill
                         className="object-cover group-hover:scale-105 transition duration-700"
+                        unoptimized
                       />
                     ) : (
                       <div className="absolute inset-0 bg-gray-100 flex items-center justify-center text-gray-400 font-bold text-lg p-4 text-center">

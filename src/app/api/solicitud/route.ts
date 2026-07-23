@@ -175,8 +175,7 @@ export async function POST(req: NextRequest) {
       attachments,
       html: `
         <h2>Nueva solicitud de publicación en BazaresMX</h2>
-        <p><strong>ID Asignado (Sheets):</strong> ${nextId}</p>
-        <p><strong>ID Asignado (Supabase):</strong> ${insertedBazarId || 'Error / No guardado'}</p>
+        <p><strong>ID Supabase:</strong> ${insertedBazarId || 'Error / No guardado'}</p>
         <p><strong>Slug:</strong> ${slug}</p>
         <p><strong>Nombre del bazar:</strong> ${data.nombre}</p>
         <p><strong>Estado:</strong> ${data.estado}</p>
@@ -198,8 +197,7 @@ export async function POST(req: NextRequest) {
         <p><strong>Imagen Cloudinary:</strong> ${data.imagenUrl ? `<a href="${data.imagenUrl}" target="_blank">${data.imagenUrl}</a>` : 'Sin URL Cloudinary'}</p>
         <p><strong>Imagen adjunta:</strong> ${imageInfo}</p>
         <hr />
-        <p><em>Estatus de escritura en Google Sheet (pestaña Bazares): ${sheetsWritten ? '✓ Exitoso (Apps Script)' : '✗ Pendiente (Configurar BAZARES_SCRIPT_URL)'}</em></p>
-        <p><em>Estatus de escritura en Supabase: ${supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`}</em></p>
+        <p><em>Supabase: ${supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`}</em></p>
       `
     });
 

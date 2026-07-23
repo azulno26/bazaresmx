@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 
 interface Expositor {
   id: number;
@@ -105,10 +106,11 @@ export default function ExpositoresIndexClient({ featuredExpositores }: Exposito
                     <div className="relative w-full aspect-square overflow-hidden bg-neutral-50 border-b border-gray-100">
                       {exp.fotoPerfil ? (
                         <Image
-                          src={exp.fotoPerfil}
+                          src={cloudinaryUrl(exp.fotoPerfil, { width: 600 })}
                           alt={exp.nombreNegocio}
                           fill
                           className="object-cover group-hover:scale-105 transition duration-500"
+                          unoptimized
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-6xl bg-gray-50">

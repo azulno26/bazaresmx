@@ -2,6 +2,7 @@ import { getExpositorBySlug, getExpositores } from "@/src/lib/supabase";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 import { formatDisponibilidad } from "@/src/lib/formatters";
 import { VisitTracker } from "./VisitTracker";
 import { getPlanDisplayName } from "@/src/lib/plan-names";
@@ -89,11 +90,12 @@ export default async function Page({ params }: Props) {
             <div className="w-full aspect-square relative mb-6 rounded-[2rem] overflow-hidden shadow-xl border border-gray-100 bg-white">
               {exp.fotoPerfil ? (
                 <Image
-                  src={exp.fotoPerfil}
+                  src={cloudinaryUrl(exp.fotoPerfil, { width: 800 })}
                   alt={exp.nombreNegocio}
                   fill
                   className="object-cover"
                   priority
+                  unoptimized
                 />
               ) : (
                 <div className="absolute inset-0 bg-neutral-100 flex items-center justify-center text-gray-400 font-bold text-lg text-center p-4">
@@ -204,10 +206,11 @@ export default async function Page({ params }: Props) {
               {exp.fotosProductos.map((foto, idx) => (
                 <div key={idx} className="aspect-square relative rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-md group">
                   <Image
-                    src={foto}
+                    src={cloudinaryUrl(foto, { width: 600 })}
                     alt={`${exp.nombreNegocio} - Galería ${idx + 1}`}
                     fill
                     className="object-cover group-hover:scale-105 transition duration-500"
+                    unoptimized
                   />
                 </div>
               ))}
@@ -225,10 +228,11 @@ export default async function Page({ params }: Props) {
                   <div className="aspect-square relative bg-neutral-50 border-b border-gray-100">
                     {prod.foto ? (
                       <Image
-                        src={prod.foto}
+                        src={cloudinaryUrl(prod.foto, { width: 600 })}
                         alt={prod.nombre}
                         fill
                         className="object-cover"
+                        unoptimized
                       />
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-5xl">

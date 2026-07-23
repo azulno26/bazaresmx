@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 import { formatDisponibilidad } from "@/src/lib/formatters";
 import { getPlanDisplayName } from "@/src/lib/plan-names";
 
@@ -183,10 +184,11 @@ export default function ExpositoresDirectoryClient({ expositoresData }: Exposito
                     <div className="relative w-full aspect-square overflow-hidden bg-neutral-50 border-b border-gray-100">
                       {exp.fotoPerfil ? (
                         <Image
-                          src={exp.fotoPerfil}
+                          src={cloudinaryUrl(exp.fotoPerfil, { width: 600 })}
                           alt={exp.nombreNegocio}
                           fill
                           className="object-cover"
+                          unoptimized
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-6xl">

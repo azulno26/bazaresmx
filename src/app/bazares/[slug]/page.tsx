@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBazares, getBazarBySlug } from "@/src/lib/supabase";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 import BazarCarrusel from "./BazarCarrusel";
 import TrackedLink from "@/src/components/TrackedLink";
 
@@ -196,21 +197,23 @@ export default async function Page({ params }: Props) {
               <>
                 {/* Blurred background */}
                 <Image
-                  src={bazar.imagen}
+                  src={cloudinaryUrl(bazar.imagen, { width: 200, quality: 30, blur: true })}
                   alt=""
                   fill
                   className="object-cover blur-2xl scale-110 opacity-30 select-none pointer-events-none"
                   priority
+                  unoptimized
                 />
                 {/* Padded foreground image */}
                 <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8">
                   <div className="relative w-full h-full">
                     <Image
-                      src={bazar.imagen}
+                      src={cloudinaryUrl(bazar.imagen, { width: 1200 })}
                       alt={bazar.nombre}
                       fill
                       className="object-contain"
                       priority
+                      unoptimized
                     />
                   </div>
                 </div>
@@ -466,10 +469,11 @@ export default async function Page({ params }: Props) {
                     <div className="relative aspect-[16/9] w-full bg-gray-50">
                       {ot.imagen ? (
                         <Image
-                          src={ot.imagen}
+                          src={cloudinaryUrl(ot.imagen, { width: 600 })}
                           alt={ot.nombre}
                           fill
                           className="object-cover"
+                          unoptimized
                         />
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center text-gray-300">📸</div>

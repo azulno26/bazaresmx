@@ -3,6 +3,7 @@ import { getBazares, getExpositores } from "@/src/lib/supabase";
 import Link from "next/link";
 import { CalendarIcon, BriefcaseIcon } from "lucide-react";
 import BazarCard from "@/src/components/BazarCard";
+import { cloudinaryUrl } from "@/src/lib/cloudinary";
 
 export const revalidate = 60;
 
@@ -249,10 +250,11 @@ export default async function LandingPage() {
                         <div className="relative h-48 w-full overflow-hidden bg-neutral-50 flex items-center justify-center text-white border-b border-gray-100">
                           {exp.fotoPerfil ? (
                             <Image
-                              src={exp.fotoPerfil}
+                              src={cloudinaryUrl(exp.fotoPerfil, { width: 600 })}
                               alt={exp.nombreNegocio}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-500"
+                              unoptimized
                             />
                           ) : (
                             <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-6xl bg-gray-50">

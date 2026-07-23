@@ -294,7 +294,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
               onClick={scrollToForm}
               className="w-full sm:w-auto bg-[#1A7A52] text-white px-10 py-5 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-xl shadow-[#1A7A52]/20 cursor-pointer"
             >
-              Regístrate gratis
+              Registrar mi marca
             </button>
             <Link
               href="#planes"

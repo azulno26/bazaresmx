@@ -46,8 +46,8 @@ export async function POST(req: NextRequest) {
     }
 
     const slug = generateSlug(data.nombreNegocio, data.ciudad);
-    const mesGratis = nextId <= 11 ? 'Sí' : 'No';
-    const statusDefault = mesGratis === 'Sí' ? 'activo' : 'pendiente';
+    const mesGratis = 'No';
+    const statusDefault = 'pendiente';
 
     // Gather product images for the gallery field
     const perfilImg = data.fotoPerfil || (data.productos?.[0]?.foto || '');
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest) {
             foto_perfil: perfilImg,
             galeria_urls: productGallery ? productGallery.split(',').filter(Boolean) : [],
             plan: planMapped,
-            mes_gratis: mesGratis === 'Sí',
+            mes_gratis: false,
             status: statusDefault,
             badge_verificado: false,
             vencimiento: fechaVencimiento
@@ -197,8 +197,8 @@ export async function POST(req: NextRequest) {
 
     // Send confirmation email via Resend
     try {
-      const isActivo = statusDefault === 'activo';
-      const emailStatusText = isActivo ? '✅ Activo — Primer mes GRATIS' : '⏳ Pendiente de pago';
+      const isActivo = false;
+      const emailStatusText = isActivo ? '✅ Activo' : '⏳ Pendiente de pago';
       const accionRequerida = isActivo 
         ? 'Ninguna, ya aparece en el sitio.' 
         : 'Esperar comprobante de transferencia en contacto@bazaresmx.com.mx.<br/>Una vez recibido, activar en: <a href="https://www.bazaresmx.com.mx/admin/vencimientos">bazaresmx.com.mx/admin/vencimientos</a>';
@@ -228,7 +228,6 @@ export async function POST(req: NextRequest) {
           <p><strong>Nombre del Negocio:</strong> ${data.nombreNegocio}</p>
           <p><strong>Emprendedor:</strong> ${data.nombreCompleto}</p>
           <p><strong>Plan Elegido:</strong> ${getPlanDisplayName(planMapped)}</p>
-          <p><strong>¿Califica para Primer Mes Gratis?</strong> ${mesGratis}</p>
           <p><strong>Giro:</strong> ${data.giro}</p>
           <p><strong>Ciudad/Zona:</strong> ${data.ciudad}</p>
           <p><strong>Descripción:</strong> ${data.descripcion || 'Sin descripción'}</p>
@@ -288,7 +287,6 @@ export async function POST(req: NextRequest) {
           <p><strong>Detalles de tu registro:</strong></p>
           <ul>
             <li><strong>Tu enlace de perfil reservado:</strong> /expositores/${slug}</li>
-            <li><strong>¿Primer mes GRATIS?:</strong> ${mesGratis === 'Sí' ? '¡Sí, calificados entre los primeros 11!' : 'No (sujeto a cuota normal)'}</li>
             <li><strong>Estatus actual:</strong> ${isActivo ? 'Activo (Perfil público)' : 'Pendiente de validación de pago'}</li>
           </ul>
           ${customerInstructions}
@@ -302,7 +300,7 @@ export async function POST(req: NextRequest) {
       console.error("Error sending notification emails:", emailErr);
     }
 
-    return NextResponse.json({ ok: true, slug, nextId, mesGratis: mesGratis === 'Sí', sheetsWritten, supabaseWritten, supabaseError, id: insertedExpositorId });
+    return NextResponse.json({ ok: true, slug, nextId, mesGratis: false, sheetsWritten, supabaseWritten, supabaseError, id: insertedExpositorId });
   } catch (error) {
     console.error("Error in API route:", error);
     return NextResponse.json({ ok: false, error: 'Internal Server Error' }, { status: 500 });

@@ -70,7 +70,7 @@ export default function ExpositoresIndexClient({ featuredExpositores }: Exposito
               href="/expositores/registro"
               className="w-full sm:w-auto border-3 border-[#1A7A52] text-[#1A7A52] px-10 py-5 rounded-2xl font-extrabold text-lg hover:bg-[#1A7A52]/5 transition text-center"
             >
-              Registrarme gratis →
+              Registrar mi marca →
             </Link>
           </div>
         </div>
@@ -161,7 +161,7 @@ export default function ExpositoresIndexClient({ featuredExpositores }: Exposito
             <span className="text-5xl block mb-4">🛍️</span>
             <h3 className="font-syne font-extrabold text-2xl text-gray-800">Directorio abriendo pronto</h3>
             <p className="text-gray-500 font-medium mt-2 max-w-sm mx-auto">
-              Sé uno de los primeros destacados. ¡Registra tu marca completamente gratis hoy!
+              Sé uno de los primeros destacados. ¡Registra tu marca hoy!
             </p>
             <Link
               href="/expositores/registro"
@@ -181,13 +181,13 @@ export default function ExpositoresIndexClient({ featuredExpositores }: Exposito
           ¿Quieres aparecer aquí en la cima?
         </h2>
         <p className="text-gray-600 font-medium max-w-2xl mx-auto mb-10 text-lg leading-relaxed">
-          Los perfiles destacados reciben visitas de organizadores de todo México diariamente. Aprovecha nuestro primer mes gratis para nuevos registros.
+          Los perfiles destacados reciben visitas de organizadores de todo México diariamente. Registra tu marca y conecta con organizadores.
         </p>
         <Link
           href="/expositores/registro"
           className="inline-flex bg-accent text-white px-10 py-5 rounded-2xl font-extrabold text-lg shadow-lg hover:brightness-110 transition shadow-accent/20"
         >
-          Quiero Registrarme Gratis
+          Quiero Registrar mi Marca
         </Link>
       </section>
     </div>

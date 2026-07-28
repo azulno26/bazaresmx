@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
         destination: '/bazares-en-estado-de-mexico',
         permanent: true,
       },
+      {
+        source: '/bazares/ciculo-del-emprendedor',
+        destination: '/bazares/bazar-artesanal',
+        permanent: true,
+      },
     ];
   },
 };

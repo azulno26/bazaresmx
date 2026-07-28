@@ -16,6 +16,7 @@ const BAZAR_TYPES_MAP: Record<string, string> = {
   "bazarpato2": "Creativo",
   "emprendiendo-ando": "Emprendedor",
   "ciculo-del-emprendedor": "Emprendedor",
+  "bazar-artesanal": "Emprendedor",
   "impulsa-bazar": "Emprendedor",
   "manos-unidas-artesanas-ciudad-de-mexico": "Emprendedor",
   "zavana-bazar": "artesanal",

@@ -218,7 +218,7 @@
     "ciudad": "CDMX",
     "colonia": "Encuentro Fortuna",
     "direccion": "Av Fortuna 334, Magdalena de las Salinas, Gustavo A. Madero, 07760 Ciudad de México",
-    "fecha": "2026-07-17",
+    "fecha": "2026-07-31",
     "fechas": [
       "2026-07-17",
       "2026-07-18",
@@ -249,7 +249,8 @@
     "badge": "destacado",
     "publicado": "02-06-2026",
     "vencimiento": "2026-09-02",
-    "organizador": "Alina Macías"
+    "organizador": "Alina Macías",
+    "fechaFin": "2026-08-02"
   },
   {
     "id": "10",

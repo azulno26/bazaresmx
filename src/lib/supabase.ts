@@ -223,6 +223,30 @@ export async function getExpositores() {
   }
 }
 
+async function getVisitasFromSheets(targetSlug: string): Promise<number> {
+  const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
+  const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
+  if (!apiKey || !targetSlug) return 0;
+
+  try {
+    const response = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Expositores%21B2%3AAJ100?key=${apiKey}`,
+      { next: { revalidate: 300 } }
+    );
+    if (!response.ok) return 0;
+    const data = await response.json();
+    const rows = (data.values || []) as string[][];
+    for (const row of rows) {
+      if (row[0] === targetSlug) {
+        return parseInt(row[34]) || 0;
+      }
+    }
+  } catch (err) {
+    console.error("Error fetching visitas from Sheets:", err);
+  }
+  return 0;
+}
+
 export async function getExpositorBySlug(slug: string) {
   if (!supabase) {
     console.error("Supabase client is not initialized.");
@@ -230,11 +254,16 @@ export async function getExpositorBySlug(slug: string) {
   }
 
   try {
-    const { data, error } = await supabase
-      .from('expositores')
-      .select('*, productos(*)')
-      .eq('slug', slug)
-      .maybeSingle();
+    const [expositorRes, visitasCount] = await Promise.all([
+      supabase
+        .from('expositores')
+        .select('*, productos(*)')
+        .eq('slug', slug)
+        .maybeSingle(),
+      getVisitasFromSheets(slug)
+    ]);
+
+    const { data, error } = expositorRes;
 
     if (error || !data) {
       if (error) console.error(`Error fetching expositor with slug ${slug}:`, error);
@@ -269,7 +298,7 @@ export async function getExpositorBySlug(slug: string) {
         foto: p.imagen_url || '',
       })) as Producto[],
       vendimiaActiva: false,
-      visitas: 0,
+      visitas: visitasCount,
     };
   } catch (err) {
     console.error(`Critical error in getExpositorBySlug for slug ${slug}:`, err);

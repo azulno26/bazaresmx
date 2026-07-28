@@ -151,7 +151,7 @@ export default async function Page({ params }: Props) {
             <div className="w-full mt-4 bg-white border border-gray-100 rounded-2xl p-4 text-center shadow-sm flex items-center justify-center gap-2 text-xs font-bold text-gray-500">
               <span className="text-base">👁️</span>
               <span>
-                Perfil visto <strong className="text-[#1A7A52] font-extrabold">{exp.visitas} veces</strong>
+                Perfil visto <strong id="exp-visitas-count" className="text-[#1A7A52] font-extrabold">{exp.visitas} veces</strong>
               </span>
             </div>
           </div>

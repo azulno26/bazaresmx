@@ -18,9 +18,19 @@ export function VisitTracker({ slug }: { slug: string }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug }),
-      }).catch((err) => {
-        console.error("Error registering visit:", err);
-      });
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.ok && typeof data.visits === "number") {
+            const countEl = document.getElementById("exp-visitas-count");
+            if (countEl) {
+              countEl.textContent = `${data.visits} veces`;
+            }
+          }
+        })
+        .catch((err) => {
+          console.error("Error registering visit:", err);
+        });
     }
   }, [slug]);
 

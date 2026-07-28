@@ -15,14 +15,15 @@ export async function POST(req: NextRequest) {
     const response = await fetch(scriptUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'trackVisit', slug })
+      body: JSON.stringify({ action: 'trackVisit', slug, sheetName: 'Expositores' })
     });
 
     if (!response.ok) {
       throw new Error(`Apps Script responded with status ${response.status}`);
     }
 
-    return NextResponse.json({ ok: true });
+    const data = await response.json();
+    return NextResponse.json({ ok: true, visits: data.visits || 0 });
   } catch (error: any) {
     console.error("Error in track-visit route:", error);
     return NextResponse.json({ ok: false, error: error.message || 'Internal Server Error' }, { status: 500 });

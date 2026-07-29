@@ -221,6 +221,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
 
   // Final Form Submit Action
   const handleSubmit = async () => {
+    if (submitting) return;
     setErrorMsg("");
     setSubmitting(true);
 
@@ -930,9 +931,9 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                     type="button"
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="bg-[#1A7A52] text-white px-10 py-5 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-xl shadow-[#1A7A52]/20 cursor-pointer disabled:opacity-50"
+                    className="bg-[#1A7A52] text-white px-10 py-5 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-xl shadow-[#1A7A52]/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {submitting ? "Procesando..." : "Registrarme ahora"}
+                    {submitting ? "Enviando..." : "Registrar mi marca"}
                   </button>
                 )}
               </div>

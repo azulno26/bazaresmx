@@ -26,6 +26,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Campos requeridos faltantes' }, { status: 400 });
     }
 
+    // Validar si ya existe un expositor con este correo en Supabase
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const supabaseAdmin = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY
+      );
+
+      const { data: existingEmail } = await supabaseAdmin
+        .from('expositores')
+        .select('id')
+        .eq('email', data.correo.trim().toLowerCase())
+        .maybeSingle();
+
+      if (existingEmail) {
+        return NextResponse.json({
+          ok: false,
+          error: "Ya tienes un perfil registrado con este correo. ¿Necesitas ayuda?"
+        }, { status: 400 });
+      }
+    }
+
     const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
     let nextId = 11; // Fallback if Sheets fetch fails, defaults to > 10
     

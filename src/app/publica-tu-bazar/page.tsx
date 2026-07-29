@@ -57,6 +57,7 @@ export default function PublishBazarForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     if (
       !formData.nombreBazar ||
       !formData.colonia ||
@@ -849,9 +850,9 @@ export default function PublishBazarForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full bg-primary text-white py-5 rounded-2xl font-extrabold text-xl transition shadow-xl shadow-primary/20 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:brightness-110'}`}
+                className={`w-full bg-primary text-white py-5 rounded-2xl font-extrabold text-xl transition shadow-xl shadow-primary/20 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'}`}
               >
-                {loading ? "Enviando solicitud..." : "Enviar solicitud"}
+                {loading ? "Enviando..." : "Enviar solicitud"}
               </button>
             </form>
           </div>

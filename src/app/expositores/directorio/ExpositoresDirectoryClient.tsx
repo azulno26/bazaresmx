@@ -61,9 +61,19 @@ export default function ExpositoresDirectoryClient({ expositoresData }: Exposito
       return matchesSearch && matchesGiro && matchesCity;
     });
 
-    // Plan sorting priority: Top -> Media -> Básico
+    // Explicit slug priority (Cutie Toys #1, Rocio Olguín #2)
+    const slugPriority: Record<string, number> = {
+      'cutie-toys-cdmx': 1,
+      'rocio-olguin-arte-y-diseno-oaxaca-oaxaca-de-juarez': 2,
+    };
     const planPriority: Record<string, number> = { Top: 1, Media: 2, Básico: 3 };
-    return res.sort((a, b) => (planPriority[a.planElegido] || 4) - (planPriority[b.planElegido] || 4));
+
+    return res.sort((a, b) => {
+      const pSlugA = slugPriority[a.slug] || 99;
+      const pSlugB = slugPriority[b.slug] || 99;
+      if (pSlugA !== pSlugB) return pSlugA - pSlugB;
+      return (planPriority[a.planElegido] || 4) - (planPriority[b.planElegido] || 4);
+    });
   }, [expositoresData, search, giroFilter, cityFilter]);
 
   const resetFilters = () => {

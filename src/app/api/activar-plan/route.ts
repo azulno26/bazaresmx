@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { verifyToken } from '@/src/lib/security';
 import { getPlanDisplayName } from '@/src/lib/plan-names';
+import { emailTemplate, emailInfoBox } from '@/src/lib/email-template';
 
 export const dynamic = 'force-dynamic';
 
@@ -143,38 +144,66 @@ export async function GET(req: NextRequest) {
           : `${siteUrl}/expositores/${slug}`;
 
         const htmlBody = type === 'bazar'
-          ? `
-            <h2>¡Tu bazar ha sido activado en BazaresMX! 🎉</h2>
-            <p>Hola,</p>
-            <p>Hemos verificado tu comprobante de pago con éxito y tu bazar <strong>${name}</strong> ya se encuentra publicado con el plan <strong>${plan.toUpperCase()}</strong>.</p>
-            <p><strong>Detalles de la publicación:</strong></p>
-            <ul>
-              <li><strong>Estatus:</strong> Activo (Visible en el directorio)</li>
-              <li><strong>Plan contratado:</strong> ${plan.toUpperCase()}</li>
-              <li><strong>Válido hasta:</strong> ${vencimientoStr}</li>
-              <li><strong>Enlace directo a tu bazar:</strong> <a href="${detailLink}" target="_blank">${detailLink}</a></li>
-            </ul>
-            <p>Tu evento ya está disponible para que miles de expositores y visitantes lo encuentren.</p>
-            <p>¡Mucho éxito con tu bazar!</p>
-            <hr />
-            <p>Atentamente,<br/><strong>El equipo de BazaresMX</strong></p>
-          `
-          : `
-            <h2>¡Tu marca ya está activa en BazaresMX! 🎉</h2>
-            <p>Hola <strong>${record.nombre_completo || 'Emprendedor'}</strong>,</p>
-            <p>Hemos verificado tu comprobante de pago con éxito y el perfil de tu marca <strong>${name}</strong> ya se encuentra activo con el plan <strong>${displayPlanName}</strong>.</p>
-            <p><strong>Detalles de tu membresía:</strong></p>
-            <ul>
-              <li><strong>Estatus:</strong> Activo (Visible en el directorio de expositores)</li>
-              <li><strong>Plan contratado:</strong> ${displayPlanName}</li>
-              <li><strong>Válido hasta:</strong> ${vencimientoStr}</li>
-              <li><strong>Enlace a tu perfil público:</strong> <a href="${detailLink}" target="_blank">${detailLink}</a></li>
-            </ul>
-            <p>Tu marca ya se destaca y está lista para recibir solicitudes e interactuar con organizadores de bazares.</p>
-            <p>¡Mucho éxito con tus ventas!</p>
-            <hr />
-            <p>Atentamente,<br/><strong>El equipo de BazaresMX</strong></p>
-          `;
+          ? emailTemplate({
+              title: `¡Tu bazar ha sido activado en BazaresMX!`,
+              greeting: `¡Felicidades! Tu bazar ya está activo 🎉`,
+              bodyHtml: `
+                <p style="margin-top: 0; font-size: 16px;">
+                  Hemos verificado tu comprobante de pago con éxito y tu bazar <strong>${name}</strong> ya se encuentra publicado y destacado en el directorio de BazaresMX.
+                </p>
+
+                ${emailInfoBox(`
+                  <table border="0" cellpadding="4" cellspacing="0" width="100%" style="font-size: 14px;">
+                    <tr><td width="40%" style="color: #666; font-weight: bold;">Bazar:</td><td style="font-weight: bold; color: #111;">${name}</td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Estatus:</td><td><strong style="color: #1A7A52;">✅ Activo (Visible en el directorio)</strong></td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Plan contratado:</td><td><strong>${plan.toUpperCase()}</strong></td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Válido hasta:</td><td>${vencimientoStr}</td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Enlace público:</td><td><a href="${detailLink}" target="_blank" style="color: #1A7A52; font-weight: bold;">${detailLink}</a></td></tr>
+                  </table>
+                `)}
+
+                <p style="margin-top: 20px;">
+                  Tu evento ya está disponible para que miles de expositores y visitantes lo encuentren. ¡Mucho éxito con tu bazar!
+                </p>
+
+                <p style="margin-top: 24px; color: #555;">
+                  Atentamente,<br/>
+                  <strong style="color: #1A7A52;">El equipo de BazaresMX</strong>
+                </p>
+              `,
+              ctaText: 'Ver Mi Bazar Publicado',
+              ctaUrl: detailLink
+            })
+          : emailTemplate({
+              title: `¡Tu marca ya está activa en BazaresMX!`,
+              greeting: `¡Hola ${record.nombre_completo || 'Emprendedor'}! 🎉`,
+              bodyHtml: `
+                <p style="margin-top: 0; font-size: 16px;">
+                  Hemos verificado tu comprobante de pago con éxito y el perfil de tu marca <strong>${name}</strong> ya se encuentra activo con el plan <strong>${displayPlanName}</strong>.
+                </p>
+
+                ${emailInfoBox(`
+                  <table border="0" cellpadding="4" cellspacing="0" width="100%" style="font-size: 14px;">
+                    <tr><td width="40%" style="color: #666; font-weight: bold;">Marca:</td><td style="font-weight: bold; color: #111;">${name}</td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Estatus:</td><td><strong style="color: #1A7A52;">✅ Activo (Visible en el directorio)</strong></td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Plan contratado:</td><td><strong>${displayPlanName}</strong></td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Válido hasta:</td><td>${vencimientoStr}</td></tr>
+                    <tr><td style="color: #666; font-weight: bold;">Enlace a tu perfil:</td><td><a href="${detailLink}" target="_blank" style="color: #1A7A52; font-weight: bold;">${detailLink}</a></td></tr>
+                  </table>
+                `)}
+
+                <p style="margin-top: 20px;">
+                  Tu marca ya se destaca en el directorio de expositores y está lista para recibir solicitudes e interactuar con organizadores de bazares. ¡Mucho éxito con tus ventas!
+                </p>
+
+                <p style="margin-top: 24px; color: #555;">
+                  Atentamente,<br/>
+                  <strong style="color: #1A7A52;">El equipo de BazaresMX</strong>
+                </p>
+              `,
+              ctaText: 'Ver Mi Perfil Público',
+              ctaUrl: detailLink
+            });
 
         await resend.emails.send({
           from: 'contacto@bazaresmx.com.mx',

@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { emailTemplate, emailInfoBox } from '@/src/lib/email-template';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
@@ -168,37 +169,55 @@ export async function POST(req: NextRequest) {
     }
 
     // Send notification email to admin via Resend
+    const adminEmailHtml = emailTemplate({
+      title: `Nueva Solicitud de Bazar: ${data.nombre}`,
+      greeting: `Nueva Solicitud de Publicación 🎪`,
+      bodyHtml: `
+        <p style="margin-top: 0;">Se ha recibido una nueva solicitud para publicar un bazar en la plataforma:</p>
+
+        ${emailInfoBox(`
+          <table border="0" cellpadding="4" cellspacing="0" width="100%" style="font-size: 14px;">
+            <tr><td width="38%" style="color: #666; font-weight: bold;">ID Supabase:</td><td style="color: #111; font-weight: bold;">${insertedBazarId || 'Error / No guardado'}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Slug:</td><td><a href="https://www.bazaresmx.com.mx/bazares/${slug}" target="_blank" style="color: #1A7A52; font-weight: bold;">${slug}</a></td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Nombre del Bazar:</td><td style="color: #111; font-weight: bold;">${data.nombre}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Organizador:</td><td>${data.organizador || 'No especificado'}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Plan Solicitado:</td><td><strong style="color: #1A7A52;">${data.planElegido || 'Básico'}</strong></td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Estado / Ciudad:</td><td>${data.estado}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Colonia:</td><td>${data.colonia}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Dirección:</td><td>${data.direccion || 'Sin dirección exacta'}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Fechas:</td><td>${data.fechaInicio} ${data.fechaFin ? `al ${data.fechaFin}` : ''}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Horario:</td><td>${data.horarioInicio} - ${data.horarioFin}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Recurrente:</td><td>${data.recurrente ? (data.frecuencia || 'Sí') : 'No'}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Acepta Expositores:</td><td>${data.aceptaExpositores}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Tipo Entrada:</td><td>${data.entrada}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">WhatsApp:</td><td><a href="https://wa.me/${(data.whatsapp || '').replace(/\D/g, '')}" target="_blank" style="color: #1A7A52;">${data.whatsapp}</a></td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Instagram:</td><td>${data.instagram || 'No especificado'}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Facebook:</td><td>${data.facebook || 'No especificado'}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Descripción:</td><td>${data.descripcion || 'Sin descripción'}</td></tr>
+          </table>
+        `)}
+
+        <h3 style="font-size: 16px; color: #1A7A52; margin: 20px 0 8px 0;">Archivos e Imágenes:</h3>
+        ${emailInfoBox(`
+          <p style="margin: 0 0 6px 0;"><strong>URL Portada:</strong> ${data.imagenUrl ? `<a href="${data.imagenUrl}" target="_blank" style="color: #1A7A52; word-break: break-all;">${data.imagenUrl}</a>` : 'Sin URL'}</p>
+          <p style="margin: 0;"><strong>Archivo adjunto:</strong> ${imageInfo}</p>
+        `)}
+
+        <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #EEE; font-size: 12px; color: #777;">
+          <div><strong>Supabase:</strong> ${supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`}</div>
+          <div><strong>Google Sheets:</strong> ${sheetsWritten ? '✓ Exitoso' : '✗ Fallido / No configurado'}</div>
+        </div>
+      `,
+      ctaText: 'Ver en Directorio',
+      ctaUrl: `https://www.bazaresmx.com.mx/bazares/${slug}`
+    });
+
     await resend.emails.send({
       from: 'contacto@bazaresmx.com.mx',
       to: 'azulno26@hotmail.com',
       subject: `Nueva solicitud de bazar: ${data.nombre}`,
       attachments,
-      html: `
-        <h2>Nueva solicitud de publicación en BazaresMX</h2>
-        <p><strong>ID Supabase:</strong> ${insertedBazarId || 'Error / No guardado'}</p>
-        <p><strong>Slug:</strong> ${slug}</p>
-        <p><strong>Nombre del bazar:</strong> ${data.nombre}</p>
-        <p><strong>Estado:</strong> ${data.estado}</p>
-        <p><strong>Colonia:</strong> ${data.colonia}</p>
-        <p><strong>Dirección:</strong> ${data.direccion || 'Sin dirección'}</p>
-        <p><strong>Fecha inicio:</strong> ${data.fechaInicio}</p>
-        <p><strong>Fecha fin:</strong> ${data.fechaFin || 'No especificada'}</p>
-        <p><strong>Recurrente:</strong> ${data.recurrente ? data.frecuencia : 'No'}</p>
-        <p><strong>Horario:</strong> ${data.horarioInicio} - ${data.horarioFin}</p>
-        <p><strong>Descripción:</strong> ${data.descripcion}</p>
-        <p><strong>WhatsApp:</strong> ${data.whatsapp}</p>
-        <p><strong>Instagram:</strong> ${data.instagram || 'No especificado'}</p>
-        <p><strong>Facebook:</strong> ${data.facebook || 'No especificado'}</p>
-        <p><strong>Otro contacto:</strong> ${data.otroTipo} - ${data.otro || 'No especificado'}</p>
-        <p><strong>Acepta expositores:</strong> ${data.aceptaExpositores}</p>
-        <p><strong>Entrada:</strong> ${data.entrada}</p>
-        <p><strong>Organizador:</strong> ${data.organizador}</p>
-        <p><strong>Plan Elegido:</strong> ${data.planElegido || 'Básico'}</p>
-        <p><strong>Imagen Cloudinary:</strong> ${data.imagenUrl ? `<a href="${data.imagenUrl}" target="_blank">${data.imagenUrl}</a>` : 'Sin URL Cloudinary'}</p>
-        <p><strong>Imagen adjunta:</strong> ${imageInfo}</p>
-        <hr />
-        <p><em>Supabase: ${supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`}</em></p>
-      `
+      html: adminEmailHtml
     });
 
     return NextResponse.json({ ok: true, sheetsWritten, supabaseWritten, supabaseError, id: insertedBazarId });

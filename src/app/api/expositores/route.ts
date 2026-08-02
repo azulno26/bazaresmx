@@ -2,6 +2,7 @@ import { Resend } from 'resend';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getPlanDisplayName, getPlanInternalName } from '@/src/lib/plan-names';
+import { emailTemplate, emailInfoBox } from '@/src/lib/email-template';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
@@ -240,85 +241,127 @@ export async function POST(req: NextRequest) {
 
       const supabaseStatusText = supabaseWritten ? '✓ Exitoso' : `✗ Fallido (${supabaseError})`;
 
+      const adminEmailHtml = emailTemplate({
+        title: `Nuevo Expositor Registrado: ${data.nombreNegocio}`,
+        greeting: `Nuevo Registro de Expositor 🛍️`,
+        bodyHtml: `
+          <p style="margin-top: 0;">Se ha registrado un nuevo expositor en la plataforma con los siguientes datos:</p>
+          
+          ${emailInfoBox(`
+            <table border="0" cellpadding="4" cellspacing="0" width="100%" style="font-size: 14px;">
+              <tr><td width="38%" style="color: #666; font-weight: bold;">ID Supabase:</td><td style="color: #111; font-weight: bold;">${insertedExpositorId || 'Error / No guardado'}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">ID Sheets:</td><td>${nextId}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Slug:</td><td><a href="https://www.bazaresmx.com.mx/expositores/${slug}" target="_blank" style="color: #1A7A52; font-weight: bold;">${slug}</a></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Marca / Negocio:</td><td style="color: #111; font-weight: bold;">${data.nombreNegocio}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Emprendedor:</td><td>${data.nombreCompleto}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Plan Elegido:</td><td><strong style="color: #1A7A52;">${getPlanDisplayName(planMapped)}</strong></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Giro:</td><td>${data.giro}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Ciudad / Zona:</td><td>${data.ciudad}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">WhatsApp:</td><td><a href="https://wa.me/${(data.whatsapp || '').replace(/\D/g, '')}" target="_blank" style="color: #1A7A52;">${data.whatsapp}</a></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Correo:</td><td><a href="mailto:${data.correo}">${data.correo}</a></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Descripción:</td><td>${data.descripcion || 'Sin descripción'}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Estatus:</td><td><strong>${emailStatusText}</strong></td></tr>
+            </table>
+          `)}
+
+          <h3 style="font-size: 16px; color: #1A7A52; margin: 20px 0 8px 0;">Datos de Cobro SPEI:</h3>
+          ${emailInfoBox(`
+            <table border="0" cellpadding="3" cellspacing="0" width="100%" style="font-size: 14px;">
+              <tr><td width="38%" style="color: #666; font-weight: bold;">Monto a cobrar:</td><td><strong style="color: #E8621A; font-size: 15px;">${montoACobrar}</strong></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Banco:</td><td>Scotiabank</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">CLABE:</td><td><code>${clabeVal}</code></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Titular:</td><td>${titularVal}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Concepto:</td><td>${data.nombreNegocio} + ${getPlanDisplayName(planMapped)}</td></tr>
+            </table>
+          `, '#F0E6D8', '#FFFDF9')}
+
+          <h3 style="font-size: 16px; color: #1A7A52; margin: 20px 0 8px 0;">Productos Subidos:</h3>
+          ${data.productos && data.productos.length > 0
+            ? `<div style="background-color: #FAFAFA; border: 1px solid #EBEBEB; border-radius: 12px; padding: 12px 16px;">
+                ${data.productos.map((p: any, idx: number) => `
+                  <div style="padding: 8px 0; border-bottom: ${idx < data.productos.length - 1 ? '1px solid #EEE' : 'none'};">
+                    <strong style="color: #111;">${idx + 1}. ${p.nombre}</strong> &mdash; <span style="color: #E8621A; font-weight: bold;">$${p.precio} MXN</span><br/>
+                    <span style="font-size: 13px; color: #666;">${p.descripcion || 'Sin descripción'}</span><br/>
+                    ${p.foto ? `<a href="${p.foto}" target="_blank" style="font-size: 12px; color: #1A7A52; font-weight: 600;">Ver foto del producto &rarr;</a>` : ''}
+                  </div>
+                `).join('')}
+              </div>`
+            : '<p style="color: #888; font-style: italic;">Sin productos agregados en el formulario.</p>'
+          }
+
+          <div style="margin-top: 24px; padding-top: 14px; border-top: 1px solid #EEE; font-size: 12px; color: #777;">
+            <div><strong>Supabase:</strong> ${supabaseStatusText}</div>
+            <div><strong>Google Sheets:</strong> ${sheetsWritten ? '✓ Exitoso (Apps Script)' : '✗ Pendiente'}</div>
+          </div>
+        `,
+        ctaText: 'Administrar en Panel de Vencimientos',
+        ctaUrl: 'https://www.bazaresmx.com.mx/admin/vencimientos'
+      });
+
       await resend.emails.send({
         from: 'contacto@bazaresmx.com.mx',
         to: 'azulno26@hotmail.com',
         subject: `Nuevo registro de expositor: ${data.nombreNegocio} (${getPlanDisplayName(planMapped)})`,
-        html: `
-          <h2>Nuevo Expositor Registrado en BazaresMX</h2>
-          <p><strong>ID Asignado (Sheets):</strong> ${nextId}</p>
-          <p><strong>ID Asignado (Supabase):</strong> ${insertedExpositorId || 'Error / No guardado'}</p>
-          <p><strong>Slug:</strong> ${slug}</p>
-          <p><strong>Nombre del Negocio:</strong> ${data.nombreNegocio}</p>
-          <p><strong>Emprendedor:</strong> ${data.nombreCompleto}</p>
-          <p><strong>Plan Elegido:</strong> ${getPlanDisplayName(planMapped)}</p>
-          <p><strong>Giro:</strong> ${data.giro}</p>
-          <p><strong>Ciudad/Zona:</strong> ${data.ciudad}</p>
-          <p><strong>Descripción:</strong> ${data.descripcion || 'Sin descripción'}</p>
-          <p><strong>WhatsApp:</strong> ${data.whatsapp}</p>
-          <p><strong>Correo:</strong> ${data.correo}</p>
-          <p><strong>Estatus:</strong> ${emailStatusText}</p>
-          <p><strong>Acción requerida:</strong> ${accionRequerida}</p>
-          <hr />
-          <h3>Datos de Cobro:</h3>
-          <p><strong>Monto a cobrar:</strong> ${montoACobrar}</p>
-          <p><strong>Datos de transferencia:</strong><br/>
-            🏦 Banco: Scotiabank<br/>
-            💳 CLABE: ${clabeVal}<br/>
-            👤 Titular: ${titularVal}<br/>
-            📝 Concepto: ${data.nombreNegocio} + ${getPlanDisplayName(planMapped)}<br/>
-            📧 Comprobante a: contacto@bazaresmx.com.mx
-          </p>
-          <hr />
-          <h3>Productos Subidos:</h3>
-          ${data.productos && data.productos.length > 0
-            ? data.productos.map((p: any, idx: number) => `
-                <p><strong>Producto ${idx + 1}:</strong> ${p.nombre} - $${p.precio}<br/>
-                <em>${p.descripcion}</em><br/>
-                <a href="${p.foto}" target="_blank">Ver foto del producto</a></p>
-              `).join('')
-            : '<p>Sin productos agregados</p>'
-          }
-          <hr />
-          <p><em>Estatus de escritura en Google Sheet: ${sheetsWritten ? '✓ Exitoso (Apps Script)' : '✗ Pendiente (Configurar EXPOSITORES_SCRIPT_URL)'}</em></p>
-          <p><em>Estatus de escritura en Supabase: ${supabaseStatusText}</em></p>
-        `
+        html: adminEmailHtml
       });
 
-      // Optional: Send auto-reply to the exhibitor
-      let customerInstructions = '';
+      // Confirmation email to the exhibitor
+      let customerInstructionsHtml = '';
       if (!isActivo) {
-        customerInstructions = `
-          <p><strong>Para activar tu perfil público, realiza la transferencia correspondiente:</strong></p>
-          <ul>
-            <li><strong>Monto a pagar:</strong> ${montoACobrar}</li>
-            <li>🏦 <strong>Banco:</strong> Scotiabank</li>
-            <li>💳 <strong>CLABE:</strong> ${clabeVal}</li>
-            <li>👤 <strong>Titular:</strong> ${titularVal}</li>
-            <li>📝 <strong>Concepto:</strong> ${data.nombreNegocio} + ${getPlanDisplayName(planMapped)}</li>
-            <li>📧 <strong>Comprobante a:</strong> contacto@bazaresmx.com.mx</li>
-          </ul>
+        customerInstructionsHtml = `
+          <h3 style="font-size: 16px; color: #1A7A52; margin: 24px 0 8px 0;">💳 Pasos para activar tu perfil público:</h3>
+          <p style="margin-top: 0;">Para completar la activación de tu marca y catálogo en BazaresMX, realiza tu transferencia interbancaria (SPEI):</p>
+          
+          ${emailInfoBox(`
+            <table border="0" cellpadding="4" cellspacing="0" width="100%" style="font-size: 14px;">
+              <tr><td width="35%" style="color: #666; font-weight: bold;">Monto a pagar:</td><td><strong style="color: #E8621A; font-size: 16px;">${montoACobrar}</strong></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Banco:</td><td><strong>Scotiabank</strong></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">CLABE:</td><td><code style="background-color: #E8EFEA; padding: 2px 6px; border-radius: 4px; font-weight: bold; color: #1A7A52;">${clabeVal}</code></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Titular:</td><td><strong>${titularVal}</strong></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Concepto:</td><td>${data.nombreNegocio} + ${getPlanDisplayName(planMapped)}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Enviar comprobante:</td><td><a href="mailto:contacto@bazaresmx.com.mx" style="color: #1A7A52; font-weight: bold;">contacto@bazaresmx.com.mx</a></td></tr>
+            </table>
+          `, '#D2E8DC', '#F0F8F4')}
         `;
       }
+
+      const clientEmailHtml = emailTemplate({
+        title: `¡Bienvenido a BazaresMX, ${data.nombreNegocio}!`,
+        greeting: `¡Gracias por unirte a BazaresMX, ${data.nombreCompleto}! 🎉`,
+        bodyHtml: `
+          <p style="margin-top: 0; font-size: 16px;">
+            Hemos recibido con éxito el registro de tu marca <strong>${data.nombreNegocio}</strong> en el plan <strong>${getPlanDisplayName(planMapped)}</strong>.
+          </p>
+
+          ${emailInfoBox(`
+            <table border="0" cellpadding="4" cellspacing="0" width="100%" style="font-size: 14px;">
+              <tr><td width="40%" style="color: #666; font-weight: bold;">Marca:</td><td style="font-weight: bold; color: #111;">${data.nombreNegocio}</td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Plan:</td><td><strong style="color: #1A7A52;">${getPlanDisplayName(planMapped)}</strong></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Enlace reservado:</td><td><a href="https://www.bazaresmx.com.mx/expositores/${slug}" target="_blank" style="color: #1A7A52; font-weight: bold;">bazaresmx.com.mx/expositores/${slug}</a></td></tr>
+              <tr><td style="color: #666; font-weight: bold;">Estatus actual:</td><td><strong>${isActivo ? '✅ Activo (Visible en el directorio)' : '⏳ Pendiente de validación de pago'}</strong></td></tr>
+            </table>
+          `)}
+
+          ${customerInstructionsHtml}
+
+          <p style="margin-top: 20px;">
+            Pronto nos pondremos en contacto contigo vía WhatsApp para validar los últimos detalles y publicar tu catálogo ante cientos de organizadores de bazares en México.
+          </p>
+
+          <p style="margin-top: 24px; color: #555;">
+            Atentamente,<br/>
+            <strong style="color: #1A7A52;">El equipo de BazaresMX</strong>
+          </p>
+        `,
+        ctaText: 'Ver Directorio de Bazares',
+        ctaUrl: 'https://www.bazaresmx.com.mx'
+      });
 
       await resend.emails.send({
         from: 'contacto@bazaresmx.com.mx',
         to: data.correo,
         subject: `¡Bienvenido a BazaresMX, ${data.nombreNegocio}!`,
-        html: `
-          <h2>¡Gracias por registrarte en BazaresMX, ${data.nombreCompleto}!</h2>
-          <p>Hemos recibido el perfil de tu marca <strong>${data.nombreNegocio}</strong> con el plan <strong>${getPlanDisplayName(planMapped)}</strong>.</p>
-          <p><strong>Detalles de tu registro:</strong></p>
-          <ul>
-            <li><strong>Tu enlace de perfil reservado:</strong> /expositores/${slug}</li>
-            <li><strong>Estatus actual:</strong> ${isActivo ? 'Activo (Perfil público)' : 'Pendiente de validación de pago'}</li>
-          </ul>
-          ${customerInstructions}
-          <p>Pronto nos pondremos en contacto contigo vía WhatsApp para validar los últimos detalles y activar tu perfil público si elegiste un plan de catálogo.</p>
-          <p>Síguenos en nuestra cuenta oficial de Instagram para novedades: <a href="https://www.instagram.com/bazaresmx.com.mx/">@bazaresmx.com.mx</a></p>
-          <br/>
-          <p>Atentamente,<br/><strong>El equipo de BazaresMX</strong></p>
-        `
+        html: clientEmailHtml
       });
     } catch (emailErr) {
       console.error("Error sending notification emails:", emailErr);

@@ -6,9 +6,12 @@ import { getPlanDisplayName, getPlanInternalName } from '@/src/lib/plan-names';
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SHEET_ID = '1R0WdyRPenxGsu8A9WRuzngDAgFhRYGlYguItBOkVdEk';
 
-// Helper to remove accents and format slug
+// Helper to remove accents and format slug using principal city only
 function generateSlug(nombreNegocio: string, ciudad: string): string {
-  const base = `${nombreNegocio}-${ciudad}`.toLowerCase();
+  // Extraer ciudad principal (primera parte antes de la coma, ej: "CDMX" de "CDMX, Coyoacán, ...")
+  const ciudadPrincipal = ciudad ? ciudad.split(',')[0].trim() : '';
+  const base = `${nombreNegocio}-${ciudadPrincipal}`.toLowerCase();
+
   return base
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "") // Remove accents

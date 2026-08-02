@@ -211,10 +211,11 @@ export async function getExpositores() {
         visitas: 0,
       }))
       .sort((a: any, b: any) => {
-        // Explicit slug priority (Cutie Toys #1, Rocio Olguín #2)
+        // Explicit slug priority (Cutie Toys #1, Rocio Olguín #2, Destrezamentes #3)
         const slugPriority: Record<string, number> = {
           'cutie-toys-cdmx': 1,
           'rocio-olguin-arte-y-diseno-oaxaca-oaxaca-de-juarez': 2,
+          'destrezamentes-cdmx-coyoacan-gustavo-a-madero-iztacalco': 3,
         };
         const pSlugA = slugPriority[a.slug] || 99;
         const pSlugB = slugPriority[b.slug] || 99;

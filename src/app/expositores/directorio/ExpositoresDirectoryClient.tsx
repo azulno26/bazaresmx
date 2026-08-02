@@ -61,10 +61,11 @@ export default function ExpositoresDirectoryClient({ expositoresData }: Exposito
       return matchesSearch && matchesGiro && matchesCity;
     });
 
-    // Explicit slug priority (Cutie Toys #1, Rocio Olguín #2)
+    // Explicit slug priority (Cutie Toys #1, Rocio Olguín #2, Destrezamentes #3)
     const slugPriority: Record<string, number> = {
       'cutie-toys-cdmx': 1,
       'rocio-olguin-arte-y-diseno-oaxaca-oaxaca-de-juarez': 2,
+      'destrezamentes-cdmx-coyoacan-gustavo-a-madero-iztacalco': 3,
     };
     const planPriority: Record<string, number> = { Top: 1, Media: 2, Básico: 3 };
 

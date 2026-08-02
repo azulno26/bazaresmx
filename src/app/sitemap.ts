@@ -58,6 +58,18 @@ export default async function sitemap() {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
+    {
+      url: 'https://www.bazaresmx.com.mx/aviso-de-privacidad',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: 'https://www.bazaresmx.com.mx/terminos-y-condiciones',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
     ...bazarUrls,
   ]
 }

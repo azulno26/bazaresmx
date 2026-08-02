@@ -60,6 +60,7 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
   
   // Cloudinary upload states
   const [uploadingProfile, setUploadingProfile] = useState(false);
@@ -222,6 +223,10 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
   // Final Form Submit Action
   const handleSubmit = async () => {
     if (submitting) return;
+    if (!aceptaTerminos) {
+      alert("Por favor confirma que has leído y aceptas los Términos y Condiciones y el Aviso de Privacidad.");
+      return;
+    }
     setErrorMsg("");
     setSubmitting(true);
 
@@ -889,7 +894,38 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                         <span className="text-gray-400 font-bold text-sm">Plan Elegido:</span>
                         <span className="text-gray-800 font-extrabold text-[#1A7A52]">{getPlanDisplayName(formData.planElegido)}</span>
                       </div>
+                    </div>
 
+                    {/* CHECKBOX TÉRMINOS Y PRIVACIDAD */}
+                    <div className="flex items-start gap-3 p-4 bg-neutral-50 rounded-2xl border border-neutral-200">
+                      <input
+                        type="checkbox"
+                        id="aceptaTerminosExpositor"
+                        checked={aceptaTerminos}
+                        onChange={(e) => setAceptaTerminos(e.target.checked)}
+                        required
+                        className="mt-1 w-4 h-4 text-[#1A7A52] rounded border-gray-300 focus:ring-[#1A7A52] cursor-pointer accent-[#1A7A52]"
+                      />
+                      <label htmlFor="aceptaTerminosExpositor" className="text-xs sm:text-sm text-gray-700 leading-snug cursor-pointer font-medium">
+                        He leído y acepto los{" "}
+                        <Link
+                          href="/terminos-y-condiciones"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#1A7A52] font-bold underline hover:brightness-110"
+                        >
+                          Términos y Condiciones
+                        </Link>{" "}
+                        y el{" "}
+                        <Link
+                          href="/aviso-de-privacidad"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#1A7A52] font-bold underline hover:brightness-110"
+                        >
+                          Aviso de Privacidad
+                        </Link>
+                      </label>
                     </div>
                   </div>
                 )}
@@ -930,19 +966,13 @@ export default function ExpositoresRegistroClient({ initialSpotsLeft }: Exposito
                   <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={submitting}
+                    disabled={submitting || !aceptaTerminos}
                     className="bg-[#1A7A52] text-white px-10 py-5 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-xl shadow-[#1A7A52]/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitting ? "Enviando..." : "Registrar mi marca"}
                   </button>
                 )}
               </div>
-              
-              {step === (formData.planElegido === "Básico" ? 5 : 7) && (
-                <p className="text-center text-xs text-gray-400 mt-4 font-medium">
-                  Al registrarte, aceptas nuestros términos de servicio y políticas de uso.
-                </p>
-              )}
             </>
           )}
         </div>

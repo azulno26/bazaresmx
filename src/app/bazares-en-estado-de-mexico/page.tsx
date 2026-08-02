@@ -186,7 +186,7 @@ export default async function BazaresEdomexPage() {
       {/* 5. ENLAZADO INTERNO PIE */}
       <footer className="bg-[#1a1a1a] text-white/50 py-12 px-6 text-center text-xs font-semibold border-t border-white/5">
         <div className="max-w-4xl mx-auto space-y-4">
-          <div className="flex justify-center gap-6 text-sm text-white/80">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-white/80">
             <Link href="/" className="hover:underline">Directorio Principal</Link>
             <span>|</span>
             <Link href="/bazares-en-cdmx" className="hover:underline">Bazares en CDMX</Link>
@@ -194,6 +194,11 @@ export default async function BazaresEdomexPage() {
             <Link href="/bazares-en-puebla" className="hover:underline">Bazares en Puebla</Link>
             <span>|</span>
             <Link href="/publica-tu-bazar" className="hover:underline">Publicar Evento</Link>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4 text-xs text-white/50">
+            <Link href="/terminos-y-condiciones" className="hover:underline hover:text-white">Términos y Condiciones</Link>
+            <span>•</span>
+            <Link href="/aviso-de-privacidad" className="hover:underline hover:text-white">Aviso de Privacidad</Link>
           </div>
           <p>© 2026 BazaresMX · Todos los derechos reservados.</p>
         </div>

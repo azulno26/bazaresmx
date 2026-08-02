@@ -408,6 +408,15 @@ export default async function LandingPage() {
           <p className="text-white/50 text-lg font-medium mb-2">
             El directorio digital de bazares en México · 2026
           </p>
+          <div className="flex flex-wrap justify-center gap-4 text-xs text-white/60 mb-6">
+            <Link href="/terminos-y-condiciones" className="hover:text-white hover:underline transition">
+              Términos y Condiciones
+            </Link>
+            <span>•</span>
+            <Link href="/aviso-de-privacidad" className="hover:text-white hover:underline transition">
+              Aviso de Privacidad
+            </Link>
+          </div>
           <p className="text-white/30 text-xs">
             Desarrollado por 💡 <a href="https://www.flowisolutions.com/" target="_blank" rel="noopener noreferrer" className="text-[#1A7A52] hover:underline font-bold">Flowi Solutions</a>
           </p>

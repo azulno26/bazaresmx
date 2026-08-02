@@ -17,6 +17,7 @@ export default function PublishBazarForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [aceptaTerminos, setAceptaTerminos] = useState(false);
   
   const [step, setStep] = useState(1);
   const [planElegido, setPlanElegido] = useState<"Básico" | "Medio" | "Pro">("Básico");
@@ -65,6 +66,10 @@ export default function PublishBazarForm() {
       !formData.nombreOrganizador
     ) {
       alert("Por favor completa los campos requeridos.");
+      return;
+    }
+    if (!aceptaTerminos) {
+      alert("Por favor confirma que has leído y aceptas los Términos y Condiciones y el Aviso de Privacidad.");
       return;
     }
 
@@ -847,10 +852,42 @@ export default function PublishBazarForm() {
                 <p className="text-xs text-gray-400 font-medium">Esta imagen aparecerá en tu página del directorio</p>
               </div>
 
+              {/* CHECKBOX TÉRMINOS Y PRIVACIDAD */}
+              <div className="flex items-start gap-3 p-4 bg-[#FFFAF5] rounded-2xl border border-orange-100/80">
+                <input
+                  type="checkbox"
+                  id="aceptaTerminos"
+                  checked={aceptaTerminos}
+                  onChange={(e) => setAceptaTerminos(e.target.checked)}
+                  required
+                  className="mt-1 w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary cursor-pointer accent-[#0F6E56]"
+                />
+                <label htmlFor="aceptaTerminos" className="text-xs sm:text-sm text-gray-700 leading-snug cursor-pointer font-medium">
+                  He leído y acepto los{" "}
+                  <Link
+                    href="/terminos-y-condiciones"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary font-bold underline hover:text-[#156a46]"
+                  >
+                    Términos y Condiciones
+                  </Link>{" "}
+                  y el{" "}
+                  <Link
+                    href="/aviso-de-privacidad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary font-bold underline hover:text-[#156a46]"
+                  >
+                    Aviso de Privacidad
+                  </Link>
+                </label>
+              </div>
+
               <button
                 type="submit"
-                disabled={loading}
-                className={`w-full bg-primary text-white py-5 rounded-2xl font-extrabold text-xl transition shadow-xl shadow-primary/20 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110'}`}
+                disabled={loading || !aceptaTerminos}
+                className={`w-full bg-primary text-white py-5 rounded-2xl font-extrabold text-xl transition shadow-xl shadow-primary/20 ${loading || !aceptaTerminos ? 'opacity-50 cursor-not-allowed' : 'hover:brightness-110 cursor-pointer'}`}
               >
                 {loading ? "Enviando..." : "Enviar solicitud"}
               </button>

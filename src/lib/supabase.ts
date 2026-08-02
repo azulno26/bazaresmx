@@ -215,7 +215,7 @@ export async function getExpositores() {
         const slugPriority: Record<string, number> = {
           'cutie-toys-cdmx': 1,
           'rocio-olguin-arte-y-diseno-oaxaca-oaxaca-de-juarez': 2,
-          'destrezamentes-cdmx-coyoacan-gustavo-a-madero-iztacalco': 3,
+          'destrezamentes-cdmx': 3,
         };
         const pSlugA = slugPriority[a.slug] || 99;
         const pSlugB = slugPriority[b.slug] || 99;

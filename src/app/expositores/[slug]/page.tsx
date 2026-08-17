@@ -18,9 +18,8 @@ type Props = {
 
 export async function generateStaticParams() {
   const expositores = await getExpositores();
-  // Only pre-generate static profiles for Media and Top plans
+  // Pre-generate static profiles for all active plans
   return expositores
-    .filter((e) => e.planElegido === 'Media' || e.planElegido === 'Top')
     .map((e) => ({
       slug: e.slug,
     }));
@@ -30,7 +29,7 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const exp = await getExpositorBySlug(slug);
   
-  if (!exp || exp.planElegido === 'Básico') {
+  if (!exp) {
     return {
       title: "Expositor no encontrado | BazaresMX",
     };
@@ -52,7 +51,7 @@ export default async function Page({ params }: Props) {
   const { slug } = await params;
   const exp = await getExpositorBySlug(slug);
 
-  if (!exp || exp.planElegido === 'Básico') {
+  if (!exp) {
     notFound();
   }
 

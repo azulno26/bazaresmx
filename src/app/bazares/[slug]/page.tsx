@@ -397,27 +397,33 @@ export default async function Page({ params }: Props) {
 
             <div className="space-y-4">
               {bazar.whatsapp && bazar.whatsapp !== "" && (
-                <a
+                <TrackedLink
+                  eventName="click_whatsapp_bazar"
+                  params={{ bazar: bazar.nombre, plan: bazar.plan }}
                   href={`https://wa.me/${bazar.whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 w-full bg-[#25D366] text-white py-4 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-lg"
                 >
                   <span>Contactar por WhatsApp</span>
-                </a>
+                </TrackedLink>
               )}
               {bazar.instagram && bazar.instagram !== "" && (
-                <a
+                <TrackedLink
+                  eventName="click_instagram_bazar"
+                  params={{ bazar: bazar.nombre }}
                   href={bazar.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 w-full bg-accent text-white py-4 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-lg"
                 >
                   <span>Ver en Instagram</span>
-                </a>
+                </TrackedLink>
               )}
               {bazar.facebook && bazar.facebook !== "" && (
-                <a
+                <TrackedLink
+                  eventName="click_facebook_bazar"
+                  params={{ bazar: bazar.nombre }}
                   href={bazar.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -427,7 +433,7 @@ export default async function Page({ params }: Props) {
                     <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
                   </svg>
                   <span>Facebook</span>
-                </a>
+                </TrackedLink>
               )}
               {bazar.tiktok && bazar.tiktok !== "" && (
                 <a

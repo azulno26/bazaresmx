@@ -16,6 +16,7 @@ interface Expositor {
   vencimiento: string | null;
   ultimo_contacto: string | null;
   notas_admin: string | null;
+  prioridad?: number;
 }
 
 interface AdminClientPageProps {
@@ -108,7 +109,7 @@ Comprobante a: contacto@bazaresmx.com.mx`;
   };
 
   // Perform API call
-  const handleAction = async (id: string, action: 'activar' | 'inactivar' | 'contactado') => {
+  const handleAction = async (id: string, action: 'activar' | 'inactivar' | 'contactado' | 'prioridad', prioridadValue?: number) => {
     if (action === 'inactivar') {
       const confirmed = window.confirm('¿Inactivar este expositor? Desaparecerá del sitio al instante.');
       if (!confirmed) return;
@@ -122,7 +123,7 @@ Comprobante a: contacto@bazaresmx.com.mx`;
           'Content-Type': 'application/json',
           'x-admin-token': adminSecret,
         },
-        body: JSON.stringify({ id, action }),
+        body: JSON.stringify({ id, action, prioridad: prioridadValue }),
       });
 
       if (!response.ok) {
@@ -161,6 +162,7 @@ Comprobante a: contacto@bazaresmx.com.mx`;
             <tr>
               <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Negocio</th>
               <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Plan</th>
+              <th scope="col" className="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Prio</th>
               <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Vencimiento</th>
               <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Último Contacto</th>
               <th scope="col" className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Estatus</th>
@@ -182,6 +184,19 @@ Comprobante a: contacto@bazaresmx.com.mx`;
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-medium capitalize">
                     {getPlanDisplayName(e.plan)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 text-center">
+                    <input 
+                      type="number" 
+                      defaultValue={e.prioridad || 0}
+                      onBlur={(ev) => {
+                        const newPrio = parseInt(ev.target.value, 10);
+                        if (!isNaN(newPrio) && newPrio !== (e.prioridad || 0)) {
+                          handleAction(e.id, 'prioridad', newPrio);
+                        }
+                      }}
+                      className="w-16 px-2 py-1 border border-slate-200 rounded text-center focus:ring-1 focus:ring-[#1A7A52] focus:border-[#1A7A52]"
+                    />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold ${

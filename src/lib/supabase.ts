@@ -205,23 +205,19 @@ export async function getExpositores() {
         badgeVerificado: !!e.badge_verificado,
         fotoPerfil: e.foto_perfil || '',
         fotosProductos: (e.galeria_urls || []) as string[],
+        prioridad: e.prioridad || 0,
         vencimiento: e.vencimiento ? new Date(e.vencimiento) : null,
         productos: [] as Producto[],
         vendimiaActiva: false,
         visitas: 0,
       }))
       .sort((a: any, b: any) => {
-        // Explicit slug priority (Cutie Toys #1, Rocio Olguín #2, Destrezamentes #3)
-        const slugPriority: Record<string, number> = {
-          'cutie-toys-cdmx': 1,
-          'rocio-olguin-arte-y-diseno-oaxaca-oaxaca-de-juarez': 2,
-          'destrezamentes-cdmx': 3,
-        };
-        const pSlugA = slugPriority[a.slug] || 99;
-        const pSlugB = slugPriority[b.slug] || 99;
-        if (pSlugA !== pSlugB) return pSlugA - pSlugB;
+        // Orden por prioridad DESC
+        const prioA = a.prioridad || 0;
+        const prioB = b.prioridad || 0;
+        if (prioA !== prioB) return prioB - prioA;
 
-        // Orden: top > media > básico/basico
+        // Orden por plan: top > media > básico
         const orden: Record<string, number> = { top: 1, media: 2, básico: 3, basico: 3 };
         const planA = (a.planElegido || 'básico').toLowerCase();
         const planB = (b.planElegido || 'básico').toLowerCase();

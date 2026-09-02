@@ -201,9 +201,20 @@ export default async function Page({ params }: Props) {
         {exp.fotosProductos.length > 0 && (
           <section className="mb-16">
             <h2 className="text-3xl font-syne font-extrabold text-gray-900 mb-6 tracking-tight">Galería de fotos</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className={
+              exp.fotosProductos.length > 1 
+                ? "flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory" 
+                : "grid grid-cols-2 md:grid-cols-4 gap-4"
+            }>
               {exp.fotosProductos.map((foto, idx) => (
-                <div key={idx} className="aspect-square relative rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-md group">
+                <div 
+                  key={idx} 
+                  className={`relative rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-md group ${
+                    exp.fotosProductos.length > 1 
+                      ? "flex-none w-64 h-64 sm:w-72 sm:h-72 snap-center" 
+                      : "aspect-square"
+                  }`}
+                >
                   <Image
                     src={cloudinaryUrl(foto, { width: 600 })}
                     alt={`${exp.nombreNegocio} - Galería ${idx + 1}`}

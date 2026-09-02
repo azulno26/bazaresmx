@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id, action } = await req.json();
+    const { id, action, prioridad } = await req.json();
 
     if (!id || !action) {
       return NextResponse.json({ ok: false, error: 'Missing parameters' }, { status: 400 });
@@ -37,6 +37,8 @@ export async function POST(req: NextRequest) {
       updatePayload = { status: 'inactivo' };
     } else if (action === 'contactado') {
       updatePayload = { ultimo_contacto: new Date().toISOString().split('T')[0] };
+    } else if (action === 'prioridad') {
+      updatePayload = { prioridad: typeof prioridad === 'number' ? prioridad : 0 };
     } else {
       return NextResponse.json({ ok: false, error: 'Invalid action' }, { status: 400 });
     }

@@ -39,16 +39,26 @@ export default async function VencimientosAdminPage() {
 
   const { data: expositores, error } = await supabase
     .from('expositores')
-    .select('id, nombre_completo, nombre_negocio, slug, whatsapp, email, plan, status, vencimiento, ultimo_contacto, notas_admin')
+    .select('id, nombre_completo, nombre_negocio, slug, whatsapp, email, plan, status, vencimiento, ultimo_contacto, notas_admin, prioridad')
     .order('vencimiento', { ascending: true, nullsFirst: false });
 
   if (error) {
     return (
       <div className="p-8 text-red-600 bg-red-50 rounded-xl border border-red-200">
-        <h2 className="font-bold text-lg">Error al conectar con Supabase</h2>
+        <h2 className="font-bold text-lg">Error al conectar con Supabase (Expositores)</h2>
         <p className="text-sm mt-1">{error.message}</p>
       </div>
     );
+  }
+
+  const { data: logs, error: logsError } = await supabase
+    .from('logs_sistema')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (logsError) {
+    console.error("Error fetching logs:", logsError);
   }
 
   const clabe = process.env.CLABE || '';
@@ -57,6 +67,7 @@ export default async function VencimientosAdminPage() {
   return (
     <AdminClientPage 
       expositores={expositores || []} 
+      logs={logs || []}
       adminSecret={adminSecret || ''} 
       clabe={clabe}
       titular={titular}

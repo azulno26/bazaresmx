@@ -7,6 +7,14 @@
     {
       "path": "/api/check-vencimientos",
       "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/cron-avisos",
+      "schedule": "0 14 * * *"
+    },
+    {
+      "path": "/api/cron-sync-sheets",
+      "schedule": "0 13 * * 0"
     }
   ]
 }

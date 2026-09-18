@@ -19,14 +19,26 @@ interface Expositor {
   prioridad?: number;
 }
 
+interface LogRecord {
+  id: string;
+  tipo: string;
+  entidad_tipo: string | null;
+  entidad_nombre: string | null;
+  accion: string;
+  resultado: string;
+  detalle: string | null;
+  created_at: string;
+}
+
 interface AdminClientPageProps {
   expositores: Expositor[];
+  logs?: LogRecord[];
   adminSecret: string;
   clabe: string;
   titular: string;
 }
 
-export default function AdminClientPage({ expositores, adminSecret, clabe, titular }: AdminClientPageProps) {
+export default function AdminClientPage({ expositores, logs = [], adminSecret, clabe, titular }: AdminClientPageProps) {
   const router = useRouter();
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
@@ -334,6 +346,71 @@ Comprobante a: contacto@bazaresmx.com.mx`;
             <h2 className="text-xl font-bold text-slate-800">❌ INACTIVOS ({inactivos.length})</h2>
           </div>
           {renderTable(inactivos, 'inactivos')}
+        </div>
+
+        {/* Section 5 — Logs del Sistema */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 bg-blue-500 rounded-full"></span>
+            <h2 className="text-xl font-bold text-slate-800">📋 LOGS DEL SISTEMA (Últimos 50)</h2>
+          </div>
+          
+          {logs.length === 0 ? (
+            <div className="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-100 shadow-sm">
+              No hay logs registrados.
+            </div>
+          ) : (
+            <div className="overflow-x-auto bg-white rounded-2xl border border-slate-100 shadow-sm max-h-96 overflow-y-auto">
+              <table className="min-w-full divide-y divide-slate-100">
+                <thead className="bg-slate-50 sticky top-0">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Fecha/Hora</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Proceso</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Entidad</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Acción</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Resultado</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 bg-white text-sm">
+                  {logs.map((log) => (
+                    <tr key={log.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-6 py-3 whitespace-nowrap text-slate-500">
+                        {new Date(log.created_at).toLocaleString('es-MX')}
+                      </td>
+                      <td className="px-6 py-3 whitespace-nowrap text-slate-700 font-medium capitalize">
+                        {log.tipo.replace('-', ' ')}
+                      </td>
+                      <td className="px-6 py-3 whitespace-nowrap text-slate-600">
+                        {log.entidad_nombre ? (
+                          <span className="font-bold">{log.entidad_nombre}</span>
+                        ) : '-'}
+                        {log.entidad_tipo && <span className="text-xs text-slate-400 block">{log.entidad_tipo}</span>}
+                      </td>
+                      <td className="px-6 py-3 whitespace-nowrap text-slate-600">
+                        {log.accion}
+                      </td>
+                      <td className="px-6 py-3">
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
+                            log.resultado === 'exito' 
+                              ? 'bg-emerald-100 text-[#1A7A52]' 
+                              : 'bg-rose-100 text-rose-600'
+                          }`}>
+                            {log.resultado === 'exito' ? '✅ Éxito' : '🔴 Error'}
+                          </span>
+                        </div>
+                        {log.detalle && (
+                          <p className="text-xs text-slate-500 mt-1 max-w-xs truncate" title={log.detalle}>
+                            {log.detalle}
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
       </div>

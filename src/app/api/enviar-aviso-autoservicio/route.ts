@@ -4,6 +4,7 @@ import { sendEmail } from '@/src/lib/email';
 import { emailTemplate } from '@/src/lib/email-template';
 import { sendTelegramMessage } from '@/src/lib/telegram';
 import { logEvento } from '@/src/lib/logger';
+import { generateToken } from '@/src/lib/security';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,15 +47,23 @@ export async function GET(req: NextRequest) {
 
     let emailsSent = 0;
     let emailsErrors = 0;
-    const noEmailList: string[] = [];
+    const noEmailList: { nombre: string; link: string }[] = [];
+    const exp = Date.now() + 15 * 24 * 60 * 60 * 1000;
 
     for (const bazar of bazares) {
       if (!bazar.email) {
-        noEmailList.push(bazar.nombre);
+        const token = generateToken(bazar.id, 'bazar', exp);
+        noEmailList.push({
+          nombre: bazar.nombre,
+          link: `https://www.bazaresmx.com.mx/actualizar/${token}`
+        });
         continue;
       }
 
       try {
+        const token = generateToken(bazar.id, 'bazar', exp);
+        const updateLink = `https://www.bazaresmx.com.mx/actualizar/${token}`;
+        
         const bodyHtml = `
           <p>Te escribimos desde BazaresMX con una buena noticia 🎉</p>
           <p>A partir de la próxima semana vas a poder actualizar la información de tu bazar directamente desde un enlace que te enviaremos por correo, sin necesidad de escribirnos por WhatsApp.</p>
@@ -120,8 +129,10 @@ export async function GET(req: NextRequest) {
     telegramMsg += `🔴 Errores: ${emailsErrors}\n\n`;
 
     if (noEmailList.length > 0) {
-      telegramMsg += `<b>⚠️ Bazares sin correo (contactar por WhatsApp):</b>\n`;
-      noEmailList.forEach(n => telegramMsg += `- ${n}\n`);
+      telegramMsg += `<b>⚠️ Bazares sin correo (contactar por WhatsApp):</b>\n\n`;
+      noEmailList.forEach(n => {
+        telegramMsg += `<b>${n.nombre}</b>\n${n.link}\n\n`;
+      });
     } else {
       telegramMsg += `Todos los bazares activos tienen correo registrado.`;
     }
@@ -132,7 +143,7 @@ export async function GET(req: NextRequest) {
       ok: true, 
       emailsSent, 
       emailsErrors, 
-      noEmailList 
+      noEmailList: noEmailList.map(n => n.nombre)
     });
 
   } catch (err: any) {

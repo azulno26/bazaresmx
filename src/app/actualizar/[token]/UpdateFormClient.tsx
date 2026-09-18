@@ -10,12 +10,34 @@ interface UpdateFormClientProps {
 
 export default function UpdateFormClient({ token, tipo, initialData }: UpdateFormClientProps) {
   const [formData, setFormData] = useState(initialData);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.imagen_url || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+      if (!validTypes.includes(file.type)) {
+        setError('El formato de la imagen debe ser JPG, PNG o WEBP.');
+        e.target.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setError('El tamaño de la imagen no puede exceder los 5MB.');
+        e.target.value = '';
+        return;
+      }
+      setError(null);
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,10 +73,38 @@ export default function UpdateFormClient({ token, tipo, initialData }: UpdateFor
     }
 
     try {
+      let finalData = { ...formData };
+      
+      if (tipo === 'bazar' && imageFile) {
+        const cloudName = "duonm6wku";
+        const preset = "bmx_social";
+        const uploadData = new FormData();
+        uploadData.append("file", imageFile);
+        uploadData.append("upload_preset", preset);
+        uploadData.append("folder", "bazaresmx/bazares");
+
+        try {
+          const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+            method: "POST",
+            body: uploadData,
+          });
+
+          if (uploadRes.ok) {
+            const resData = await uploadRes.json();
+            finalData.imagen_url = resData.secure_url;
+          } else {
+            // No bloqueamos el form, pero mostramos error y seguimos
+            console.error("Fallo al subir a Cloudinary:", await uploadRes.text());
+          }
+        } catch (err) {
+          console.error("Exception uploading image:", err);
+        }
+      }
+
       const res = await fetch('/api/actualizar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, data: formData }),
+        body: JSON.stringify({ token, data: finalData }),
       });
 
       const json = await res.json();
@@ -95,6 +145,22 @@ export default function UpdateFormClient({ token, tipo, initialData }: UpdateFor
       <form onSubmit={handleSubmit} className="space-y-6">
         {tipo === 'bazar' && (
           <>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Imagen Principal del Bazar</label>
+              {imagePreview && (
+                <div className="mb-3">
+                  <img src={imagePreview} alt="Preview" className="h-40 w-auto rounded-lg object-cover border border-gray-200" />
+                </div>
+              )}
+              <input 
+                type="file" 
+                accept="image/jpeg, image/png, image/webp" 
+                onChange={handleImageChange} 
+                className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#1A7A52]/10 file:text-[#1A7A52] hover:file:bg-[#1A7A52]/20"
+              />
+              <p className="text-xs text-gray-500 mt-1">Máximo 5MB (JPG, PNG, WEBP). Si no subes nada, se conservará la imagen actual.</p>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>

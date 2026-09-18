@@ -72,6 +72,10 @@ export async function POST(req: NextRequest) {
         facebook: data.facebook
       };
       
+      if (data.imagen_url) {
+        updatePayload.imagen_url = data.imagen_url;
+      }
+      
       // if future date, active status
       if (data.fecha) {
         const eventDate = new Date(data.fecha + 'T00:00:00');

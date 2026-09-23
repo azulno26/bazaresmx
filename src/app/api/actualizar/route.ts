@@ -70,7 +70,8 @@ export async function POST(req: NextRequest) {
         descripcion: data.descripcion,
         whatsapp: data.whatsapp,
         instagram: data.instagram,
-        facebook: data.facebook
+        facebook: data.facebook,
+        recordatorios_enviados: 0
       };
       
       if (data.imagen_url) {
@@ -94,7 +95,8 @@ export async function POST(req: NextRequest) {
         whatsapp: data.whatsapp,
         instagram: data.instagram,
         facebook: data.facebook,
-        tiktok: data.tiktok
+        tiktok: data.tiktok,
+        recordatorios_enviados: 0
       };
     }
 

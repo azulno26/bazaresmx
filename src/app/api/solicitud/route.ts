@@ -91,6 +91,7 @@ export async function POST(req: NextRequest) {
       '',                                           // Col Z: Tags
       'artesanal',                                  // Col AA: Tipo
       '',                                           // Col AB: Sedes
+      data.email || '',                             // Col AC: Email
     ];
 
     let sheetsWritten = false;
@@ -140,6 +141,7 @@ export async function POST(req: NextRequest) {
             fecha_fin: data.fechaFin || null,
             organizador: data.organizador || '',
             whatsapp: data.whatsapp || '',
+            email: data.email || '',
             instagram: data.instagram || '',
             facebook: data.facebook || '',
             tiktok: data.plataformaOtraRed === 'TikTok' ? data.otraRedSocial : '',
@@ -181,6 +183,7 @@ export async function POST(req: NextRequest) {
             <tr><td style="color: #666; font-weight: bold;">Slug:</td><td><a href="https://www.bazaresmx.com.mx/bazares/${slug}" target="_blank" style="color: #1A7A52; font-weight: bold;">${slug}</a></td></tr>
             <tr><td style="color: #666; font-weight: bold;">Nombre del Bazar:</td><td style="color: #111; font-weight: bold;">${data.nombre}</td></tr>
             <tr><td style="color: #666; font-weight: bold;">Organizador:</td><td>${data.organizador || 'No especificado'}</td></tr>
+            <tr><td style="color: #666; font-weight: bold;">Correo:</td><td>${data.email || 'No especificado'}</td></tr>
             <tr><td style="color: #666; font-weight: bold;">Plan Solicitado:</td><td><strong style="color: #1A7A52;">${data.planElegido || 'Básico'}</strong></td></tr>
             <tr><td style="color: #666; font-weight: bold;">Estado / Ciudad:</td><td>${data.estado}</td></tr>
             <tr><td style="color: #666; font-weight: bold;">Colonia:</td><td>${data.colonia}</td></tr>
@@ -219,6 +222,29 @@ export async function POST(req: NextRequest) {
       attachments,
       html: adminEmailHtml
     });
+
+    if (data.email) {
+      const welcomeEmailHtml = emailTemplate({
+        title: `¡Bienvenido a BazaresMX, ${data.organizador || 'Organizador'}!`,
+        greeting: `Tu bazar ha sido recibido con éxito 🎉`,
+        bodyHtml: `
+          <p style="margin-top: 0; color: #444; font-size: 16px; line-height: 1.6;">Hola <strong>${data.organizador || 'Organizador'}</strong>,</p>
+          <p style="color: #444; font-size: 16px; line-height: 1.6;">Hemos recibido correctamente el registro de tu bazar <strong>${data.nombre}</strong>.</p>
+          <p style="color: #444; font-size: 16px; line-height: 1.6;">Queremos avisarte que una vez que pase la fecha de tu evento, <strong>te enviaremos un correo a esta misma dirección</strong> con un enlace único y seguro para que puedas actualizar la fecha de tu próxima edición de manera rápida y sin intermediarios.</p>
+          <p style="color: #444; font-size: 16px; line-height: 1.6;">Por favor, revisa ocasionalmente tu carpeta de spam o correo no deseado para asegurarte de que recibas nuestras notificaciones.</p>
+          <p style="color: #444; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">¡Mucho éxito en tu evento!</p>
+        `,
+        ctaText: 'Ir a BazaresMX',
+        ctaUrl: 'https://www.bazaresmx.com.mx'
+      });
+
+      await resend.emails.send({
+        from: 'contacto@bazaresmx.com.mx',
+        to: data.email,
+        subject: `¡Bienvenido a BazaresMX! Tu registro ha sido recibido`,
+        html: welcomeEmailHtml
+      });
+    }
 
     return NextResponse.json({ ok: true, sheetsWritten, supabaseWritten, supabaseError, id: insertedBazarId });
   } catch (error) {

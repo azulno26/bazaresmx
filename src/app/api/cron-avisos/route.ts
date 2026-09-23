@@ -114,11 +114,11 @@ export async function GET(req: NextRequest) {
         try {
           const exp = Date.now() + 15 * 24 * 60 * 60 * 1000;
           const token = generateToken(bazar.id, 'bazar', exp, supabaseServiceKey || 'default-secret');
-          const link = \`https://www.bazaresmx.com.mx/actualizar/\${token}\`;
+          const link = `https://www.bazaresmx.com.mx/actualizar/${token}`;
 
           const html = emailTemplate({
             title: subject,
-            greeting: \`Hola, equipo de \${bazar.nombre}\`,
+            greeting: `Hola, equipo de ${bazar.nombre}`,
             bodyHtml: body,
             ctaText: ctaText,
             ctaUrl: link
@@ -130,14 +130,14 @@ export async function GET(req: NextRequest) {
           const updatePayload: any = { ultimo_aviso_enviado: today, recordatorios_enviados: newRecs };
           if (deactivate) {
             updatePayload.status = 'inactivo';
-            await sendTelegramMessage(\`⏸️ <b>\${bazar.nombre}</b> se ocultó por falta de actualización.\`);
+            await sendTelegramMessage(`⏸️ <b>${bazar.nombre}</b> se ocultó por falta de actualización.`);
           }
 
           await supabase.from('bazares').update(updatePayload).eq('id', bazar.id);
-          summaryList?.push(\`[Bazar] \${bazar.nombre}\`);
-          await logEvento({ tipo: 'cron-avisos', entidadTipo: 'bazar', entidadId: bazar.id, entidadNombre: bazar.nombre, accion: deactivate ? 'auto_desactivado' : 'email_enviado', resultado: 'exito', detalle: \`Recordatorio \${newRecs}\` });
+          summaryList?.push(`[Bazar] ${bazar.nombre}`);
+          await logEvento({ tipo: 'cron-avisos', entidadTipo: 'bazar', entidadId: bazar.id, entidadNombre: bazar.nombre, accion: deactivate ? 'auto_desactivado' : 'email_enviado', resultado: 'exito', detalle: `Recordatorio ${newRecs}` });
         } catch (err: any) {
-          summary.errors.push(\`[Bazar] \${bazar.nombre}: \${err.message}\`);
+          summary.errors.push(`[Bazar] ${bazar.nombre}: ${err.message}`);
           await logEvento({ tipo: 'cron-avisos', entidadTipo: 'bazar', entidadId: bazar.id, entidadNombre: bazar.nombre, accion: 'email_enviado', resultado: 'error', detalle: err.message });
         }
       }
@@ -196,22 +196,22 @@ export async function GET(req: NextRequest) {
         try {
           const expTime = Date.now() + 15 * 24 * 60 * 60 * 1000;
           const token = generateToken(exp.id, 'expositor', expTime, supabaseServiceKey || 'default-secret');
-          const link = \`https://www.bazaresmx.com.mx/actualizar/\${token}\`;
+          const link = `https://www.bazaresmx.com.mx/actualizar/${token}`;
 
-          const paymentInfo = \`
+          const paymentInfo = `
             <div class="info-box" style="margin-top: 20px;">
               <p><b>Datos de pago:</b></p>
               <p>🏦 Banco: Scotiabank<br/>
-              💳 CLABE: \${process.env.CLABE || '032180000118359719'}<br/>
-              👤 Titular: \${process.env.TITULAR || 'Diego Castellanos'}<br/>
-              📝 Concepto: \${exp.nombre_negocio} \${exp.plan}</p>
+              💳 CLABE: ${process.env.CLABE || '032180000118359719'}<br/>
+              👤 Titular: ${process.env.TITULAR || 'Diego Castellanos'}<br/>
+              📝 Concepto: ${exp.nombre_negocio} ${exp.plan}</p>
               <p>📧 Envía tu comprobante a: <a href="mailto:contacto@bazaresmx.com.mx">contacto@bazaresmx.com.mx</a></p>
             </div>
-          \`;
+          `;
 
           const html = emailTemplate({
             title: subject,
-            greeting: \`Hola, equipo de \${exp.nombre_negocio}\`,
+            greeting: `Hola, equipo de ${exp.nombre_negocio}`,
             bodyHtml: body + paymentInfo,
             ctaText: ctaText,
             ctaUrl: link
@@ -226,39 +226,39 @@ export async function GET(req: NextRequest) {
           }
           if (deactivate) {
             updatePayload.status = 'inactivo';
-            await sendTelegramMessage(\`⏸️ <b>\${exp.nombre_negocio}</b> se ocultó por falta de renovación (20 días).\`);
+            await sendTelegramMessage(`⏸️ <b>${exp.nombre_negocio}</b> se ocultó por falta de renovación (20 días).`);
           }
 
           await supabase.from('expositores').update(updatePayload).eq('id', exp.id);
           
           if (!isPreReminder && summaryList) {
-            summaryList.push(\`[Expositor] \${exp.nombre_negocio}\`);
+            summaryList.push(`[Expositor] ${exp.nombre_negocio}`);
           }
           
-          await logEvento({ tipo: 'cron-avisos', entidadTipo: 'expositor', entidadId: exp.id, entidadNombre: exp.nombre_negocio, accion: deactivate ? 'auto_desactivado' : 'email_enviado', resultado: 'exito', detalle: \`Recordatorio \${isPreReminder ? '-7' : newRecs}\` });
+          await logEvento({ tipo: 'cron-avisos', entidadTipo: 'expositor', entidadId: exp.id, entidadNombre: exp.nombre_negocio, accion: deactivate ? 'auto_desactivado' : 'email_enviado', resultado: 'exito', detalle: `Recordatorio ${isPreReminder ? '-7' : newRecs}` });
         } catch (err: any) {
-          summary.errors.push(\`[Expositor] \${exp.nombre_negocio}: \${err.message}\`);
+          summary.errors.push(`[Expositor] ${exp.nombre_negocio}: ${err.message}`);
           await logEvento({ tipo: 'cron-avisos', entidadTipo: 'expositor', entidadId: exp.id, entidadNombre: exp.nombre_negocio, accion: 'email_enviado', resultado: 'error', detalle: err.message });
         }
       }
     }
 
     // --- Resumen consolidado a Telegram ---
-    let telegramMsg = \`<b>📊 CRON AVISOS — \${today}</b>\n\`;
-    telegramMsg += \`📧 Primeros avisos: \${summary.day1.length}\n\`;
-    if (summary.day1.length > 0) telegramMsg += \`   <pre>\${summary.day1.join('\\n   ')}</pre>\n\`;
+    let telegramMsg = `<b>📊 CRON AVISOS — ${today}</b>\n`;
+    telegramMsg += `📧 Primeros avisos: ${summary.day1.length}\n`;
+    if (summary.day1.length > 0) telegramMsg += `   <pre>${summary.day1.join('\n   ')}</pre>\n`;
     
-    telegramMsg += \`🔔 Recordatorios día 5: \${summary.day5.length}\n\`;
-    if (summary.day5.length > 0) telegramMsg += \`   <pre>\${summary.day5.join('\\n   ')}</pre>\n\`;
+    telegramMsg += `🔔 Recordatorios día 5: ${summary.day5.length}\n`;
+    if (summary.day5.length > 0) telegramMsg += `   <pre>${summary.day5.join('\n   ')}</pre>\n`;
     
-    telegramMsg += \`⚠️ Avisos día 12: \${summary.day12.length}\n\`;
-    if (summary.day12.length > 0) telegramMsg += \`   <pre>\${summary.day12.join('\\n   ')}</pre>\n\`;
+    telegramMsg += `⚠️ Avisos día 12: ${summary.day12.length}\n`;
+    if (summary.day12.length > 0) telegramMsg += `   <pre>${summary.day12.join('\n   ')}</pre>\n`;
     
-    telegramMsg += \`⏸️ Desactivados día 20: \${summary.day20.length}\n\`;
-    if (summary.day20.length > 0) telegramMsg += \`   <pre>\${summary.day20.join('\\n   ')}</pre>\n\`;
+    telegramMsg += `⏸️ Desactivados día 20: ${summary.day20.length}\n`;
+    if (summary.day20.length > 0) telegramMsg += `   <pre>${summary.day20.join('\n   ')}</pre>\n`;
     
-    telegramMsg += \`🔴 Errores: \${summary.errors.length}\n\`;
-    if (summary.errors.length > 0) telegramMsg += \`   <pre>\${summary.errors.join('\\n   ')}</pre>\n\`;
+    telegramMsg += `🔴 Errores: ${summary.errors.length}\n`;
+    if (summary.errors.length > 0) telegramMsg += `   <pre>${summary.errors.join('\n   ')}</pre>\n`;
 
     await sendTelegramMessage(telegramMsg);
 
@@ -266,7 +266,7 @@ export async function GET(req: NextRequest) {
 
   } catch (err: any) {
     console.error('Critical error in cron-avisos:', err);
-    await sendTelegramMessage(\`🚨 CRON AVISOS FALLÓ: \${err.message}\`);
+    await sendTelegramMessage(`🚨 CRON AVISOS FALLÓ: ${err.message}`);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

@@ -35,6 +35,7 @@ export default function PublishBazarForm() {
     horarioFin: "",
     descripcion: "",
     whatsapp: "",
+    email: "",
     facebook: "",
     instagram: "",
     otraRedSocial: "",
@@ -63,9 +64,15 @@ export default function PublishBazarForm() {
       !formData.nombreBazar ||
       !formData.colonia ||
       !formData.whatsapp ||
+      !formData.email ||
       !formData.nombreOrganizador
     ) {
       alert("Por favor completa los campos requeridos.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Por favor ingresa un correo electrónico válido.");
       return;
     }
     if (!aceptaTerminos) {
@@ -118,6 +125,7 @@ export default function PublishBazarForm() {
         horarioFin: formData.horarioFin,
         descripcion: formData.descripcion,
         whatsapp: formData.whatsapp,
+        email: formData.email,
         instagram: formData.instagram,
         facebook: formData.facebook,
         otroTipo: formData.plataformaOtraRed,
@@ -736,6 +744,19 @@ export default function PublishBazarForm() {
                       className="border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-primary outline-none transition"
                       placeholder="521..."
                     />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-gray-700">Correo electrónico *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="border-2 border-gray-100 rounded-xl px-4 py-3 focus:border-primary outline-none transition"
+                      placeholder="tucorreo@ejemplo.com"
+                    />
+                    <span className="text-xs text-gray-500">Aquí te enviaremos los enlaces para actualizar tu bazar cuando termine tu evento</span>
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold text-gray-700">Instagram (opcional)</label>

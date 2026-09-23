@@ -20,17 +20,17 @@ export function emailTemplate({
 }: EmailTemplateProps): string {
   const ctaButtonHtml = ctaText && ctaUrl
     ? `
-      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 28px 0 16px 0;">
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 28px 0 16px 0;">
         <tr>
           <td align="center">
             <!--[if mso]>
-            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${ctaUrl}" style="height:48px;v-text-anchor:middle;width:240px;" arcsize="18%" stroke="f" fillcolor="#E8621A">
+            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${ctaUrl}" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="18%" stroke="f" fillcolor="#E8621A">
               <w:anchorlock/>
               <center style="color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;">${ctaText}</center>
             </v:roundrect>
             <![endif]-->
             <!--[if !mso]><!-- -->
-            <a href="${ctaUrl}" target="_blank" style="background-color: #E8621A; color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 12px rgba(232, 98, 26, 0.25); text-align: center;">
+            <a href="${ctaUrl}" target="_blank" style="background-color: #E8621A; color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; text-decoration: none; padding: 14px 24px; border-radius: 10px; display: inline-block; max-width: 280px; width: 100%; box-sizing: border-box; box-shadow: 0 4px 12px rgba(232, 98, 26, 0.25); text-align: center;">
               ${ctaText}
             </a>
             <!--<![endif]-->
@@ -68,6 +68,8 @@ export function emailTemplate({
       text-decoration: none;
       -ms-interpolation-mode: bicubic;
       max-width: 100%;
+      height: auto;
+      display: block;
     }
     table {
       border-collapse: collapse;
@@ -81,6 +83,10 @@ export function emailTemplate({
       color: #1A7A52;
       text-decoration: underline;
     }
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+      padding: 0;
+    }
     .info-box {
       background-color: #F5F7F5;
       border: 1px solid #E2E8E2;
@@ -88,23 +94,26 @@ export function emailTemplate({
       padding: 16px 20px;
       margin: 20px 0;
     }
-    @media only screen and (max-width: 620px) {
+    @media only screen and (max-width: 600px) {
       .container-table {
         width: 100% !important;
         border-radius: 0 !important;
       }
       .content-padding {
-        padding: 24px 20px !important;
+        padding: 16px !important;
       }
       .header-padding {
-        padding: 28px 20px !important;
+        padding: 16px !important;
       }
       .footer-padding {
-        padding: 28px 20px !important;
+        padding: 16px !important;
       }
       .headline-text {
-        font-size: 22px !important;
-        line-height: 28px !important;
+        font-size: 20px !important;
+        line-height: 1.5 !important;
+      }
+      .body-text {
+        font-size: 16px !important;
       }
     }
   </style>
@@ -115,20 +124,20 @@ export function emailTemplate({
     ${title} · BazaresMX
   </div>
 
-  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F4F6F4; table-layout: fixed;">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F4F6F4; table-layout: fixed;">
     <tr>
       <td align="center" style="padding: 24px 12px 40px 12px;">
         <!-- MAIN CONTAINER (600px MAX) -->
-        <table border="0" cellpadding="0" cellspacing="0" width="600" class="container-table" style="max-width: 600px; width: 100%; background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid #E5EAE5;">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" class="container-table" style="max-width: 600px; width: 100%; margin: 0 auto; background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid #E5EAE5;">
           
           <!-- HEADER -->
           <tr>
-            <td align="center" class="header-padding" style="background-color: #1A7A52; padding: 32px 30px; text-align: center;">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <td align="center" class="header-padding" style="background-color: #1A7A52; padding: 24px; text-align: center;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center">
                     <a href="https://www.bazaresmx.com.mx" target="_blank" style="text-decoration: none;">
-                      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px;">
+                      <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 24px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px;">
                         Bazares<span style="color: #99E2C2;">MX</span>
                       </span>
                     </a>
@@ -147,16 +156,16 @@ export function emailTemplate({
 
           <!-- BODY CONTENT -->
           <tr>
-            <td class="content-padding" style="padding: 36px 36px 28px 36px; background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; color: #2C2C2A;">
+            <td class="content-padding" style="padding: 24px; background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.5; color: #2C2C2A;">
               
               <!-- GREETING / TITLE -->
               ${greeting ? `
-              <h1 class="headline-text" style="margin: 0 0 20px 0; font-size: 24px; line-height: 30px; font-weight: 800; color: #1A7A52;">
+              <h1 class="headline-text" style="margin: 0 0 20px 0; font-size: 24px; line-height: 1.5; font-weight: 800; color: #1A7A52;">
                 ${greeting}
               </h1>` : ''}
 
               <!-- MAIN BODY HTML -->
-              <div style="font-size: 15px; line-height: 1.6; color: #2C2C2A;">
+              <div class="body-text" style="font-size: 16px; line-height: 1.5; color: #2C2C2A;">
                 ${bodyHtml}
               </div>
 
@@ -168,18 +177,18 @@ export function emailTemplate({
 
           <!-- FOOTER -->
           <tr>
-            <td class="footer-padding" style="background-color: #124B35; padding: 32px 30px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #FFFFFF;">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <td class="footer-padding" style="background-color: #124B35; padding: 24px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #FFFFFF;">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 
                 <!-- BRAND & WEBSITE -->
                 <tr>
-                  <td align="center" style="font-size: 15px; font-weight: 700; color: #FFFFFF; padding-bottom: 8px;">
+                  <td align="center" style="font-size: 14px; font-weight: 700; color: #FFFFFF; padding-bottom: 8px; line-height: 1.5;">
                     BazaresMX — <a href="https://www.bazaresmx.com.mx" target="_blank" style="color: #99E2C2; text-decoration: none; font-weight: bold;">bazaresmx.com.mx</a>
                   </td>
                 </tr>
 
                 <tr>
-                  <td align="center" style="font-size: 12px; color: #B3D8C8; padding-bottom: 16px;">
+                  <td align="center" style="font-size: 13px; color: #B3D8C8; padding-bottom: 16px; line-height: 1.5;">
                     El directorio digital de bazares y marcas locales en México
                   </td>
                 </tr>
@@ -187,7 +196,7 @@ export function emailTemplate({
                 <!-- SOCIAL LINKS -->
                 <tr>
                   <td align="center" style="padding-bottom: 16px;">
-                    <table border="0" cellpadding="0" cellspacing="0">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                       <tr>
                         <td style="padding: 0 10px;">
                           <a href="https://www.instagram.com/bazaresmx.com.mx/" target="_blank" style="color: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; background-color: rgba(255,255,255,0.12); padding: 6px 14px; border-radius: 20px; display: inline-block;">
@@ -206,7 +215,7 @@ export function emailTemplate({
 
                 <!-- LEGAL LINKS -->
                 <tr>
-                  <td align="center" style="border-top: 1px solid rgba(255, 255, 255, 0.12); padding-top: 16px; font-size: 12px; color: #A0C8B6;">
+                  <td align="center" style="border-top: 1px solid rgba(255, 255, 255, 0.12); padding-top: 16px; font-size: 13px; color: #A0C8B6; line-height: 1.5;">
                     <a href="https://www.bazaresmx.com.mx/terminos-y-condiciones" target="_blank" style="color: #D8F3E5; text-decoration: underline;">Términos y Condiciones</a>
                     &nbsp;·&nbsp;
                     <a href="https://www.bazaresmx.com.mx/aviso-de-privacidad" target="_blank" style="color: #D8F3E5; text-decoration: underline;">Aviso de Privacidad</a>
@@ -215,7 +224,7 @@ export function emailTemplate({
 
                 <!-- COPYRIGHT -->
                 <tr>
-                  <td align="center" style="padding-top: 12px; font-size: 11px; color: #7CAE99;">
+                  <td align="center" style="padding-top: 12px; font-size: 13px; color: #7CAE99; line-height: 1.5;">
                     © 2026 BazaresMX. Todos los derechos reservados.
                   </td>
                 </tr>
@@ -238,9 +247,9 @@ export function emailTemplate({
  */
 export function emailInfoBox(contentHtml: string, borderColor = '#E2E8E2', bgColor = '#F5F7F5'): string {
   return `
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px; margin: 18px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px; margin: 18px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
       <tr>
-        <td style="padding: 18px 20px; font-size: 14px; line-height: 1.6; color: #2C2C2A;">
+        <td style="padding: 16px; font-size: 16px; line-height: 1.5; color: #2C2C2A;">
           ${contentHtml}
         </td>
       </tr>

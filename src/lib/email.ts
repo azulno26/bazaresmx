@@ -1,4 +1,4 @@
-export async function sendEmail({ to, subject, html }: { to: string; subject: string; html: string }) {
+export async function sendEmail({ to, bcc, subject, html }: { to: string; bcc?: string; subject: string; html: string }) {
   const resendApiKey = process.env.RESEND_API_KEY;
   if (!resendApiKey) {
     console.error("Missing RESEND_API_KEY");
@@ -6,18 +6,23 @@ export async function sendEmail({ to, subject, html }: { to: string; subject: st
   }
 
   try {
+    const payload: any = {
+      from: 'BazaresMX <contacto@bazaresmx.com.mx>',
+      to: [to],
+      subject: subject,
+      html: html
+    };
+    if (bcc) {
+      payload.bcc = [bcc];
+    }
+
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        from: 'BazaresMX <contacto@bazaresmx.com.mx>',
-        to: [to],
-        subject: subject,
-        html: html
-      })
+      body: JSON.stringify(payload)
     });
 
     if (!res.ok) {

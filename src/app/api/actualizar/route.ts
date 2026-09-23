@@ -132,32 +132,60 @@ export async function POST(req: NextRequest) {
     await sendTelegramMessage(`✅ El ${decoded.type} <b>${nombre}</b> actualizó sus datos mediante el portal de autoservicio.`);
 
     // 6. Email Confirmation
-    if (userEmail) {
-      let changesHtml = `<ul>`;
-      for (const [key, value] of Object.entries(updatePayload)) {
-        if (key !== 'status') {
-          changesHtml += `<li><b>${key}:</b> ${value || '(vacío)'}</li>`;
-        }
+    let changesHtml = `<ul style="list-style-type: none; padding: 0;">`;
+    for (const [key, newValue] of Object.entries(updatePayload)) {
+      if (key === 'status') continue;
+      
+      const oldVal = currentRecord[key] || '(vacío)';
+      const newVal = newValue || '(vacío)';
+      
+      // Solo mostrar los que cambiaron, o si quieres mostrar todos, quita el if
+      if (oldVal !== newVal) {
+        changesHtml += `<li style="margin-bottom: 8px;"><b>${key.toUpperCase()}:</b><br/> <span style="color: #666; text-decoration: line-through;">${oldVal}</span> &rarr; <span style="color: #1A7A52; font-weight: bold;">${newVal}</span></li>`;
+      } else {
+        changesHtml += `<li style="margin-bottom: 8px;"><b>${key.toUpperCase()}:</b> ${newVal}</li>`;
       }
-      changesHtml += `</ul>`;
+    }
+    changesHtml += `</ul>`;
 
-      const profileUrl = `https://www.bazaresmx.com.mx/${decoded.type === 'bazar' ? 'bazares' : 'expositores'}/${currentRecord.slug}`;
+    const profileUrl = `https://www.bazaresmx.com.mx/${decoded.type === 'bazar' ? 'bazares' : 'expositores'}/${currentRecord.slug}`;
+    const dateStr = new Date().toLocaleString('es-MX', { timeZone: 'America/Mexico_City' });
 
+    const bodyHtml = `
+      <p><b>Fecha de actualización:</b> ${dateStr}</p>
+      <p>Hemos guardado los siguientes datos en el perfil:</p>
+      <div class="info-box">${changesHtml}</div>
+      <p>Si no fuiste tú quien realizó estos cambios, escríbenos a <a href="mailto:contacto@bazaresmx.com.mx">contacto@bazaresmx.com.mx</a>.</p>
+    `;
+
+    if (userEmail) {
       const html = emailTemplate({
         title: `Actualizamos tu perfil en BazaresMX`,
         greeting: `Hola, equipo de ${nombre}:`,
-        bodyHtml: `
-          <p>Hemos guardado los siguientes cambios en tu perfil de manera exitosa:</p>
-          <div class="info-box">${changesHtml}</div>
-          <p>Si no fuiste tú quien realizó estos cambios, escríbenos a <a href="mailto:contacto@bazaresmx.com.mx">contacto@bazaresmx.com.mx</a>.</p>
-        `,
+        bodyHtml: bodyHtml,
         ctaText: 'Ver mi perfil',
         ctaUrl: profileUrl
       });
 
       await sendEmail({
         to: userEmail,
+        bcc: 'contacto@bazaresmx.com.mx',
         subject: `✅ Actualizamos tu ${decoded.type} en BazaresMX`,
+        html: html
+      });
+    } else {
+      // Si el usuario no tiene correo registrado, notificar directamente a Diego
+      const html = emailTemplate({
+        title: `Actualización de perfil (sin correo)`,
+        greeting: `Notificación del sistema:`,
+        bodyHtml: bodyHtml,
+        ctaText: 'Ver perfil público',
+        ctaUrl: profileUrl
+      });
+
+      await sendEmail({
+        to: 'contacto@bazaresmx.com.mx',
+        subject: `✅ ${nombre} actualizó sus datos (sin correo registrado)`,
         html: html
       });
     }

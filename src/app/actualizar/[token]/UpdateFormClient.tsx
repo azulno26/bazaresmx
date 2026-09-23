@@ -125,7 +125,9 @@ export default function UpdateFormClient({ token, tipo, initialData }: UpdateFor
       <div className="bg-white p-8 rounded-xl shadow-sm text-center max-w-lg mx-auto border border-[#1A7A52]/20">
         <h2 className="text-2xl font-bold text-[#1A7A52] mb-4">¡Actualización Exitosa! ✅</h2>
         <p className="text-gray-600 mb-6">Hemos guardado tus cambios correctamente. Recibirás un correo de confirmación con el resumen de los datos actualizados.</p>
-        <p className="text-sm text-gray-500">¿Necesitas actualizar tus fotos? Escríbenos a contacto@bazaresmx.com.mx</p>
+        {tipo === 'expositor' && (
+          <p className="text-sm text-gray-500">¿Necesitas actualizar tus fotos? Escríbenos a contacto@bazaresmx.com.mx</p>
+        )}
       </div>
     );
   }
@@ -177,12 +179,14 @@ export default function UpdateFormClient({ token, tipo, initialData }: UpdateFor
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Colonia(s)</label>
-                <input type="text" name="colonia" value={formData.colonia || ''} onChange={handleChange} className="w-full p-2 border rounded focus:ring-[#1A7A52] focus:border-[#1A7A52]" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del lugar o sede</label>
+                <input type="text" name="colonia" value={formData.colonia || ''} onChange={handleChange} className="w-full p-2 border rounded focus:ring-[#1A7A52] focus:border-[#1A7A52]" placeholder="Ej. Gran Sur, Plaza Coacalco, Parque Toreo" />
+                <p className="text-xs text-gray-500 mt-1">Como aparece en Google Maps. Si tienes varias sedes, sepáralas con punto y coma (;)</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Dirección exacta</label>
-                <input type="text" name="direccion" value={formData.direccion || ''} onChange={handleChange} className="w-full p-2 border rounded focus:ring-[#1A7A52] focus:border-[#1A7A52]" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Dirección completa</label>
+                <input type="text" name="direccion" value={formData.direccion || ''} onChange={handleChange} className="w-full p-2 border rounded focus:ring-[#1A7A52] focus:border-[#1A7A52]" placeholder="Ej. Periférico Sur 5550, Pedregal de Carrasco, Coyoacán, 04700 CDMX" />
+                <p className="text-xs text-gray-500 mt-1">Copia la dirección completa desde Google Maps</p>
               </div>
             </div>
           </>
@@ -235,10 +239,14 @@ export default function UpdateFormClient({ token, tipo, initialData }: UpdateFor
         </div>
 
         <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-gray-500 text-center sm:text-left">
-            ¿Necesitas actualizar tus fotos?<br/> 
-            Escríbenos a <a href="mailto:contacto@bazaresmx.com.mx" className="text-[#E8621A] hover:underline">contacto@bazaresmx.com.mx</a>
-          </p>
+          <div className="text-sm text-gray-500 text-center sm:text-left">
+            {tipo === 'expositor' && (
+              <>
+                ¿Necesitas actualizar tus fotos?<br/> 
+                Escríbenos a <a href="mailto:contacto@bazaresmx.com.mx" className="text-[#E8621A] hover:underline">contacto@bazaresmx.com.mx</a>
+              </>
+            )}
+          </div>
           <button 
             type="submit" 
             disabled={loading}

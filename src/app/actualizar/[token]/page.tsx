@@ -79,7 +79,7 @@ export default async function ActualizarPage({ params }: { params: Promise<{ tok
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <img src="/images/logo-bazaresmx.png" alt="BazaresMX" className="h-12 mx-auto mb-4" />
+          <h1 className="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">BazaresMX</h1>
           <p className="text-sm text-gray-500 uppercase tracking-wide font-semibold">Portal de Autoservicio</p>
         </div>
         <UpdateFormClient token={token} tipo={decoded.type} initialData={data} />

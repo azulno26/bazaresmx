@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 
-export function generateToken(id: string, type: 'bazar' | 'expositor', exp: number): string {
-  const secret = process.env.SUPABASE_SERVICE_ROLE_KEY || 'default-secret';
+export function generateToken(id: string, type: 'bazar' | 'expositor', exp: number, secret: string): string {
   const payload = `${id}:${type}:${exp}`;
   const signature = crypto.createHmac('sha256', secret)
                           .update(payload)
@@ -15,9 +14,8 @@ export interface DecodedToken {
   exp: number;
 }
 
-export function verifyToken(tokenStr: string): DecodedToken | null {
+export function verifyToken(tokenStr: string, secret: string): DecodedToken | null {
   try {
-    const secret = process.env.SUPABASE_SERVICE_ROLE_KEY || 'default-secret';
     const decoded = Buffer.from(tokenStr, 'base64url').toString('utf8');
     const parts = decoded.split(':');
     if (parts.length !== 4) return null;

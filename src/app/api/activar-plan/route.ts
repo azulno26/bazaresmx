@@ -24,7 +24,8 @@ export async function GET(req: NextRequest) {
     }
 
     // 1. Verificar el token criptográfico
-    const decoded = verifyToken(token);
+    const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const decoded = secret ? verifyToken(token, secret) : null;
     if (!decoded || decoded.id !== id) {
       return new NextResponse('<h1>❌ Enlace de activación inválido o expirado</h1><p>El token es incorrecto, está alterado o han pasado más de 24 horas.</p>', {
         status: 403,

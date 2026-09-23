@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
 
     for (const bazar of bazares) {
       if (!bazar.email) {
-        const token = generateToken(bazar.id, 'bazar', exp);
+        const token = generateToken(bazar.id, 'bazar', exp, supabaseServiceKey);
         noEmailList.push({
           nombre: bazar.nombre,
           link: `https://www.bazaresmx.com.mx/actualizar/${token}`
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
       }
 
       try {
-        const token = generateToken(bazar.id, 'bazar', exp);
+        const token = generateToken(bazar.id, 'bazar', exp, supabaseServiceKey);
         const updateLink = `https://www.bazaresmx.com.mx/actualizar/${token}`;
         
         const bodyHtml = `
@@ -131,7 +131,7 @@ export async function GET(req: NextRequest) {
     if (noEmailList.length > 0) {
       telegramMsg += `<b>⚠️ Bazares sin correo (contactar por WhatsApp):</b>\n\n`;
       noEmailList.forEach(n => {
-        telegramMsg += `<b>${n.nombre}</b>\n${n.link}\n\n`;
+        telegramMsg += `<b>${n.nombre}</b>\n<code>${n.link}</code>\n\n`;
       });
     } else {
       telegramMsg += `Todos los bazares activos tienen correo registrado.`;

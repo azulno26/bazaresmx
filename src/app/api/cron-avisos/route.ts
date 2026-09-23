@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
           if (!wasSentInLast72Hours(bazar.ultimo_aviso_enviado)) {
             try {
               const exp = Date.now() + 15 * 24 * 60 * 60 * 1000;
-              const token = generateToken(bazar.id, 'bazar', exp);
+              const token = generateToken(bazar.id, 'bazar', exp, supabaseServiceKey || 'default-secret');
               const link = `https://www.bazaresmx.com.mx/actualizar/${token}`;
 
               const html = emailTemplate({
@@ -137,7 +137,7 @@ export async function GET(req: NextRequest) {
         if (!wasSentInLast72Hours(exp.ultimo_aviso_enviado)) {
           try {
             const expTime = Date.now() + 15 * 24 * 60 * 60 * 1000;
-            const token = generateToken(exp.id, 'expositor', expTime);
+            const token = generateToken(exp.id, 'expositor', expTime, supabaseServiceKey || 'default-secret');
             const link = `https://www.bazaresmx.com.mx/actualizar/${token}`;
 
             const paymentInfo = `

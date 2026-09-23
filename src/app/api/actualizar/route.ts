@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Faltan datos requeridos.' }, { status: 400 });
     }
 
-    const decoded = verifyToken(token);
+    const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const decoded = secret ? verifyToken(token, secret) : null;
     if (!decoded) {
       return NextResponse.json({ error: 'Token inválido o expirado.' }, { status: 401 });
     }

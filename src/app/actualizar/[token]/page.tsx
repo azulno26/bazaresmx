@@ -4,15 +4,36 @@ import UpdateFormClient from './UpdateFormClient';
 
 export default async function ActualizarPage({ params }: { params: { token: string } }) {
   const token = params.token;
-  const decoded = verifyToken(token);
+  const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const decoded = secret ? verifyToken(token, secret) : null;
 
   if (!decoded) {
+    const hasSecret = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
+    let decodedStr = '';
+    let parts: any[] = [];
+    try {
+      decodedStr = Buffer.from(token, 'base64url').toString('utf8');
+      parts = decodedStr.split(':');
+    } catch (e: any) {
+      decodedStr = e.message;
+    }
+
     return (
       <div className="min-h-screen bg-gray-50 p-6 flex flex-col items-center justify-center">
         <div className="bg-white p-8 rounded-xl shadow-sm max-w-lg text-center border-t-4 border-red-500">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Enlace Inválido</h1>
           <p className="text-gray-600 mb-6">Este enlace no es válido o ha sido modificado. Si necesitas actualizar tus datos, por favor solicita un nuevo enlace.</p>
           <a href="mailto:contacto@bazaresmx.com.mx" className="text-[#1A7A52] font-semibold hover:underline">contacto@bazaresmx.com.mx</a>
+          
+          <div className="text-left text-xs text-gray-500 break-all bg-gray-100 p-4 mt-6 rounded overflow-auto">
+            <p className="font-bold mb-2">DEBUG INFO (Para Diego):</p>
+            <p>Token original: {token}</p>
+            <p>Length: {token?.length}</p>
+            <p>Secret present: {hasSecret ? 'Yes' : 'No'}</p>
+            <p>Decoded base64url: {decodedStr}</p>
+            <p>Parts count: {parts.length}</p>
+            <p>Signature extracted: {parts[3] || 'none'}</p>
+          </div>
         </div>
       </div>
     );

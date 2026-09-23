@@ -148,7 +148,7 @@ export async function GET(req: NextRequest) {
           if (matchedRecord && matchedType) {
             // Generar enlace de activación seguro (expira en 24h)
             const exp = Date.now() + 24 * 60 * 60 * 1000;
-            const token = generateToken(matchedRecord.id, matchedType, exp);
+            const token = generateToken(matchedRecord.id, matchedType, exp, supabaseServiceKey || 'default-secret');
             const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.bazaresmx.com.mx';
             const activationLink = `${appUrl}/api/activar-plan?id=${matchedRecord.id}&token=${token}&email=${encodeURIComponent(senderEmail)}`;
 

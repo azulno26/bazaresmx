@@ -20,9 +20,9 @@ export function emailTemplate({
 }: EmailTemplateProps): string {
   const ctaButtonHtml = ctaText && ctaUrl
     ? `
-      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 28px 0 16px 0;">
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 28px 0 16px 0; background-color: #FFFFFF;">
         <tr>
-          <td align="center">
+          <td align="center" style="background-color: #FFFFFF;">
             <!--[if mso]>
             <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${ctaUrl}" style="height:48px;v-text-anchor:middle;width:280px;" arcsize="18%" stroke="f" fillcolor="#E8621A">
               <w:anchorlock/>
@@ -47,6 +47,8 @@ export function emailTemplate({
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="x-apple-disable-message-reformatting" />
+  <meta name="color-scheme" content="light only" />
+  <meta name="supported-color-schemes" content="light only" />
   <title>${title}</title>
   <!--[if mso]>
   <style type="text/css">
@@ -54,13 +56,17 @@ export function emailTemplate({
   </style>
   <![endif]-->
   <style type="text/css">
+    :root {
+      color-scheme: light only;
+      supported-color-schemes: light only;
+    }
     body {
       margin: 0;
       padding: 0;
       width: 100% !important;
       -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
-      background-color: #F4F6F4;
+      background-color: #FFFFFF;
     }
     img {
       border: 0;
@@ -118,15 +124,15 @@ export function emailTemplate({
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #F4F6F4; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2C2C2A;">
+<body style="margin: 0; padding: 0; background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2C2C2A;">
   <!-- PREHEADER TRICK (HIDDEN TEXT FOR EMAIL CLIENT PREVIEW) -->
-  <div style="display: none; font-size: 1px; color: #F4F6F4; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+  <div style="display: none; font-size: 1px; color: #FFFFFF; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
     ${title} · BazaresMX
   </div>
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F4F6F4; table-layout: fixed;">
     <tr>
-      <td align="center" style="padding: 24px 12px 40px 12px;">
+      <td align="center" style="padding: 24px 12px 40px 12px; background-color: #F4F6F4;">
         <!-- MAIN CONTAINER (600px MAX) -->
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" class="container-table" style="max-width: 600px; width: 100%; margin: 0 auto; background-color: #FFFFFF; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid #E5EAE5;">
           
@@ -165,7 +171,7 @@ export function emailTemplate({
               </h1>` : ''}
 
               <!-- MAIN BODY HTML -->
-              <div class="body-text" style="font-size: 16px; line-height: 1.5; color: #2C2C2A;">
+              <div class="body-text" style="font-size: 16px; line-height: 1.5; color: #2C2C2A; background-color: #FFFFFF;">
                 ${bodyHtml}
               </div>
 
@@ -249,7 +255,7 @@ export function emailInfoBox(contentHtml: string, borderColor = '#E2E8E2', bgCol
   return `
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 12px; margin: 18px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
       <tr>
-        <td style="padding: 16px; font-size: 16px; line-height: 1.5; color: #2C2C2A;">
+        <td style="padding: 16px; font-size: 16px; line-height: 1.5; color: #2C2C2A; background-color: ${bgColor};">
           ${contentHtml}
         </td>
       </tr>

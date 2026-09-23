@@ -2,8 +2,9 @@ import { verifyToken } from '@/src/lib/security';
 import { createClient } from '@supabase/supabase-js';
 import UpdateFormClient from './UpdateFormClient';
 
-export default async function ActualizarPage({ params }: { params: { token: string } }) {
-  const token = params.token;
+export default async function ActualizarPage({ params }: { params: Promise<{ token: string }> }) {
+  console.log("=== NEXT 15 PARAMS DUMP ===", await params);
+  const { token } = await params;
   const secret = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const decoded = secret ? verifyToken(token, secret) : null;
 

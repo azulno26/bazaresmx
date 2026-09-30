@@ -15,6 +15,7 @@ interface Expositor {
   instagram: string;
   facebook: string;
   tiktok: string;
+  whatsapp: string;
   planElegido: "Básico" | "Media" | "Top";
   fotoPerfil: string;
   badgeVerificado: boolean;

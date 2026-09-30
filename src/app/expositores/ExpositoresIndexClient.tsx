@@ -22,9 +22,13 @@ interface Expositor {
 
 type ExpositoresIndexClientProps = {
   featuredExpositores: Expositor[];
+  allExpositores: Expositor[];
 };
 
-export default function ExpositoresIndexClient({ featuredExpositores }: ExpositoresIndexClientProps) {
+import { getPlanDisplayName } from "@/src/lib/plan-names";
+import { formatDisponibilidad } from "@/src/lib/formatters";
+
+export default function ExpositoresIndexClient({ featuredExpositores, allExpositores }: ExpositoresIndexClientProps) {
   return (
     <div className="min-h-screen bg-[#FFFAF5] pb-24">
       {/* NAVBAR */}
@@ -64,7 +68,7 @@ export default function ExpositoresIndexClient({ featuredExpositores }: Exposito
               href="/expositores/directorio"
               className="w-full sm:w-auto bg-[#1A7A52] text-white px-10 py-5 rounded-2xl font-extrabold text-lg hover:brightness-110 transition shadow-xl shadow-[#1A7A52]/20 text-center"
             >
-              Ver todos los expositores
+              Buscar expositores por giro y ciudad
             </Link>
             <Link
               href="/expositores/registro"
@@ -169,6 +173,160 @@ export default function ExpositoresIndexClient({ featuredExpositores }: Exposito
             >
               Registrar mi Marca
             </Link>
+          </div>
+        )}
+      </section>
+
+      {/* TODOS NUESTROS EXPOSITORES */}
+      <section className="max-w-7xl mx-auto px-6 py-16 border-t border-gray-100">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl md:text-5xl font-syne font-extrabold text-[#1a1a1a] tracking-tight">
+            Todos nuestros expositores
+          </h2>
+          <p className="text-lg text-gray-500 mt-4 font-medium max-w-2xl mx-auto">
+            Descubre todas las marcas registradas en BazaresMX
+          </p>
+        </div>
+
+        {allExpositores.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {allExpositores.map((exp) => {
+                const isBasic = exp.planElegido === "Básico";
+                
+                const CardContent = (
+                  <div 
+                    className={`bg-white rounded-[2.5rem] overflow-hidden border ${
+                      exp.planElegido === "Top" 
+                        ? "border-[#1A7A52] shadow-2xl relative" 
+                        : "border-gray-100 shadow-xl"
+                    } hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full`}
+                  >
+                    <div>
+                      <div className="relative w-full aspect-square overflow-hidden bg-neutral-50 border-b border-gray-100">
+                        {exp.fotoPerfil ? (
+                          <Image
+                            src={cloudinaryUrl(exp.fotoPerfil, { width: 600 })}
+                            alt={exp.nombreNegocio}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center text-gray-300 text-6xl">
+                            📸
+                          </div>
+                        )}
+                        
+                        <div className="absolute top-4 left-4 flex gap-2">
+                          {exp.planElegido === "Top" && (
+                            <span className="bg-[#0B5E43] text-white px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-md">
+                              ⭐ Destacado
+                            </span>
+                          )}
+                          {exp.badgeVerificado && (
+                            <span className="bg-blue-600 text-white px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-md">
+                              ✓ Verificado
+                            </span>
+                          )}
+                          <span className="bg-white/90 backdrop-blur-md text-[#1A7A52] px-3 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">
+                            Plan {getPlanDisplayName(exp.planElegido)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="p-8">
+                        <span className="bg-[#1A7A52]/10 text-[#1A7A52] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                          {exp.giro}
+                        </span>
+                        <h3 className="text-2xl font-bold mt-5 mb-3 text-gray-900 leading-tight">
+                          {exp.nombreNegocio}
+                        </h3>
+                        <p className="text-gray-500 font-medium text-sm line-clamp-3 leading-relaxed mb-4">
+                          {exp.descripcion}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="px-8 pb-8 pt-0 flex flex-col gap-3 border-t border-gray-50 mt-auto">
+                      <div className="flex flex-col gap-1.5 pt-4 text-xs font-bold text-gray-400">
+                        <div className="flex items-center gap-1">
+                          <span>📍</span>
+                          <span className="truncate">{exp.ciudad}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-neutral-600">
+                          <span>📅</span>
+                          <span>Expone: <span className="text-[#1A7A52] font-black">{formatDisponibilidad(exp.disponibilidad)}</span></span>
+                        </div>
+                      </div>
+
+                      {isBasic ? (
+                        <div className="space-y-3 pt-2">
+                          <div className="flex gap-3 justify-center">
+                            {exp.instagram && (
+                              <a
+                                href={exp.instagram.startsWith("http") ? exp.instagram : `https://instagram.com/${exp.instagram.replace("@", "")}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs font-bold text-gray-400 hover:text-[#E1306C] transition"
+                              >
+                                Instagram
+                              </a>
+                            )}
+                            {exp.facebook && (
+                              <a
+                                href={exp.facebook.startsWith("http") ? exp.facebook : `https://facebook.com/${exp.facebook.replace("@", "")}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs font-bold text-gray-400 hover:text-[#1877F2] transition"
+                              >
+                                Facebook
+                              </a>
+                            )}
+                          </div>
+                          <a
+                            href={`https://wa.me/${exp.whatsapp}?text=Hola%20${encodeURIComponent(exp.nombreNegocio)},%20vi%20tu%20perfil%20en%20el%20directorio%20de%20BazaresMX%20y%20me%20gustar%C3%ADa%20invitarte%20a%20nuestro%20bazar.`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full bg-[#1A7A52] text-white py-3 rounded-xl font-bold text-center block text-sm hover:brightness-110 transition shadow-md shadow-[#1A7A52]/10"
+                          >
+                            Contactar WhatsApp
+                          </a>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-between pt-2">
+                          <span className="text-gray-400 text-xs font-bold">Catálogo Disponible</span>
+                          <span className="text-[#1A7A52] font-black text-sm group-hover:underline flex items-center gap-1">
+                            Ver Catálogo →
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+
+                return isBasic ? (
+                  <div key={exp.id}>{CardContent}</div>
+                ) : (
+                  <Link key={exp.id} href={`/expositores/${exp.slug}`} className="group">
+                    {CardContent}
+                  </Link>
+                );
+              })}
+            </div>
+            
+            <div className="mt-16 text-center">
+              <Link
+                href="/expositores/directorio"
+                className="inline-flex items-center justify-center bg-white border-2 border-[#1A7A52] text-[#1A7A52] px-8 py-4 rounded-xl font-bold hover:bg-[#1A7A52]/5 transition text-lg"
+              >
+                Ver directorio completo con filtros →
+              </Link>
+            </div>
+          </>
+        ) : (
+          <div className="text-center text-gray-500 py-12">
+            No hay expositores disponibles por el momento.
           </div>
         )}
       </section>

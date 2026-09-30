@@ -37,6 +37,12 @@ export default async function LandingPage() {
           </Link>
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
+              href="/expositores/directorio"
+              className="text-gray-600 hover:text-[#1A7A52] font-bold text-xs sm:text-sm transition duration-300 whitespace-nowrap hidden sm:block"
+            >
+              Expositores
+            </Link>
+            <Link 
               href="/publica-tu-bazar"
               className="text-[#1A7A52] hover:text-[#156a46] font-bold text-xs sm:text-sm transition duration-300 whitespace-nowrap bg-[#EBF7F2] px-4 py-2 rounded-full"
             >

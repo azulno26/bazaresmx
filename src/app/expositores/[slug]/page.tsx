@@ -74,7 +74,7 @@ export default async function Page({ params }: Props) {
         <div className="max-w-5xl mx-auto text-xs sm:text-sm text-gray-500 font-medium flex items-center gap-2">
           <Link href="/" className="hover:underline">Inicio</Link>
           <span>/</span>
-          <span>Expositores</span>
+          <Link href="/expositores" className="hover:underline">Expositores</Link>
           <span>/</span>
           <span className="text-gray-900 font-bold">{exp.nombreNegocio}</span>
         </div>
